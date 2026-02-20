@@ -1,0 +1,25 @@
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Expo / RN
+.expo/
+dist/
+web-build/
+
+# Supabase local
+supabase/.temp/
+supabase/.branches/
+supabase/.cache/
