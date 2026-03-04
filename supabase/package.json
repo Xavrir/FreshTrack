@@ -1,0 +1,17 @@
+{
+  "name": "supabase",
+  "version": "1.0.0",
+  "description": "Folder untuk konfigurasi Supabase CLI + migrations.",
+  "main": "index.js",
+  "scripts": {
+    "start": "supabase start",
+    "reset": "supabase db reset"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "supabase": "^2.76.16"
+  }
+}
