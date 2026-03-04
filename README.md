@@ -1,4 +1,4 @@
-# Sistem Pencatatan Kadaluarsa Makanan
+# FreshTrack
 
 Aplikasi Android (Expo) untuk mencatat makanan + tanggal kadaluarsa, dengan pengingat notifikasi lokal (H-3 & H-0) dan sinkronisasi lintas device melalui Supabase.
 
