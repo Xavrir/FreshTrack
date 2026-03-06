@@ -4,3 +4,7 @@ export * from './TextInput';
 export * from './Card';
 export * from './Chip';
 export * from './Container';
+export * from './Divider';
+export * from './BottomNav';
+export * from './Stamp';
+export * from './Icon';

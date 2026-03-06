@@ -1,0 +1,2 @@
+export const BOTTOM_NAV_BASE_CLEARANCE = 116;
+export const SCREEN_EDGE_GUTTER = 32;

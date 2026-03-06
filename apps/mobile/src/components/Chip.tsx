@@ -9,43 +9,43 @@ export interface ChipProps extends ViewProps {
 }
 
 export function Chip({ label, variant = 'default', style, ...rest }: ChipProps) {
-  const { colors, spacing, radii } = useTheme();
+  const { colors, spacing, borderWidth: bw, radii } = useTheme();
 
-  const getBackgroundColor = () => {
+  const getStampColor = () => {
     switch (variant) {
       case 'success': return colors.success;
       case 'danger': return colors.danger;
-      case 'warning': return colors.primary;
-      default: return colors.surfaceRaised;
+      case 'warning': return colors.warning;
+      default: return colors.border;
     }
   };
 
-  const getTextColor = () => {
-    switch (variant) {
-      case 'success':
-      case 'danger':
-      case 'warning':
-        return colors.surface;
-      default:
-        return colors.text;
-    }
-  };
+  const stampColor = getStampColor();
+  const isFilled = variant !== 'default';
 
   return (
     <View
       style={[
         styles.chip,
         {
-          backgroundColor: getBackgroundColor(),
+          backgroundColor: isFilled ? stampColor : colors.surfaceMuted,
+          borderColor: stampColor,
+          borderWidth: bw.medium,
+          paddingHorizontal: spacing.md,
+          paddingVertical: spacing.xs,
           borderRadius: radii.full,
-          paddingHorizontal: spacing.sm,
-          paddingVertical: spacing.xs / 2,
         },
         style,
       ]}
       {...rest}
     >
-      <Text variant="caption" weight="medium" style={{ color: getTextColor() }}>
+      <Text
+        variant="label"
+        weight="bold"
+        color={isFilled ? (variant === 'warning' ? 'primaryText' : 'surface') : 'textMuted'}
+        uppercase
+        tracking="wider"
+      >
         {label}
       </Text>
     </View>

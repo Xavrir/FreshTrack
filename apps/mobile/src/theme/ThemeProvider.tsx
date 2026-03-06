@@ -7,6 +7,8 @@ interface ThemeContextValue {
   colors: typeof tokens.colors.light;
   spacing: typeof tokens.spacing;
   radii: typeof tokens.radii;
+  borderWidth: typeof tokens.borderWidth;
+  shadow: typeof tokens.shadow;
   typography: typeof tokens.typography;
   setTheme: (theme: ThemeType | 'system') => void;
 }
@@ -15,7 +17,7 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const systemColorScheme = useColorScheme();
-  const [themeMode, setThemeMode] = useState<ThemeType | 'system'>('system');
+  const [themeMode, setThemeMode] = useState<ThemeType | 'system'>('dark');
 
   const resolvedTheme = themeMode === 'system' ? (systemColorScheme || 'light') : themeMode;
   const colors = tokens.colors[resolvedTheme as ThemeType];
@@ -27,6 +29,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         colors,
         spacing: tokens.spacing,
         radii: tokens.radii,
+        borderWidth: tokens.borderWidth,
+        shadow: tokens.shadow,
         typography: tokens.typography,
         setTheme: setThemeMode,
       }}

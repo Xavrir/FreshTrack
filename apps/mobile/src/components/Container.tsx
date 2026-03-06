@@ -24,13 +24,13 @@ export function Container({
 
   const innerContent = scroll ? (
     <ScrollView
-      contentContainerStyle={[styles.content, { padding: spacing.lg }, contentContainerStyle]}
+      contentContainerStyle={[styles.content, { padding: spacing.md }, contentContainerStyle]}
       keyboardShouldPersistTaps="handled"
     >
       {children}
     </ScrollView>
   ) : (
-    <View style={[styles.content, { padding: spacing.lg }, style]} {...rest}>
+    <View style={[styles.content, style]} {...rest}>
       {children}
     </View>
   );

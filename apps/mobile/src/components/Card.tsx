@@ -7,7 +7,7 @@ export interface CardProps extends ViewProps {
 }
 
 export function Card({ elevated = false, style, children, ...rest }: CardProps) {
-  const { colors, spacing, radii } = useTheme();
+  const { colors, spacing, borderWidth: bw, shadow, radii } = useTheme();
 
   return (
     <View
@@ -15,11 +15,12 @@ export function Card({ elevated = false, style, children, ...rest }: CardProps) 
         styles.card,
         {
           backgroundColor: colors.surface,
-          borderRadius: radii.md,
           padding: spacing.lg,
           borderColor: colors.border,
+          borderWidth: bw.medium,
+          borderRadius: radii.lg,
         },
-        elevated && styles.elevated,
+        elevated && shadow.md,
         style,
       ]}
       {...rest}
@@ -31,17 +32,6 @@ export function Card({ elevated = false, style, children, ...rest }: CardProps) 
 
 const styles = StyleSheet.create({
   card: {
-    borderWidth: 1,
-    overflow: 'hidden',
-  },
-  elevated: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    overflow: 'visible',
   },
 });
