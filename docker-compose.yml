@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: freshtrack-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: freshtrack
+      POSTGRES_PASSWORD: freshtrack
+      POSTGRES_DB: freshtrack
+    ports:
+      - "5432:5432"
+    volumes:
+      - freshtrack_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U freshtrack -d freshtrack"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit:v1.27
+    container_name: freshtrack-mailpit
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  freshtrack_postgres_data:

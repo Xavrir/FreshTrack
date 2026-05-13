@@ -1,0 +1,133 @@
+<html class="dark"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e8913b",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#211911",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .scan-line {
+            height: 2px;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, #e8913b, transparent);
+            box-shadow: 0 0 15px 2px #e8913b;
+            position: absolute;
+            top: 50%;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark font-display antialiased overflow-hidden">
+<div class="relative flex h-screen w-full flex-col bg-background-dark overflow-hidden">
+<!-- Camera Viewfinder Background -->
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-slate-800 flex items-center justify-center">
+<img class="w-full h-full object-cover opacity-60" data-alt="Blurred kitchen pantry shelves with food items" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARE2UYlvedFJlxn1-eNESAlEjFt9nRiF2wmWZzxezZt1sZgFos1Gfny77xkd72aQS2HjjkQf-PQYFUO9WuSGxBVoVf7OwbsX4FggcWRGUlHfaumB5Gu_N78iXTvo7lUH7IVNczGj8E3zpjFjZYZAlx_ktMjpmKLzj6gZh5B_a5TAUYoq50_6bygfG8hnb9EDBzoTcAqMrUy76Z2a-OLDBc1dN1MEZCsN1_a61eQELH9pz7x_LwjFSrda50A4SyU_ysKhj3mpQjPAyg"/>
+</div>
+</div>
+<!-- Semi-transparent Overlay -->
+<div class="absolute inset-0 z-10 bg-black/40"></div>
+<!-- Header -->
+<div class="relative z-20 flex items-center justify-between p-6 pt-12">
+<button class="flex items-center justify-center size-10 rounded-full bg-background-dark/40 backdrop-blur-md text-slate-100">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-slate-100 text-lg font-bold tracking-tight">Scan Barcode</h1>
+<div class="size-10"></div> <!-- Spacer for centering -->
+</div>
+<!-- Scanning Area -->
+<div class="relative z-20 flex-1 flex flex-col items-center justify-center px-6">
+<div class="relative w-[280px] h-[140px]">
+<!-- Corner Brackets -->
+<div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-primary rounded-tl-lg"></div>
+<div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-primary rounded-tr-lg"></div>
+<div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-primary rounded-bl-lg"></div>
+<div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-primary rounded-br-lg"></div>
+<!-- Animated-like static Scan Line -->
+<div class="scan-line"></div>
+<!-- Inner Glow/Glass effect -->
+<div class="absolute inset-0 bg-primary/5 rounded-lg border border-primary/20 backdrop-blur-[1px]"></div>
+</div>
+<p class="mt-8 text-slate-100 text-base font-medium drop-shadow-md">
+                Point camera at barcode
+            </p>
+<!-- Control Buttons -->
+<div class="flex items-center gap-6 mt-12">
+<button class="flex items-center justify-center size-12 rounded-full bg-black/40 backdrop-blur-md text-slate-100 border border-white/10">
+<span class="material-symbols-outlined">image</span>
+</button>
+<button class="flex items-center justify-center size-20 rounded-full bg-primary text-white shadow-lg shadow-primary/40 border-4 border-white/20">
+<span class="material-symbols-outlined !text-4xl">photo_camera</span>
+</button>
+<button class="flex items-center justify-center size-12 rounded-full bg-black/40 backdrop-blur-md text-slate-100 border border-white/10">
+<span class="material-symbols-outlined">flashlight_on</span>
+</button>
+</div>
+</div>
+<!-- Bottom Drawer -->
+<div class="relative z-30 bg-background-light dark:bg-background-dark rounded-t-lg shadow-[0_-10px_40px_rgba(0,0,0,0.3)] px-6 pb-12 pt-4">
+<!-- Pull Indicator -->
+<div class="flex justify-center mb-6">
+<div class="w-12 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-col @container">
+<div class="flex flex-col items-center justify-center gap-4 py-2">
+<div class="flex flex-col items-center text-center gap-1">
+<p class="text-slate-900 dark:text-slate-100 text-lg font-bold">Having trouble?</p>
+<p class="text-slate-600 dark:text-slate-400 text-sm">Can't find the barcode? Add it yourself.</p>
+</div>
+<button class="mt-2 flex items-center justify-center gap-2 px-8 py-4 bg-primary/10 dark:bg-primary/20 text-primary font-bold rounded-xl border border-primary/30 w-full hover:bg-primary hover:text-white transition-colors">
+                        Enter Manually
+                        <span class="material-symbols-outlined text-[20px]">keyboard</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Navigation Bar (iOS Style) -->
+<div class="relative z-30 bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 px-8 py-3 flex justify-between items-center">
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-[10px] font-bold">Pantry</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined">qr_code_scanner</span>
+<span class="text-[10px] font-bold">Scan</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">shopping_basket</span>
+<span class="text-[10px] font-bold">List</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold">Settings</span>
+</div>
+</div>
+</div>
+</body></html>

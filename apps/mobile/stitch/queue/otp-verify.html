@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FreshTrack Email Verification</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e8913b",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#211911",
+                        "espresso": "#2D1B0E",
+                        "warm-sand": "#F5EDE0",
+                        "gray-brown": "#7A6D61"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "sans": ["DM Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: #FBF7F0; /* Warm Cream specified in prompt */
+        }
+        .otp-input {
+            width: 48px;
+            height: 48px;
+            text-align: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex items-center justify-center min-h-screen text-slate-900">
+<!-- Mobile Container (393x852) -->
+<div class="relative w-[393px] h-[852px] bg-[#FBF7F0] shadow-2xl overflow-hidden flex flex-col">
+<!-- Header / Top App Bar -->
+<div class="flex items-center p-6 pb-2">
+<button class="text-espresso flex items-center justify-center w-10 h-10 -ml-2 hover:bg-black/5 rounded-full transition-colors">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+</div>
+<!-- Content Section -->
+<div class="flex-1 flex flex-col items-center px-6 pt-12">
+<!-- Icon/Branding Element -->
+<div class="mb-8 bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1">mark_email_unread</span>
+</div>
+<!-- Titles -->
+<h1 class="text-espresso text-[24px] font-bold leading-tight text-center mb-2">
+                Verify Your Email
+            </h1>
+<p class="text-gray-brown text-[15px] font-medium text-center mb-10">
+                We sent a code to <span class="text-espresso font-semibold">user@email.com</span>
+</p>
+<!-- OTP Inputs -->
+<div class="flex justify-center gap-2 mb-10">
+<!-- Filled -->
+<input class="otp-input rounded-lg border-[1.5px] border-warm-sand bg-warm-sand text-espresso focus:ring-0 focus:outline-none" maxlength="1" readonly="" type="text" value="4"/>
+<!-- Filled -->
+<input class="otp-input rounded-lg border-[1.5px] border-warm-sand bg-warm-sand text-espresso focus:ring-0 focus:outline-none" maxlength="1" readonly="" type="text" value="8"/>
+<!-- Filled -->
+<input class="otp-input rounded-lg border-[1.5px] border-warm-sand bg-warm-sand text-espresso focus:ring-0 focus:outline-none" maxlength="1" readonly="" type="text" value="2"/>
+<!-- Focused -->
+<input autofocus="" class="otp-input rounded-lg border-[1.5px] border-primary bg-warm-sand text-espresso focus:ring-0 focus:outline-none ring-2 ring-primary/10" maxlength="1" placeholder="|" type="text"/>
+<!-- Empty -->
+<input class="otp-input rounded-lg border-[1.5px] border-warm-sand bg-warm-sand text-espresso focus:ring-0 focus:outline-none" maxlength="1" type="text"/>
+<!-- Empty -->
+<input class="otp-input rounded-lg border-[1.5px] border-warm-sand bg-warm-sand text-espresso focus:ring-0 focus:outline-none" maxlength="1" type="text"/>
+</div>
+<!-- Verify Button (Disabled State as requested) -->
+<button class="w-full h-14 bg-primary/50 text-white font-bold text-lg rounded-xl cursor-not-allowed mb-8 flex items-center justify-center shadow-sm">
+                Verify
+            </button>
+<!-- Resend Section -->
+<div class="mt-auto pb-12 text-center">
+<p class="text-gray-brown text-sm">
+                    Didn't receive the code? 
+                    <span class="text-primary font-bold ml-1">Resend in 30s</span>
+</p>
+</div>
+</div>
+<!-- Decorative Elements for Neo-Skeuomorphism -->
+<div class="absolute bottom-[-50px] left-[-50px] w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>
+<div class="absolute top-[10%] right-[-30px] w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
+<!-- iOS Home Indicator -->
+<div class="w-full flex justify-center pb-2">
+<div class="w-32 h-1.5 bg-espresso/20 rounded-full"></div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Item Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;family=Young+Serif&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "utility-bg": "#F5F2ED",
+                        "utility-border": "#000000",
+                        "utility-text": "#000000",
+                        "utility-green": "#4c9a66",
+                        "utility-red": "#dc2626",
+                        "utility-amber": "#d97706",
+                    },
+                    fontFamily: {
+                        "display": ["Young Serif", "serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0", "lg": "0", "xl": "0", "full": "0"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-utility-bg text-utility-text font-mono min-h-screen antialiased selection:bg-primary selection:text-black">
+<div class="relative flex h-auto min-h-screen w-full flex-col max-w-md mx-auto border-x-2 border-utility-border overflow-x-hidden">
+<header class="flex items-center justify-between border-b-2 border-utility-border p-4 bg-utility-bg sticky top-0 z-10">
+<button aria-label="Back" class="flex items-center justify-center w-10 h-10 border-2 border-utility-border hover:bg-primary/20 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-utility-bg bg-white">
+<span class="material-symbols-outlined text-utility-text">arrow_back</span>
+</button>
+<h1 class="text-2xl font-display font-bold text-center flex-1 tracking-tight text-utility-text uppercase">Item Specs</h1>
+<button aria-label="Edit" class="flex items-center justify-center w-10 h-10 border-2 border-utility-border hover:bg-primary/20 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-utility-bg bg-white">
+<span class="material-symbols-outlined text-utility-text">edit</span>
+</button>
+</header>
+<main class="flex-1 flex flex-col p-4">
+<div class="border-[4px] border-utility-border overflow-hidden bg-white mb-6 h-64 shrink-0 relative">
+<img alt="Organic Milk" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAk8wRunRZeSNDEaD_xxzlLcuIJjEfbet6jPfel3zF2nidwkkV2jiZ3uvAgY70wHHsGUkOko8ugCIdGfn_10aRlyd_gFmGxHaJ7zrNhxpKUhZDqxho3GoURh6cp8AQkabR9mUaG-CNQBw72bzqh4pIPjTP4viKrRJIQP7GS7ecNDDMnYVzq7tnyANP_c3DR_nbtt1qJ6YrAkqRA71bUk1Qd4qtWdYQV9PZMcIN4_aU_S4YSH1yEHJTldt35oqOXzoyGkaYhIaaawssv"/>
+<div class="absolute top-2 right-2 bg-primary border-2 border-utility-border px-2 py-1 flex items-center gap-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+<span class="material-symbols-outlined text-sm">verified</span>
+<span class="text-xs font-bold uppercase tracking-widest">Verified</span>
+</div>
+</div>
+<div class="mb-6 flex flex-col gap-1 border-b-2 border-utility-border pb-6">
+<h2 class="font-display font-bold text-4xl uppercase leading-none text-utility-text">Organic Milk</h2>
+<div class="flex items-center justify-between mt-2">
+<p class="font-mono text-utility-text/70 uppercase tracking-widest text-sm font-bold">Dairy &amp; Alternatives</p>
+<p class="font-mono text-utility-text/70 uppercase tracking-widest text-sm">Added 11/01</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div class="border-[3px] border-utility-border bg-white p-5 flex flex-col items-center justify-center text-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all cursor-default group">
+<span class="text-xs uppercase font-bold tracking-widest text-utility-text/70 mb-2 group-hover:text-utility-text transition-colors">Current Stock</span>
+<div class="flex items-baseline gap-1">
+<span class="font-mono font-bold text-5xl">1.5</span>
+</div>
+<span class="text-sm font-bold uppercase tracking-widest mt-1 text-utility-text/70 group-hover:text-utility-text transition-colors">Gallon(s)</span>
+</div>
+<div class="border-[3px] border-utility-border bg-white p-5 flex flex-col items-center justify-center text-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all cursor-default group">
+<span class="text-xs uppercase font-bold tracking-widest text-utility-text/70 mb-2 group-hover:text-utility-text transition-colors">Days to Expiry</span>
+<div class="flex items-baseline gap-1">
+<span class="font-mono font-bold text-5xl text-utility-amber">12</span>
+</div>
+<span class="text-sm font-bold uppercase tracking-widest mt-1 text-utility-text/70 group-hover:text-utility-text transition-colors">Days</span>
+</div>
+</div>
+<div class="flex-1"></div>
+<div class="flex flex-col gap-4 mt-auto">
+<button class="w-full bg-primary text-utility-text font-bold text-xl py-5 border-[3px] border-utility-border hover:bg-primary/80 transition-all focus:outline-none focus:ring-2 focus:ring-utility-border focus:ring-offset-2 focus:ring-offset-utility-bg uppercase tracking-widest flex items-center justify-center gap-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 active:translate-x-1">
+<span class="material-symbols-outlined text-2xl font-bold">check_circle</span>
+                    Use Item
+                </button>
+<button class="w-full bg-utility-red text-white font-bold text-xl py-5 border-[3px] border-utility-border hover:bg-utility-red/90 transition-all focus:outline-none focus:ring-2 focus:ring-utility-border focus:ring-offset-2 focus:ring-offset-utility-bg uppercase tracking-widest flex items-center justify-center gap-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 active:translate-x-1">
+<span class="material-symbols-outlined text-2xl font-bold">delete</span>
+                    Mark Waste
+                </button>
+</div>
+</main>
+</div>
+
+</body></html>

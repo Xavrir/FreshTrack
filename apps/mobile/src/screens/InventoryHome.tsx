@@ -163,6 +163,27 @@ export function InventoryHome() {
               </View>
             </Card>
 
+            <TouchableOpacity activeOpacity={0.88} onPress={() => navigation.navigate('MenuRecommendations')}>
+              <Card elevated style={{ marginBottom: spacing.lg, borderRadius: radii.lg }}>
+                <Text variant="label" color="primary" mono tracking="widest" style={{ marginBottom: spacing.xs }}>
+                  AI MENU PICKS
+                </Text>
+                <Text variant="body" weight="bold">
+                  Build tonight&apos;s meal from what you already have.
+                </Text>
+                <Text variant="caption" color="textMuted" style={{ marginTop: 4 }}>
+                  Open recipe suggestions, ingredient amounts, and what is still missing.
+                </Text>
+                <View style={[styles.sectionHeader, { marginTop: spacing.md }]}> 
+                  <View style={{ flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap' }}>
+                    <Chip label="AI POWERED" variant="warning" />
+                    <Chip label="INGREDIENT MATCH" variant="default" />
+                  </View>
+                  <Icon name="arrow-right" size={20} color="primary" />
+                </View>
+              </Card>
+            </TouchableOpacity>
+
             <View style={[styles.sectionHeader, { marginBottom: spacing.md }]}> 
               <Text variant="label" color="primary" mono tracking="widest">
                 RECENT STOCK

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Add to Stock Log</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;family=Young+Serif&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "utility-bg": "#F5F2ED",
+                        "utility-border": "#000000",
+                        "utility-text": "#000000",
+                        "utility-green": "#4c9a66",
+                        "utility-red": "#dc2626",
+                        "utility-amber": "#d97706",
+                    },
+                    fontFamily: {
+                        "display": ["Young Serif", "serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0", "lg": "0", "xl": "0", "full": "0"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23000000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'/%3e%3c/svg%3e") !important;
+            background-position: right 0.5rem center !important;
+            background-repeat: no-repeat !important;
+            background-size: 1.5em 1.5em !important;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-utility-bg text-utility-text font-mono min-h-screen antialiased selection:bg-primary selection:text-black">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto border-x-2 border-utility-border overflow-x-hidden">
+<header class="flex items-center justify-between border-b-2 border-utility-border p-4 bg-utility-bg sticky top-0 z-10">
+<button aria-label="Back" class="flex items-center justify-center w-10 h-10 border-2 border-utility-border bg-white hover:bg-primary/20 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-utility-bg">
+<span class="material-symbols-outlined text-utility-text">arrow_back</span>
+</button>
+<h1 class="text-2xl font-display font-bold text-center flex-1 tracking-tight text-utility-text uppercase">Add Item</h1>
+<div class="w-10 h-10"></div> 
+</header>
+<main class="flex-1 flex flex-col p-4 gap-6">
+<button class="w-full h-48 border-2 border-utility-border bg-white flex flex-col items-center justify-center gap-3 hover:bg-primary/10 transition-colors focus:outline-none focus:ring-2 focus:ring-utility-border focus:ring-offset-2 focus:ring-offset-utility-bg group" type="button">
+<div class="w-14 h-14 border-2 border-utility-border flex items-center justify-center bg-utility-bg group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">add_a_photo</span>
+</div>
+<span class="font-mono text-sm font-bold tracking-widest uppercase">Capture Image</span>
+</button>
+<form class="flex flex-col gap-6 flex-1">
+<div>
+<label class="block font-display text-lg mb-2 tracking-wide" for="item-name">Item Name</label>
+<input class="w-full border-2 border-utility-border bg-white p-3 font-mono text-base focus:ring-0 focus:border-utility-border focus:bg-primary/5 transition-colors placeholder:text-utility-text/40" id="item-name" placeholder="e.g. Sourdough Bread" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block font-display text-lg mb-2 tracking-wide" for="quantity">Quantity</label>
+<input class="w-full border-2 border-utility-border bg-white p-3 font-mono text-base focus:ring-0 focus:border-utility-border focus:bg-primary/5 transition-colors placeholder:text-utility-text/40" id="quantity" placeholder="1" type="number"/>
+</div>
+<div>
+<label class="block font-display text-lg mb-2 tracking-wide" for="unit">Unit</label>
+<select class="w-full border-2 border-utility-border bg-white p-3 font-mono text-base focus:ring-0 focus:border-utility-border focus:bg-primary/5 transition-colors appearance-none rounded-none cursor-pointer" id="unit">
+<option>Units</option>
+<option>Loaf</option>
+<option>Gallon</option>
+<option>Lbs</option>
+<option>Dozen</option>
+<option>Oz</option>
+</select>
+</div>
+</div>
+<div>
+<label class="block font-display text-lg mb-2 tracking-wide" for="expiry-date">Expiry Date</label>
+<input class="w-full border-2 border-utility-border bg-white p-3 font-mono text-base focus:ring-0 focus:border-utility-border focus:bg-primary/5 transition-colors" id="expiry-date" type="date"/>
+</div>
+<div>
+<label class="block font-display text-lg mb-2 tracking-wide" for="category">Category</label>
+<select class="w-full border-2 border-utility-border bg-white p-3 font-mono text-base focus:ring-0 focus:border-utility-border focus:bg-primary/5 transition-colors appearance-none rounded-none cursor-pointer" id="category">
+<option>Pantry</option>
+<option>Dairy</option>
+<option>Produce</option>
+<option>Meat</option>
+<option>Bakery</option>
+<option>Frozen</option>
+</select>
+</div>
+</form>
+<button class="mt-8 w-full bg-primary text-utility-text font-bold text-xl py-5 border-2 border-utility-border hover:bg-primary/80 transition-colors focus:outline-none focus:ring-2 focus:ring-utility-border focus:ring-offset-2 focus:ring-offset-utility-bg uppercase tracking-widest active:translate-y-1 shadow-[4px_4px_0_0_rgba(0,0,0,1)] active:shadow-none mb-4" type="button">
+                Add To Stock
+            </button>
+</main>
+</div>
+
+</body></html>

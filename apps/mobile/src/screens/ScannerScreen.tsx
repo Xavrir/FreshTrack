@@ -7,7 +7,7 @@ import { Button, Text, Icon, Chip } from '../components';
 import { RootNavigationProp } from '../navigation/types';
 import { useTheme } from '../theme/ThemeProvider';
 import { useHousehold } from '../providers/HouseholdProvider';
-import { detectProductDraft } from '../services/productDetection';
+import { detectProductDraft, detectProductFromImage } from '../services/productDetection';
 
 type Candidate = {
   label: string;
@@ -28,6 +28,21 @@ export function ScannerScreen() {
   const [flashEnabled, setFlashEnabled] = React.useState(false);
   const [scannedCode, setScannedCode] = React.useState<string | null>(null);
   const [detecting, setDetecting] = React.useState(false);
+  const [cameraReady, setCameraReady] = React.useState(false);
+  const cameraRef = React.useRef<CameraView>(null);
+  const requestedPermissionRef = React.useRef(false);
+  const torchEnabled = permission?.granted && cameraReady && !detecting && flashEnabled;
+
+  React.useEffect(() => {
+    if (!permission || requestedPermissionRef.current) {
+      return;
+    }
+
+    if (!permission.granted && permission.canAskAgain) {
+      requestedPermissionRef.current = true;
+      void requestPermission();
+    }
+  }, [permission, requestPermission]);
 
   const handleBarcodeScanned = React.useCallback(
     async ({ data }: { data: string }) => {
@@ -48,6 +63,24 @@ export function ScannerScreen() {
     [household?.id, navigation, scannedCode]
   );
 
+  const handleTakePicture = async () => {
+    if (!cameraRef.current || detecting) return;
+    setDetecting(true);
+    try {
+      const photo = await cameraRef.current.takePictureAsync({ quality: 0.8, skipProcessing: true });
+      if (photo?.uri) {
+        const draft = await detectProductFromImage(photo.uri);
+        navigation.replace('AddBatch', { imageUri: photo.uri, aiDetection: draft });
+        return;
+      }
+      Alert.alert('Capture failed', 'No image was captured. Please try again.');
+      setDetecting(false);
+    } catch {
+      Alert.alert('Capture failed', 'Could not take photo. Please try again.');
+      setDetecting(false);
+    }
+  };
+
   const candidates = scannedCode ? [{ label: scannedCode, product: 'Detected Item' }] : FALLBACK_CANDIDATES;
 
   return (
@@ -60,13 +93,23 @@ export function ScannerScreen() {
           <Icon name="arrow-left" size={20} />
         </TouchableOpacity>
         <Text variant="label" color="textSubtle" mono tracking="widest">
-          BARCODE SCANNER
+          SCAN OR SNAP
         </Text>
         <TouchableOpacity
-          style={[styles.headerBtn, { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: bw.medium, borderRadius: radii.md }]}
-          onPress={() => setFlashEnabled((current) => !current)}
+          style={[styles.headerBtn, { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: bw.medium, borderRadius: radii.md, opacity: permission?.granted && cameraReady ? 1 : 0.55 }]}
+          onPress={() => {
+            if (!permission?.granted) {
+              Alert.alert('Camera permission needed', 'Enable camera access first, then you can turn on the scanner flash.');
+              return;
+            }
+            if (!cameraReady) {
+              return;
+            }
+            setFlashEnabled((current) => !current);
+          }}
+          disabled={!permission?.granted || !cameraReady}
         >
-          <Icon name={flashEnabled ? 'flash' : 'flash-outline'} size={20} color="primary" />
+          <Icon name={torchEnabled ? 'flash' : 'flash-outline'} size={20} color="primary" />
         </TouchableOpacity>
       </View>
 
@@ -77,11 +120,17 @@ export function ScannerScreen() {
           </View>
         ) : permission.granted ? (
           <CameraView
+            ref={cameraRef}
             style={StyleSheet.absoluteFillObject}
             facing="back"
-            enableTorch={flashEnabled}
+            enableTorch={torchEnabled}
             barcodeScannerSettings={{
               barcodeTypes: ['ean13', 'ean8', 'upc_a', 'upc_e', 'code128', 'code39', 'qr'],
+            }}
+            onCameraReady={() => setCameraReady(true)}
+            onMountError={() => {
+              setCameraReady(false);
+              setFlashEnabled(false);
             }}
             onBarcodeScanned={scannedCode ? undefined : handleBarcodeScanned}
           />
@@ -121,13 +170,37 @@ export function ScannerScreen() {
 
         <View style={[styles.hintBox, { backgroundColor: 'rgba(9,9,9,0.82)', borderColor: colors.border, borderRadius: radii.full, borderWidth: bw.medium }]}> 
           <Text variant="label" color="text" mono tracking="widest">
-            {permission?.granted ? 'ALIGN BARCODE WITHIN FRAME' : 'CAMERA PERMISSION REQUIRED'}
+            {permission?.granted ? 'POINT AT BARCODE OR SNAP PHOTO' : 'CAMERA PERMISSION REQUIRED'}
           </Text>
         </View>
+
+        {/* Shutter Button Overlay */}
+        {permission?.granted && !detecting && (
+          <View style={styles.shutterContainer}>
+             <TouchableOpacity
+              style={[styles.shutterButtonOuter, { borderColor: colors.text }]}
+              onPress={handleTakePicture}
+              activeOpacity={0.7}
+             >
+               <View style={[styles.shutterButtonInner, { backgroundColor: colors.text }]} />
+             </TouchableOpacity>
+          </View>
+        )}
       </View>
 
       <View style={[styles.footerSheet, { backgroundColor: colors.surface, borderTopColor: colors.border, borderTopWidth: bw.medium, borderTopLeftRadius: radii.xl, borderTopRightRadius: radii.xl, padding: spacing.xl, paddingBottom: insets.bottom + spacing.xl }]}> 
         <View style={[styles.handle, { backgroundColor: colors.borderStrong, borderRadius: radii.full, marginBottom: spacing.lg }]} />
+        
+        <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.lg }}>
+          <Button 
+             variant="secondary" 
+             style={{ flex: 1 }} 
+             onPress={() => navigation.replace('AddBatch', {})}
+          >
+            MANUAL ENTRY
+          </Button>
+        </View>
+
         <View style={[styles.footerHeader, { marginBottom: spacing.md }]}> 
           <View>
             <Text variant="label" color="primary" mono tracking="widest">
@@ -137,7 +210,7 @@ export function ScannerScreen() {
               {scannedCode ? 'Barcode captured' : 'Barcode candidates detected'}
             </Text>
           </View>
-          <Chip label={permission?.granted ? 'READY' : 'PENDING'} variant={permission?.granted ? 'success' : 'warning'} />
+          <Chip label={torchEnabled ? 'FLASH ON' : permission?.granted ? 'READY' : 'PENDING'} variant={torchEnabled ? 'warning' : permission?.granted ? 'success' : 'warning'} />
         </View>
 
         <View style={{ gap: spacing.md }}>
@@ -282,5 +355,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+  },
+  shutterContainer: {
+    position: 'absolute',
+    bottom: 30,
+    alignSelf: 'center',
+    zIndex: 10,
+  },
+  shutterButtonOuter: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    borderWidth: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.3)',
+  },
+  shutterButtonInner: {
+    width: 58,
+    height: 58,
+    borderRadius: 29,
   },
 });

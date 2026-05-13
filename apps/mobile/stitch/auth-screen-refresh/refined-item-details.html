@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Barlow:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2aa0d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#1a160f",
+                        "neutral-dark": "#2a241a",
+                        "neutral-light": "#3d3528",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "heading": ["Barlow", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>FreshTrack Item Details</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<header class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+<div class="flex items-center p-4 justify-between max-w-2xl mx-auto w-full">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="font-heading text-lg font-bold tracking-tight uppercase">Item Details</h2>
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+</header>
+<main class="flex-1 max-w-2xl mx-auto w-full pb-32">
+<div class="px-4 py-4">
+<div class="relative w-full aspect-square overflow-hidden rounded-xl bg-neutral-dark shadow-2xl">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Close up shot of fresh organic blueberries in a bowl" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCxSYmBnEjFDmoJIio15AAxnsj_JHXdyL5_X8egitZMSN44AEvVGqLiUGLTOZ9wcwgx1CrgIEes2VKImw14ia0DjoHs6qd43ATBN-Pn4jefNbPcYaOz7znlIHfzPkHE3iYBBTUgVwbPHaCw8IET_Vo8Zecuf5ptG5vwv0K43TKwGVSKPjszdUQ8N2FCxPt5ikaT1Fy0e6Pl9-z-8GKUllrKSanmwxDxnOW0j3tOzwW4NW-vHzAiAHQfqelmWiH4YJ3GI0NrnFZUlsmA');"></div>
+<div class="absolute top-4 left-4">
+<span class="bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Fresh</span>
+</div>
+</div>
+</div>
+<div class="px-4 pb-6">
+<h1 class="font-heading text-4xl font-extrabold tracking-tight dark:text-slate-50 mb-2 uppercase">Organic Blueberries</h1>
+<p class="text-primary font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">category</span>
+                Fruits &amp; Berries
+            </p>
+</div>
+<div class="px-4 grid grid-cols-2 gap-3 mb-8">
+<div class="bg-neutral-dark p-4 rounded-xl border border-primary/5">
+<p class="text-[10px] uppercase font-bold tracking-widest text-primary/60 mb-1">Added By</p>
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-primary">person</span>
+</div>
+<p class="text-sm font-semibold">Sarah Jenkins</p>
+</div>
+</div>
+<div class="bg-neutral-dark p-4 rounded-xl border border-primary/5">
+<p class="text-[10px] uppercase font-bold tracking-widest text-primary/60 mb-1">Expiry Date</p>
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+<p class="text-sm font-semibold">Oct 24, 2023</p>
+</div>
+</div>
+<div class="bg-neutral-dark p-4 rounded-xl border border-primary/5">
+<p class="text-[10px] uppercase font-bold tracking-widest text-primary/60 mb-1">Location</p>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-primary">kitchen</span>
+<p class="text-sm font-semibold">Main Fridge (Shelf 2)</p>
+</div>
+</div>
+<div class="bg-neutral-dark p-4 rounded-xl border border-primary/5">
+<p class="text-[10px] uppercase font-bold tracking-widest text-primary/60 mb-1">Quantity</p>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-primary">inventory_2</span>
+<p class="text-sm font-semibold">500g Pack</p>
+</div>
+</div>
+</div>
+<div class="px-4 space-y-4">
+<button class="w-full bg-primary hover:bg-primary/90 text-background-dark font-heading font-extrabold py-4 rounded-xl flex items-center justify-center gap-3 transition-all shadow-lg active:scale-95">
+<span class="material-symbols-outlined font-bold">check_circle</span>
+                MARK AS CONSUMED
+            </button>
+<button class="w-full bg-neutral-dark hover:bg-neutral-light text-slate-100 font-heading font-extrabold py-4 rounded-xl flex items-center justify-center gap-3 transition-all border border-slate-700 active:scale-95">
+<span class="material-symbols-outlined font-bold">delete_forever</span>
+                MARK AS WASTED
+            </button>
+</div>
+<div class="px-4 mt-8">
+<h3 class="font-heading text-sm font-bold tracking-widest text-primary uppercase mb-4">Nutritional Info (Per 100g)</h3>
+<div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+<div class="flex-shrink-0 bg-neutral-dark px-4 py-2 rounded-lg border border-primary/5">
+<p class="text-xs text-primary/60">Calories</p>
+<p class="font-bold">57 kcal</p>
+</div>
+<div class="flex-shrink-0 bg-neutral-dark px-4 py-2 rounded-lg border border-primary/5">
+<p class="text-xs text-primary/60">Sugars</p>
+<p class="font-bold">10g</p>
+</div>
+<div class="flex-shrink-0 bg-neutral-dark px-4 py-2 rounded-lg border border-primary/5">
+<p class="text-xs text-primary/60">Fiber</p>
+<p class="font-bold">2.4g</p>
+</div>
+<div class="flex-shrink-0 bg-neutral-dark px-4 py-2 rounded-lg border border-primary/5">
+<p class="text-xs text-primary/60">Protein</p>
+<p class="font-bold">0.7g</p>
+</div>
+</div>
+</div>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 bg-background-light dark:bg-background-dark/95 backdrop-blur-lg border-t border-primary/10 z-20">
+<div class="flex max-w-2xl mx-auto justify-around items-center px-4 py-3">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-[10px] font-bold tracking-wider uppercase">Inventory</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">qr_code_scanner</span>
+<span class="text-[10px] font-bold tracking-wider uppercase">Scanner</span>
+</a>
+<div class="relative -top-6">
+<button class="bg-primary text-background-dark size-14 rounded-full shadow-xl shadow-primary/20 flex items-center justify-center border-4 border-background-dark">
+<span class="material-symbols-outlined text-3xl font-bold">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="text-[10px] font-bold tracking-wider uppercase">Insights</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold tracking-wider uppercase">Settings</span>
+</a>
+</div>
+</nav>
+</body></html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FreshTrack - Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "warm-cream": "#FBF7F0",
+                        "terracotta-amber": "#E8913A",
+                        "deep-espresso": "#2D1B0E",
+                        "warm-sand": "#F5EDE0",
+                        "warm-gray-brown": "#7A6855"
+                    },
+                    fontFamily: {
+                        "display": ["DM Sans", "sans-serif"],
+                        "sans": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "12": "12px"
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        :root {
+            --shadow-soft: 0px 4px 12px rgba(45, 27, 14, 0.1);
+            --shadow-neo: 4px 4px 10px rgba(45, 27, 14, 0.08), -4px -4px 12px rgba(255, 255, 255, 0.6);
+        }
+        body {
+            background-color: #FBF7F0;
+        }
+        .neo-field {
+            box-shadow: inset 2px 2px 5px rgba(45, 27, 14, 0.05), inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-sans text-deep-espresso min-h-screen flex flex-col items-center justify-between p-8">
+<div class="w-full max-w-[400px] flex-1 flex flex-col items-center justify-center">
+<div class="mb-14 text-center">
+<div class="inline-flex flex-col items-center">
+<h1 class="text-[36px] font-bold leading-none tracking-tight font-display text-deep-espresso">
+                    FreshTrack
+                </h1>
+<div class="h-[3px] w-12 bg-terracotta-amber rounded-full mt-2"></div>
+</div>
+<p class="mt-4 text-warm-gray-brown text-base font-medium">
+                Your kitchen inventory, organized
+            </p>
+</div>
+<div class="w-full p-[20px] space-y-7">
+<button class="w-full flex items-center justify-center gap-3 bg-terracotta-amber text-deep-espresso font-bold py-4 rounded-12 shadow-lg transition-transform active:scale-[0.98]">
+<span class="material-symbols-outlined !text-[24px]">
+                    account_circle
+                </span>
+<span class="text-base tracking-tight">Continue with Google</span>
+</button>
+<div class="flex items-center gap-4 py-2">
+<div class="flex-1 h-[1px] bg-deep-espresso/10"></div>
+<span class="text-warm-gray-brown/60 text-xs font-bold tracking-[0.2em]">OR</span>
+<div class="flex-1 h-[1px] bg-deep-espresso/10"></div>
+</div>
+<div class="space-y-2">
+<label class="block text-deep-espresso/80 text-sm font-semibold ml-1">
+                    Email
+                </label>
+<div class="relative">
+<input class="w-full bg-warm-sand neo-field border-none rounded-12 py-4 px-5 text-deep-espresso placeholder-deep-espresso/30 focus:ring-2 focus:ring-terracotta-amber/30 transition-all outline-none" placeholder="Enter your email" type="email"/>
+</div>
+</div>
+<button class="w-full border-2 border-terracotta-amber text-terracotta-amber font-bold py-4 rounded-12 hover:bg-terracotta-amber/5 active:bg-terracotta-amber/10 transition-colors">
+                Send OTP Code
+            </button>
+</div>
+</div>
+<div class="pb-8 text-center">
+<a class="text-terracotta-amber text-sm font-bold tracking-wide hover:opacity-80 transition-opacity" href="#">
+            Try Demo Mode
+        </a>
+</div>
+<div class="hidden">
+<img alt="Pantry organization context" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC93D49FMhLqDy7JXdw9QkP7tAHUBRd4UN-rCn7d_K_rLKFJ6BVWEUvkxUgtapgpLzHax4lGYhVSgta97AC1ZvBtVp1Ws3uEvK_WFlhpWeBd7YcJvqBXuxGR6V4bNBN3pgQXC3fvY7SZgsY2a1f-i6kE6HVm-QOYEGLEJmAOYSZYbMYjvwTEXRRq8J7QlsR93P9Ggp-PausZPilYnOS0WScX5ew7BOzAZ3_5fcULDIScgyD2wAKa0SB8di6ALtSq9FxIZCRSqg1hXFM"/>
+</div>
+
+</body></html>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, StyleSheet, View, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Card, Divider, Icon, Text, TextInput } from '../components';
@@ -24,8 +24,13 @@ export function LoginScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={[styles.container, { padding: spacing.xl }]}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}> 
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}> 
+        <ScrollView
+          contentContainerStyle={[styles.scrollContent, { padding: spacing.xl }]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
         <View style={{ marginTop: spacing.xxl, marginBottom: spacing['4xl'] }}>
           <Text variant="label" color="textSubtle" mono tracking="widest" style={{ marginBottom: spacing.sm }}>
             HOUSEHOLD ACCESS PORTAL
@@ -45,7 +50,7 @@ export function LoginScreen() {
               <Text variant="label" color="primary" mono tracking="widest">LIVE</Text>
               <Text variant="body" weight="bold" style={{ marginTop: spacing.xs }}>Pantry status</Text>
             </View>
-            <View style={[styles.heroMetric, { backgroundColor: colors.surfaceMuted, borderColor: colors.border, borderRadius: radii.md, borderWidth: bw.medium }]}>
+            <View style={[styles.heroMetric, { backgroundColor: colors.surfaceMuted, borderColor: colors.border, borderRadius: radii.md, borderWidth: bw.medium }]}> 
               <Text variant="label" color="warning" mono tracking="widest">FAST</Text>
               <Text variant="body" weight="bold" style={{ marginTop: spacing.xs }}>OTP sign in</Text>
             </View>
@@ -104,6 +109,7 @@ export function LoginScreen() {
             </Text>
           </View>
         </Card>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -115,6 +121,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   card: {
     paddingVertical: 24,

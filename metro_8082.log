@@ -1,0 +1,7 @@
+  --non-interactive is not supported, use $CI=1 instead
+The /android project does not contain any URI schemes. Expo CLI will not be able to use links to launch the project. You can configure a custom URI scheme using the --scheme option.
+Starting project at /home/xavrir/FreshTrack/apps/mobile
+Starting Metro Bundler
+
+Waiting on http://localhost:8082
+Logs for your project will appear below.

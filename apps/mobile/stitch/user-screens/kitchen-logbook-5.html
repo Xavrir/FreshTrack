@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kitchen Logbook</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;family=Young+Serif&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "utility-bg": "#F5F2ED",
+                        "utility-border": "#000000",
+                        "utility-text": "#000000",
+                        "utility-green": "#4c9a66",
+                        "utility-red": "#dc2626",
+                        "utility-amber": "#d97706",
+                    },
+                    fontFamily: {
+                        "display": ["Young Serif", "serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0", "lg": "0", "xl": "0", "full": "0"},
+                },
+            },
+        }
+    </script>
+<style>
+        .stamp {
+            display: inline-block;
+            padding: 0.1rem 0.4rem;
+            text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+            font-size: 0.75rem;
+            border: 2px solid;
+            border-radius: 2px;
+            transform: rotate(-5deg);
+            opacity: 0.8;
+            pointer-events: none;
+        }
+        .stamp.expired {
+            color: #dc2626;
+            border-color: #dc2626;
+        }
+        .stamp.soon {
+            color: #d97706;
+            border-color: #d97706;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-utility-bg text-utility-text font-mono min-h-screen antialiased selection:bg-primary selection:text-black">
+<div class="relative flex h-auto min-h-screen w-full flex-col max-w-md mx-auto border-x-2 border-utility-border overflow-x-hidden">
+<!-- Header -->
+<header class="flex items-center justify-between border-b-2 border-utility-border p-4 bg-utility-bg sticky top-0 z-10">
+<button aria-label="Menu" class="flex items-center justify-center w-10 h-10 border-2 border-utility-border hover:bg-primary/20 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-utility-bg">
+<span class="material-symbols-outlined text-utility-text">menu</span>
+</button>
+<h1 class="text-2xl font-display font-bold text-center flex-1 tracking-tight text-utility-text">KITCHEN LOG</h1>
+<button aria-label="Search" class="flex items-center justify-center w-10 h-10 border-2 border-utility-border hover:bg-primary/20 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-utility-bg">
+<span class="material-symbols-outlined text-utility-text">search</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col p-4 gap-4">
+<!-- Scan Button -->
+<button class="w-full bg-primary text-utility-text font-bold text-lg py-4 border-2 border-utility-border hover:bg-primary/80 transition-colors focus:outline-none focus:ring-2 focus:ring-utility-border focus:ring-offset-2 focus:ring-offset-utility-bg uppercase tracking-widest flex items-center justify-center gap-2">
+<span class="material-symbols-outlined font-bold">barcode_scanner</span>
+                Scan Item
+            </button>
+<!-- Table Header -->
+<div class="grid grid-cols-[1fr_auto_auto] gap-4 border-b-2 border-utility-border pb-2 px-2 mt-4 font-bold text-sm uppercase tracking-wider">
+<div>Item &amp; Qty</div>
+<div class="text-center w-16">Status</div>
+<div class="text-right w-16">Expiry</div>
+</div>
+<!-- Inventory List -->
+<div class="flex flex-col border-2 border-utility-border">
+<!-- Row 1: Good -->
+<div class="relative flex items-center justify-between p-3 border-b-2 border-utility-border bg-white group hover:bg-primary/5 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 border-2 border-utility-border flex items-center justify-center bg-utility-bg shrink-0">
+<span class="material-symbols-outlined">water_drop</span>
+</div>
+<div class="flex flex-col">
+<p class="font-bold text-base leading-tight">Organic Milk</p>
+<p class="text-sm text-utility-text/70">1 Gallon</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div aria-label="Status: Good" class="w-4 h-4 border-2 border-utility-border bg-primary rounded-full"></div>
+<p class="w-16 text-right font-bold text-sm">11/24</p>
+</div>
+</div>
+<!-- Row 2: Good -->
+<div class="relative flex items-center justify-between p-3 border-b-2 border-utility-border bg-utility-bg group hover:bg-primary/5 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 border-2 border-utility-border flex items-center justify-center bg-white shrink-0">
+<span class="material-symbols-outlined">bakery_dining</span>
+</div>
+<div class="flex flex-col">
+<p class="font-bold text-base leading-tight">Sourdough Bread</p>
+<p class="text-sm text-utility-text/70">1 Loaf</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div aria-label="Status: Good" class="w-4 h-4 border-2 border-utility-border bg-primary rounded-full"></div>
+<p class="w-16 text-right font-bold text-sm">11/18</p>
+</div>
+</div>
+<!-- Row 3: Expired -->
+<div class="relative flex items-center justify-between p-3 border-b-2 border-utility-border bg-white group hover:bg-primary/5 transition-colors opacity-70">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 border-2 border-utility-border flex items-center justify-center bg-utility-bg shrink-0">
+<span class="material-symbols-outlined">egg_alt</span>
+</div>
+<div class="flex flex-col">
+<p class="font-bold text-base leading-tight">Eggs</p>
+<p class="text-sm text-utility-text/70">1 Dozen</p>
+</div>
+</div>
+<div class="flex items-center gap-4 relative">
+<div class="absolute -left-12 top-1/2 -translate-y-1/2 stamp expired z-10">Expired</div>
+<p class="w-16 text-right font-bold text-sm text-utility-red">05/12</p>
+</div>
+</div>
+<!-- Row 4: Soon -->
+<div class="relative flex items-center justify-between p-3 border-b-2 border-utility-border bg-utility-bg group hover:bg-primary/5 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 border-2 border-utility-border flex items-center justify-center bg-white shrink-0">
+<span class="material-symbols-outlined">set_meal</span>
+</div>
+<div class="flex flex-col">
+<p class="font-bold text-base leading-tight">Salmon Fillet</p>
+<p class="text-sm text-utility-text/70">1.5 lbs</p>
+</div>
+</div>
+<div class="flex items-center gap-4 relative">
+<div class="absolute -left-10 top-1/2 -translate-y-1/2 stamp soon z-10">Soon</div>
+<p class="w-16 text-right font-bold text-sm text-utility-amber">11/02</p>
+</div>
+</div>
+<!-- Row 5: Good -->
+<div class="relative flex items-center justify-between p-3 bg-white group hover:bg-primary/5 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 border-2 border-utility-border flex items-center justify-center bg-utility-bg shrink-0">
+<span class="material-symbols-outlined">nutrition</span>
+</div>
+<div class="flex flex-col">
+<p class="font-bold text-base leading-tight">Avocados</p>
+<p class="text-sm text-utility-text/70">4 units</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div aria-label="Status: Good" class="w-4 h-4 border-2 border-utility-border bg-primary rounded-full"></div>
+<p class="w-16 text-right font-bold text-sm">11/15</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="border-t-2 border-utility-border bg-utility-bg pb-safe pt-2 px-2 sticky bottom-0 z-10">
+<div class="flex justify-around items-center h-16">
+<a class="flex flex-col items-center justify-center w-full h-full text-utility-text border-2 border-transparent hover:border-utility-border focus:border-utility-border focus:outline-none transition-colors group" href="#">
+<span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">inventory_2</span>
+<span class="text-[10px] font-bold uppercase mt-1">Stock</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-utility-text/60 hover:text-utility-text border-2 border-transparent hover:border-utility-border focus:border-utility-border focus:outline-none transition-colors group" href="#">
+<span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">menu_book</span>
+<span class="text-[10px] font-bold uppercase mt-1">Recipes</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-utility-text/60 hover:text-utility-text border-2 border-transparent hover:border-utility-border focus:border-utility-border focus:outline-none transition-colors group" href="#">
+<span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">settings</span>
+<span class="text-[10px] font-bold uppercase mt-1">Config</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

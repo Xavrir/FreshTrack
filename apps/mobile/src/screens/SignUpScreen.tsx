@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity, View, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Card, Divider, Icon, Text, TextInput } from '../components';
@@ -23,7 +23,12 @@ export function SignUpScreen() {
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}> 
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={[styles.container, { padding: spacing.xl }]}> 
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}> 
+        <ScrollView
+          contentContainerStyle={[styles.scrollContent, { padding: spacing.xl }]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
         <View style={[styles.topBar, { marginBottom: spacing.xxl }]}> 
           <TouchableOpacity
             style={[styles.backButton, { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: bw.medium, borderRadius: radii.md }]}
@@ -53,8 +58,8 @@ export function SignUpScreen() {
 
           <View style={{ gap: spacing.sm, marginTop: spacing.xl }}>
             {['Verify your email', 'Create or join a household', 'Start tracking live stock'].map((step, index) => (
-              <View key={step} style={[styles.stepRow, { backgroundColor: index === 0 ? colors.surface : colors.surfaceMuted, borderColor: colors.border, borderRadius: radii.md, borderWidth: bw.medium }]}>
-                <View style={[styles.stepBadge, { backgroundColor: colors.primary, borderRadius: radii.full }]}>
+              <View key={step} style={[styles.stepRow, { backgroundColor: index === 0 ? colors.surface : colors.surfaceMuted, borderColor: colors.border, borderRadius: radii.md, borderWidth: bw.medium }]}> 
+                <View style={[styles.stepBadge, { backgroundColor: colors.primary, borderRadius: radii.full }]}> 
                   <Text variant="label" color="primaryText" mono>{index + 1}</Text>
                 </View>
                 <Text variant="body" weight="medium">{step}</Text>
@@ -102,6 +107,7 @@ export function SignUpScreen() {
             </Text>
           </TouchableOpacity>
         </Card>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -113,6 +119,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   topBar: {
     flexDirection: 'row',

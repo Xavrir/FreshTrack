@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FreshTrack - Edit Item</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e8913b",
+                        "background-light": "#fbf7f0",
+                        "background-dark": "#211911",
+                        "warm-sand": "#f5ede0",
+                        "alarm-red": "#d64545",
+                        "deep-espresso": "#2d1b0e"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "sans": ["DM Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-deep-espresso min-h-screen">
+<div class="max-w-[480px] mx-auto min-h-screen flex flex-col px-4 pb-8">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between py-6">
+<button class="w-10 h-10 flex items-center justify-start text-deep-espresso dark:text-slate-100">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold font-sans flex-1 text-center pr-10">Edit Item</h1>
+</header>
+<!-- Main Form Card -->
+<main class="flex-1">
+<div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-primary/10">
+<!-- Product Name Field -->
+<div class="mb-5">
+<label class="block text-xs font-bold text-primary/80 uppercase tracking-wider mb-2">Product Name</label>
+<div class="relative">
+<input class="w-full bg-warm-sand dark:bg-slate-700 border-none rounded-lg h-14 px-4 font-sans text-deep-espresso dark:text-slate-100 focus:ring-2 focus:ring-primary/50" type="text" value="Susu UHT Diamond"/>
+</div>
+</div>
+<!-- Brand Field -->
+<div class="mb-5">
+<label class="block text-xs font-bold text-primary/80 uppercase tracking-wider mb-2">Brand</label>
+<div class="relative">
+<input class="w-full bg-warm-sand dark:bg-slate-700 border-none rounded-lg h-14 px-4 font-sans text-deep-espresso dark:text-slate-100 focus:ring-2 focus:ring-primary/50" type="text" value="Diamond"/>
+</div>
+</div>
+<!-- Quantity and Unit Row -->
+<div class="flex gap-4 mb-5">
+<div class="flex-1">
+<label class="block text-xs font-bold text-primary/80 uppercase tracking-wider mb-2">Quantity</label>
+<input class="w-full bg-warm-sand dark:bg-slate-700 border-none rounded-lg h-14 px-4 font-display font-medium text-deep-espresso dark:text-slate-100 focus:ring-2 focus:ring-primary/50" type="text" value="3"/>
+</div>
+<div class="flex-1">
+<label class="block text-xs font-bold text-primary/80 uppercase tracking-wider mb-2">Unit</label>
+<input class="w-full bg-warm-sand dark:bg-slate-700 border-none rounded-lg h-14 px-4 font-sans text-deep-espresso dark:text-slate-100 focus:ring-2 focus:ring-primary/50" type="text" value="pcs"/>
+</div>
+</div>
+<!-- Expiry Date Field -->
+<div class="mb-5">
+<label class="block text-xs font-bold text-primary/80 uppercase tracking-wider mb-2">Expiry Date</label>
+<div class="relative flex items-center">
+<input class="w-full bg-warm-sand dark:bg-slate-700 border-none rounded-lg h-14 px-4 pr-12 font-display font-medium text-deep-espresso dark:text-slate-100 focus:ring-2 focus:ring-primary/50" type="text" value="Mar 12, 2026"/>
+<span class="material-symbols-outlined absolute right-4 text-primary/60">calendar_today</span>
+</div>
+</div>
+<!-- Barcode Field -->
+<div class="mb-2">
+<label class="block text-xs font-bold text-primary/80 uppercase tracking-wider mb-2">Barcode</label>
+<div class="relative flex items-center">
+<input class="w-full bg-warm-sand dark:bg-slate-700 border-none rounded-lg h-14 px-4 pr-12 font-display text-deep-espresso dark:text-slate-100 focus:ring-2 focus:ring-primary/50" type="text" value="8999999034560"/>
+<span class="material-symbols-outlined absolute right-4 text-primary/60">barcode_scanner</span>
+</div>
+</div>
+</div>
+<!-- Image Section (Visual Context) -->
+<div class="mt-6 flex justify-center">
+<div class="w-full aspect-video rounded-xl bg-warm-sand dark:bg-slate-800 overflow-hidden relative border border-primary/5">
+<img alt="Milk cartons in a pantry" class="w-full h-full object-cover opacity-80 mix-blend-multiply dark:mix-blend-normal" data-alt="Close up of fresh milk cartons in a shelf" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbeTFWWOdNSeX6QZZoPRdgTuEY8UI_ue9ziVV-f9tvsXWkF8eovvpajfp99anffLETAXySeAzdfXtgWuav-NJOCPIcf-VidMxJa_A8rm2GSY0J9uXTJ-7jBxXJg68-PhWOOhi8qePUuaWDQKn9BIygu1e6H057SxgwX8c62B4nDRdAYkCWQzw2Xloi96ewVCyTuxsaZqgnWptuhRtd5viHODIMDWu-GuY12bcLf3yuwI37sxovQcgaFp-ABnjHSJN6soH48FcYqoic"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-light/50 to-transparent"></div>
+</div>
+</div>
+</main>
+<!-- Actions -->
+<footer class="mt-8 flex flex-col gap-4">
+<button class="w-full bg-primary hover:bg-primary/90 transition-colors h-14 rounded-xl flex items-center justify-center text-deep-espresso font-bold text-lg shadow-lg shadow-primary/20">
+                Save Changes
+            </button>
+<button class="w-full py-3 flex items-center justify-center text-alarm-red font-bold text-base hover:bg-alarm-red/5 rounded-lg transition-colors">
+<span class="material-symbols-outlined mr-2 text-xl">delete</span>
+                Delete Item
+            </button>
+</footer>
+</div>
+</body></html>

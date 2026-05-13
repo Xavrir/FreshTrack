@@ -1,0 +1,509 @@
+› Building app...
+Starting a Gradle Daemon (subsequent builds will be faster)
+Configuration on demand is an incubating feature.
+> Task :expo-gradle-plugin:expo-autolinking-plugin-shared:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :gradle-plugin:settings-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :gradle-plugin:shared:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :expo-gradle-plugin:expo-autolinking-settings-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :expo-gradle-plugin:expo-autolinking-settings-plugin:pluginDescriptors UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:pluginDescriptors UP-TO-DATE
+> Task :expo-gradle-plugin:expo-autolinking-settings-plugin:processResources UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:processResources UP-TO-DATE
+> Task :gradle-plugin:shared:compileKotlin UP-TO-DATE
+> Task :expo-gradle-plugin:expo-autolinking-plugin-shared:compileKotlin UP-TO-DATE
+> Task :expo-gradle-plugin:expo-autolinking-plugin-shared:compileJava NO-SOURCE
+> Task :gradle-plugin:shared:compileJava NO-SOURCE
+> Task :expo-gradle-plugin:expo-autolinking-plugin-shared:processResources NO-SOURCE
+> Task :gradle-plugin:shared:processResources NO-SOURCE
+> Task :expo-gradle-plugin:expo-autolinking-plugin-shared:classes UP-TO-DATE
+> Task :gradle-plugin:shared:classes UP-TO-DATE
+> Task :expo-gradle-plugin:expo-autolinking-plugin-shared:jar UP-TO-DATE
+> Task :gradle-plugin:shared:jar UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:compileKotlin UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:compileJava NO-SOURCE
+> Task :gradle-plugin:settings-plugin:classes UP-TO-DATE
+> Task :expo-gradle-plugin:expo-autolinking-settings-plugin:compileKotlin UP-TO-DATE
+> Task :expo-gradle-plugin:expo-autolinking-settings-plugin:compileJava NO-SOURCE
+> Task :expo-gradle-plugin:expo-autolinking-settings-plugin:classes UP-TO-DATE
+> Task :gradle-plugin:settings-plugin:jar UP-TO-DATE
+> Task :expo-gradle-plugin:expo-autolinking-settings-plugin:jar UP-TO-DATE
+> Task :expo-gradle-plugin:expo-max-sdk-override-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :expo-gradle-plugin:expo-autolinking-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :gradle-plugin:react-native-gradle-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :expo-module-gradle-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :expo-module-gradle-plugin:pluginDescriptors UP-TO-DATE
+> Task :expo-module-gradle-plugin:processResources UP-TO-DATE
+> Task :expo-gradle-plugin:expo-autolinking-plugin:compileKotlin UP-TO-DATE
+> Task :expo-gradle-plugin:expo-max-sdk-override-plugin:compileKotlin UP-TO-DATE
+> Task :expo-gradle-plugin:expo-autolinking-plugin:compileJava NO-SOURCE
+> Task :expo-gradle-plugin:expo-max-sdk-override-plugin:compileJava NO-SOURCE
+> Task :expo-gradle-plugin:expo-autolinking-plugin:pluginDescriptors UP-TO-DATE
+> Task :expo-gradle-plugin:expo-max-sdk-override-plugin:pluginDescriptors UP-TO-DATE
+> Task :expo-gradle-plugin:expo-autolinking-plugin:processResources UP-TO-DATE
+> Task :expo-gradle-plugin:expo-autolinking-plugin:classes UP-TO-DATE
+> Task :expo-gradle-plugin:expo-max-sdk-override-plugin:processResources UP-TO-DATE
+> Task :expo-gradle-plugin:expo-max-sdk-override-plugin:classes UP-TO-DATE
+> Task :expo-gradle-plugin:expo-autolinking-plugin:jar UP-TO-DATE
+> Task :expo-gradle-plugin:expo-max-sdk-override-plugin:jar UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:compileKotlin UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:compileJava NO-SOURCE
+> Task :gradle-plugin:react-native-gradle-plugin:pluginDescriptors UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:processResources UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:classes UP-TO-DATE
+> Task :gradle-plugin:react-native-gradle-plugin:jar UP-TO-DATE
+> Task :expo-module-gradle-plugin:compileKotlin UP-TO-DATE
+> Task :expo-module-gradle-plugin:compileJava NO-SOURCE
+> Task :expo-module-gradle-plugin:classes UP-TO-DATE
+> Task :expo-module-gradle-plugin:jar UP-TO-DATE
+
+> Configure project :
+[32m[ExpoRootProject][0m Using the following versions:
+  - buildTools:  [32m36.0.0[0m
+  - minSdk:      [32m24[0m
+  - compileSdk:  [32m36[0m
+  - targetSdk:   [32m36[0m
+  - ndk:         [32m27.1.12297006[0m
+  - kotlin:      [32m2.1.20[0m
+  - ksp:         [32m2.1.20-2.0.1[0m
+
+> Configure project :app
+ ℹ️  [33mApplying gradle plugin[0m '[32mexpo-max-sdk-override-plugin[0m'
+  [expo-max-sdk-override-plugin] This plugin will find all permissions declared with `android:maxSdkVersion`. If there exists a declaration with the `android:maxSdkVersion` annotation and another one without, the plugin will remove the annotation from the final merged manifest. In order to see a log with the changes run a clean build of the app.
+Checking the license for package NDK (Side by side) 27.1.12297006 in /home/xavrir/Android/Sdk/licenses
+License for package NDK (Side by side) 27.1.12297006 accepted.
+Preparing "Install NDK (Side by side) 27.1.12297006 v.27.1.12297006".
+"Install NDK (Side by side) 27.1.12297006 v.27.1.12297006" ready.
+Installing NDK (Side by side) 27.1.12297006 in /home/xavrir/Android/Sdk/ndk/27.1.12297006
+"Install NDK (Side by side) 27.1.12297006 v.27.1.12297006" complete.
+"Install NDK (Side by side) 27.1.12297006 v.27.1.12297006" finished.
+WARNING: [CXX5202] This app only has 32-bit [armeabi-v7a,x86] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+[CXX5202] This app only has 32-bit [armeabi-v7a,x86] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+WARNING: [CXX5202] This app only has 32-bit [armeabi-v7a,x86] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+[CXX5202] This app only has 32-bit [armeabi-v7a,x86] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+WARNING: [CXX5202] This app only has 32-bit [armeabi-v7a,x86] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+[CXX5202] This app only has 32-bit [armeabi-v7a,x86] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+Checking the license for package Android SDK Build-Tools 36 in /home/xavrir/Android/Sdk/licenses
+License for package Android SDK Build-Tools 36 accepted.
+Preparing "Install Android SDK Build-Tools 36 v.36.0.0".
+"Install Android SDK Build-Tools 36 v.36.0.0" ready.
+Installing Android SDK Build-Tools 36 in /home/xavrir/Android/Sdk/build-tools/36.0.0
+"Install Android SDK Build-Tools 36 v.36.0.0" complete.
+"Install Android SDK Build-Tools 36 v.36.0.0" finished.
+Checking the license for package Android SDK Platform 36 in /home/xavrir/Android/Sdk/licenses
+License for package Android SDK Platform 36 accepted.
+Preparing "Install Android SDK Platform 36 (revision 2)".
+"Install Android SDK Platform 36 (revision 2)" ready.
+Installing Android SDK Platform 36 in /home/xavrir/Android/Sdk/platforms/android-36
+"Install Android SDK Platform 36 (revision 2)" complete.
+"Install Android SDK Platform 36 (revision 2)" finished.
+[=========                              ] 25%                                   
+> Configure project :expo
+
+Using expo modules
+  - [32mexpo-log-box[0m (55.0.7)
+  - [32mexpo-constants[0m (55.0.7)
+
+> Configure project :expo-modules-core
+WARNING: [CXX5202] This app only has 32-bit [armeabi-v7a,x86] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+[CXX5202] This app only has 32-bit [armeabi-v7a,x86] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+WARNING: [CXX5202] This app only has 32-bit [armeabi-v7a,x86] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+[CXX5202] This app only has 32-bit [armeabi-v7a,x86] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+
+> Configure project :expo
+  - [32mexpo-modules-core[0m (55.0.13)
+  - [33m[📦][0m [32mexpo-dom-webview[0m (55.0.3)
+  - [33m[📦][0m [32mexpo-asset[0m (55.0.8)
+  - [33m[📦][0m [32mexpo-file-system[0m (55.0.10)
+  - [33m[📦][0m [32mexpo-font[0m (55.0.4)
+  - [33m[📦][0m [32mexpo-keep-awake[0m (55.0.4)
+
+
+> Configure project :react-native-screens
+WARNING: [CXX5202] This app only has 32-bit [armeabi-v7a,x86] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+[CXX5202] This app only has 32-bit [armeabi-v7a,x86] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+WARNING: [CXX5202] This app only has 32-bit [armeabi-v7a,x86] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+[CXX5202] This app only has 32-bit [armeabi-v7a,x86] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+Checking the license for package Android SDK Build-Tools 35 in /home/xavrir/Android/Sdk/licenses
+License for package Android SDK Build-Tools 35 accepted.
+Preparing "Install Android SDK Build-Tools 35 v.35.0.0".
+"Install Android SDK Build-Tools 35 v.35.0.0" ready.
+Installing Android SDK Build-Tools 35 in /home/xavrir/Android/Sdk/build-tools/35.0.0
+"Install Android SDK Build-Tools 35 v.35.0.0" complete.
+"Install Android SDK Build-Tools 35 v.35.0.0" finished.
+[=========                              ] 25%                                   
+> Task :expo-modules-core:preBuild UP-TO-DATE
+> Task :expo-log-box:preBuild UP-TO-DATE
+> Task :expo-log-box:preDebugBuild UP-TO-DATE
+> Task :expo-modules-core:preDebugBuild UP-TO-DATE
+> Task :expo:generatePackagesList
+> Task :expo:preBuild
+> Task :expo:preDebugBuild
+> Task :app:generateAutolinkingNewArchitectureFiles
+> Task :app:generateAutolinkingPackageList
+> Task :app:generateCodegenSchemaFromJavaScript SKIPPED
+> Task :app:generateCodegenArtifactsFromSchema SKIPPED
+> Task :app:generateReactNativeEntryPoint
+> Task :app:preBuild
+> Task :app:preDebugBuild
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :expo:writeDebugAarMetadata
+> Task :expo-log-box:writeDebugAarMetadata
+> Task :expo-modules-core:writeDebugAarMetadata
+> Task :expo-constants:createExpoConfig
+> Task :expo-constants:preBuild
+> Task :expo-constants:preDebugBuild
+> Task :expo-constants:writeDebugAarMetadata
+> Task :expo-modules-core:generateDebugResValues
+> Task :expo-constants:generateDebugResValues
+> Task :app:generateDebugBuildConfig
+> Task :expo-log-box:generateDebugResValues
+> Task :expo:generateDebugResValues
+> Task :expo-modules-core:generateDebugResources
+> Task :expo-constants:generateDebugResources
+> Task :expo:generateDebugResources
+> Task :expo-log-box:generateDebugResources
+> Task :app:generateDebugResValues
+> Task :app:generateDebugResources
+> Task :expo-modules-core:packageDebugResources
+> Task :expo:packageDebugResources
+> Task :expo-constants:packageDebugResources
+> Task :expo-log-box:packageDebugResources
+> Task :expo-modules-core:extractDeepLinksDebug
+> Task :expo:extractDeepLinksDebug
+> Task :expo-log-box:extractDeepLinksDebug
+> Task :expo-constants:extractDeepLinksDebug
+> Task :react-native-safe-area-context:generateCodegenSchemaFromJavaScript
+> Task :react-native-screens:generateCodegenSchemaFromJavaScript
+> Task :expo:processDebugManifest
+
+> Task :expo-modules-core:processDebugManifest
+/home/xavrir/FreshTrack/apps/mobile/node_modules/expo-modules-core/android/src/main/AndroidManifest.xml:8:9-11:45 Warning:
+	meta-data#com.facebook.soloader.enabled@android:value was tagged at AndroidManifest.xml:8 to replace other declarations but no other declaration present
+
+> Task :expo-constants:processDebugManifest
+> Task :expo-log-box:processDebugManifest
+> Task :app:packageDebugResources
+> Task :react-native-safe-area-context:generateCodegenArtifactsFromSchema
+> Task :react-native-safe-area-context:preBuild
+> Task :react-native-safe-area-context:preDebugBuild
+> Task :react-native-safe-area-context:writeDebugAarMetadata
+> Task :react-native-screens:generateCodegenArtifactsFromSchema
+> Task :react-native-screens:preBuild
+> Task :react-native-screens:preDebugBuild
+> Task :react-native-screens:writeDebugAarMetadata
+> Task :react-native-screens:generateDebugResValues FROM-CACHE
+> Task :react-native-safe-area-context:generateDebugResValues FROM-CACHE
+> Task :react-native-safe-area-context:generateDebugResources FROM-CACHE
+> Task :react-native-screens:generateDebugResources
+> Task :react-native-safe-area-context:packageDebugResources
+> Task :react-native-safe-area-context:extractDeepLinksDebug FROM-CACHE
+
+> Task :react-native-safe-area-context:processDebugManifest
+package="com.th3rdwave.safeareacontext" found in source AndroidManifest.xml: /home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-safe-area-context/android/src/main/AndroidManifest.xml.
+Setting the namespace via the package attribute in the source AndroidManifest.xml is no longer supported, and the value is ignored.
+Recommendation: remove package="com.th3rdwave.safeareacontext" from the source AndroidManifest.xml: /home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-safe-area-context/android/src/main/AndroidManifest.xml.
+
+> Task :react-native-screens:packageDebugResources
+> Task :react-native-screens:extractDeepLinksDebug FROM-CACHE
+> Task :react-native-screens:processDebugManifest
+> Task :app:parseDebugLocalResources
+> Task :expo-constants:compileDebugLibraryResources
+> Task :expo-modules-core:compileDebugLibraryResources
+> Task :expo:compileDebugLibraryResources
+> Task :expo:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :expo-constants:parseDebugLocalResources
+> Task :expo:generateDebugBuildConfig
+> Task :expo-modules-core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :expo-modules-core:parseDebugLocalResources
+> Task :expo-log-box:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :expo-modules-core:generateDebugBuildConfig
+> Task :expo-log-box:generateDebugBuildConfig
+> Task :react-native-screens:parseDebugLocalResources
+> Task :expo-constants:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :expo-constants:generateDebugBuildConfig
+> Task :react-native-safe-area-context:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :expo-log-box:javaPreCompileDebug
+> Task :react-native-screens:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :expo:parseDebugLocalResources
+> Task :react-native-screens:generateDebugBuildConfig
+> Task :react-native-safe-area-context:generateDebugBuildConfig
+> Task :react-native-screens:javaPreCompileDebug FROM-CACHE
+> Task :react-native-safe-area-context:javaPreCompileDebug FROM-CACHE
+> Task :react-native-safe-area-context:parseDebugLocalResources
+> Task :expo:mergeDebugShaders
+> Task :expo-constants:mergeDebugShaders
+> Task :expo-modules-core:generateDebugRFile
+> Task :expo-constants:compileDebugShaders NO-SOURCE
+> Task :expo:compileDebugShaders NO-SOURCE
+> Task :expo:generateDebugAssets UP-TO-DATE
+> Task :expo-constants:generateDebugAssets UP-TO-DATE
+> Task :expo:javaPreCompileDebug
+> Task :react-native-safe-area-context:compileDebugLibraryResources
+> Task :react-native-safe-area-context:generateDebugRFile
+> Task :expo:mergeDebugAssets
+> Task :expo-log-box:compileDebugLibraryResources
+> Task :expo:mergeDebugJniLibFolders
+> Task :expo-log-box:parseDebugLocalResources
+> Task :expo-log-box:mergeDebugShaders
+> Task :expo:generateDebugRFile
+> Task :expo:mergeDebugNativeLibs NO-SOURCE
+> Task :expo-modules-core:javaPreCompileDebug
+> Task :react-native-safe-area-context:mergeDebugShaders
+> Task :expo-log-box:compileDebugShaders NO-SOURCE
+> Task :expo-log-box:generateDebugAssets UP-TO-DATE
+> Task :expo-log-box:mergeDebugAssets
+> Task :expo:copyDebugJniLibsProjectOnly
+> Task :expo-log-box:mergeDebugJniLibFolders
+> Task :expo-log-box:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-screens:mergeDebugShaders
+> Task :react-native-screens:compileDebugShaders NO-SOURCE
+> Task :react-native-screens:generateDebugAssets UP-TO-DATE
+> Task :react-native-screens:mergeDebugAssets
+> Task :expo-constants:generateDebugRFile
+> Task :expo-constants:javaPreCompileDebug
+> Task :expo-log-box:copyDebugJniLibsProjectOnly
+> Task :expo-log-box:generateDebugRFile
+> Task :react-native-screens:generateDebugRFile
+> Task :expo-constants:mergeDebugAssets
+> Task :expo-constants:mergeDebugJniLibFolders
+> Task :expo-constants:mergeDebugNativeLibs NO-SOURCE
+> Task :expo-constants:copyDebugJniLibsProjectOnly
+> Task :react-native-screens:compileDebugLibraryResources
+
+> Task :react-native-screens:configureCMakeDebug[armeabi-v7a]
+Checking the license for package CMake 3.22.1 in /home/xavrir/Android/Sdk/licenses
+License for package CMake 3.22.1 accepted.
+Preparing "Install CMake 3.22.1 v.3.22.1".
+"Install CMake 3.22.1 v.3.22.1" ready.
+Installing CMake 3.22.1 in /home/xavrir/Android/Sdk/cmake/3.22.1
+"Install CMake 3.22.1 v.3.22.1" complete.
+"Install CMake 3.22.1 v.3.22.1" finished.
+
+> Task :app:checkDebugAarMetadata
+> Task :expo-modules-core:compileDebugKotlin
+> Task :react-native-safe-area-context:compileDebugKotlin
+> Task :react-native-safe-area-context:compileDebugShaders NO-SOURCE
+> Task :react-native-safe-area-context:generateDebugAssets UP-TO-DATE
+> Task :react-native-safe-area-context:mergeDebugAssets
+> Task :react-native-safe-area-context:mergeDebugJniLibFolders
+> Task :react-native-safe-area-context:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-safe-area-context:copyDebugJniLibsProjectOnly
+
+> Task :react-native-safe-area-context:compileDebugKotlin
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-safe-area-context/android/src/main/java/com/th3rdwave/safeareacontext/SafeAreaView.kt:9:8 'class UIManagerModule : ReactContextBaseJavaModule, OnBatchCompleteListener, LifecycleEventListener, UIManager' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-safe-area-context/android/src/main/java/com/th3rdwave/safeareacontext/SafeAreaView.kt:50:54 'class UIManagerModule : ReactContextBaseJavaModule, OnBatchCompleteListener, LifecycleEventListener, UIManager' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-safe-area-context/android/src/main/java/com/th3rdwave/safeareacontext/SafeAreaView.kt:59:23 'val uiImplementation: UIImplementation!' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-safe-area-context/android/src/main/java/com/th3rdwave/safeareacontext/SafeAreaViewShadowNode.kt:9:32 'class LayoutShadowNode : ReactShadowNodeImpl' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-safe-area-context/android/src/main/java/com/th3rdwave/safeareacontext/SafeAreaViewShadowNode.kt:110:61 'class NativeViewHierarchyOptimizer : Any' is deprecated. Deprecated in Java.
+
+> Task :expo-modules-core:mergeDebugShaders
+> Task :expo-modules-core:compileDebugShaders NO-SOURCE
+> Task :expo-modules-core:generateDebugAssets UP-TO-DATE
+> Task :expo-modules-core:mergeDebugAssets
+> Task :app:mapDebugSourceSetPaths
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDebug
+> Task :react-native-safe-area-context:compileDebugJavaWithJavac
+> Task :react-native-safe-area-context:bundleLibRuntimeToJarDebug
+> Task :react-native-safe-area-context:bundleLibCompileToJarDebug
+> Task :react-native-safe-area-context:processDebugJavaRes
+> Task :react-native-safe-area-context:bundleLibRuntimeToDirDebug
+
+> Task :app:processDebugMainManifest
+/home/xavrir/FreshTrack/apps/mobile/android/app/src/debug/AndroidManifest.xml:6:5-162 Warning:
+	application@android:usesCleartextTraffic was tagged at AndroidManifest.xml:6 to replace other declarations but no other declaration present
+/home/xavrir/FreshTrack/apps/mobile/android/app/src/debug/AndroidManifest.xml Warning:
+	provider#expo.modules.filesystem.FileSystemFileProvider@android:authorities was tagged at AndroidManifest.xml:0 to replace other declarations but no other declaration present
+
+> Task :app:expoDebugOverrideMaxSdkConflicts
+[33m---------- Expo Max Sdk Override Plugin ----------[0m
+[32m>>> No 'android:maxSdkVersion' conflicts found[0m
+[33m--------------------------------------------------[0m
+
+> Task :app:processDebugManifest
+> Task :app:javaPreCompileDebug FROM-CACHE
+> Task :app:mergeDebugShaders
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets
+> Task :app:desugarDebugFileDependencies
+> Task :app:compressDebugAssets
+> Task :app:mergeDebugResources
+> Task :app:checkDebugDuplicateClasses
+> Task :expo-modules-core:configureCMakeDebug[armeabi-v7a]
+> Task :app:configureCMakeDebug[armeabi-v7a]
+
+> Task :expo-modules-core:compileDebugKotlin
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo-modules-core/android/src/main/java/expo/modules/apploader/AppLoaderProvider.kt:34:52 Unchecked cast of 'Class<*>!' to 'Class<out HeadlessAppLoader>'.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/AppContext.kt:13:8 'class UIManagerModule : ReactContextBaseJavaModule, OnBatchCompleteListener, LifecycleEventListener, UIManager' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/AppContext.kt:21:8 'typealias ErrorManagerModule = JSLoggerModule' is deprecated. Use JSLoggerModule instead.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/AppContext.kt:59:13 'val hostingRuntimeContext: MainRuntime' is deprecated. Use AppContext.runtimeContext instead.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/AppContext.kt:257:21 'typealias ErrorManagerModule = JSLoggerModule' is deprecated. Use JSLoggerModule instead.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/AppContext.kt:366:21 'val DEFAULT: Int' is deprecated. UIManagerType.DEFAULT will be deleted in the next release of React Native. Use [LEGACY] instead.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/AppContext.kt:367:10 'class UIManagerModule : ReactContextBaseJavaModule, OnBatchCompleteListener, LifecycleEventListener, UIManager' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/defaultmodules/NativeModulesProxyModule.kt:16:5 'fun Constants(legacyConstantsProvider: () -> Map<String, Any?>): Unit' is deprecated. Use `Constant` or `Property` instead.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/views/ViewDefinitionBuilder.kt:464:16 'val errorManager: JSLoggerModule?' is deprecated. Use AppContext.jsLogger instead.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/views/ViewDefinitionBuilder.kt:464:30 'fun reportExceptionToLogBox(codedException: CodedException): Unit' is deprecated. Use appContext.jsLogger.error(...) instead.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/views/ViewManagerDefinition.kt:41:16 'val errorManager: JSLoggerModule?' is deprecated. Use AppContext.jsLogger instead.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo-modules-core/android/src/main/java/expo/modules/kotlin/views/ViewManagerDefinition.kt:41:30 'fun reportExceptionToLogBox(codedException: CodedException): Unit' is deprecated. Use appContext.jsLogger.error(...) instead.
+
+> Task :expo-modules-core:buildCMakeDebug[armeabi-v7a]
+
+> Task :expo-modules-core:compileDebugJavaWithJavac
+Note: /home/xavrir/FreshTrack/apps/mobile/node_modules/expo-modules-core/android/src/main/java/expo/modules/adapters/react/ModuleRegistryAdapter.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :expo-modules-core:processDebugJavaRes
+> Task :expo-modules-core:bundleLibCompileToJarDebug
+> Task :expo-modules-core:bundleLibRuntimeToJarDebug
+> Task :app:processDebugManifestForPackage
+> Task :expo-modules-core:bundleLibRuntimeToDirDebug
+> Task :expo-modules-core:configureCMakeDebug[x86]
+
+> Task :expo-constants:compileDebugKotlin
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo/node_modules/expo-constants/android/src/main/java/expo/modules/constants/ConstantsModule.kt:13:5 'fun Constants(legacyConstantsProvider: () -> Map<String, Any?>): Unit' is deprecated. Use `Constant` or `Property` instead.
+
+> Task :react-native-screens:buildCMakeDebug[armeabi-v7a]
+> Task :expo-constants:compileDebugJavaWithJavac
+> Task :expo-constants:bundleLibCompileToJarDebug
+> Task :expo-constants:bundleLibRuntimeToJarDebug
+> Task :expo-constants:processDebugJavaRes
+> Task :expo-constants:bundleLibRuntimeToDirDebug
+> Task :expo-log-box:compileDebugKotlin
+> Task :react-native-screens:configureCMakeDebug[x86]
+> Task :expo-log-box:compileDebugJavaWithJavac
+> Task :expo-log-box:bundleLibCompileToJarDebug
+> Task :expo-log-box:bundleLibRuntimeToJarDebug
+> Task :expo-log-box:processDebugJavaRes
+> Task :expo-log-box:bundleLibRuntimeToDirDebug
+> Task :react-native-screens:compileDebugKotlin
+> Task :app:mergeExtDexDebug
+
+> Task :expo:compileDebugKotlin
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo/android/src/main/java/expo/modules/ExpoModulesPackage.kt:34:16 This declaration overrides a deprecated member but is not marked as deprecated itself. Add the '@Deprecated' annotation or suppress the diagnostic.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo/android/src/main/java/expo/modules/ReactActivityDelegateWrapper.kt:22:8 'class ReactInstanceManager : Any' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo/android/src/main/java/expo/modules/ReactActivityDelegateWrapper.kt:102:16 This declaration overrides a deprecated member but is not marked as deprecated itself. Add the '@Deprecated' annotation or suppress the diagnostic.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo/android/src/main/java/expo/modules/ReactActivityDelegateWrapper.kt:102:43 'class ReactInstanceManager : Any' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo/android/src/main/java/expo/modules/ReactActivityDelegateWrapper.kt:103:21 'val reactInstanceManager: ReactInstanceManager' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo/android/src/main/java/expo/modules/fetch/ExpoFetchModule.kt:31:39 'constructor(reactContext: ReactContext): ForwardingCookieHandler' is deprecated. Use the default constructor.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo/android/src/main/java/expo/modules/fetch/NativeResponse.kt:42:16 This declaration overrides a deprecated member but is not marked as deprecated itself. Add the '@Deprecated' annotation or suppress the diagnostic.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/expo/android/src/main/java/expo/modules/fetch/NativeResponse.kt:44:11 'fun deallocate(): Unit' is deprecated. Use sharedObjectDidRelease() instead.
+
+> Task :expo:compileDebugJavaWithJavac
+> Task :expo:bundleLibCompileToJarDebug
+> Task :expo:bundleLibRuntimeToJarDebug
+> Task :expo:processDebugJavaRes
+> Task :expo:bundleLibRuntimeToDirDebug
+> Task :react-native-screens:buildCMakeDebug[x86]
+> Task :expo-modules-core:buildCMakeDebug[x86]
+> Task :react-native-screens:mergeDebugJniLibFolders
+> Task :expo-modules-core:mergeDebugJniLibFolders
+> Task :react-native-screens:mergeDebugNativeLibs
+> Task :react-native-screens:copyDebugJniLibsProjectOnly
+> Task :expo-modules-core:mergeDebugNativeLibs
+> Task :expo-modules-core:copyDebugJniLibsProjectOnly
+
+> Task :react-native-screens:compileDebugKotlin
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/RNScreensPackage.kt:62:9 The corresponding parameter in the supertype 'BaseReactPackage' is named 'name'. This may cause problems when calling this function with named arguments.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/RNScreensPackage.kt:63:9 The corresponding parameter in the supertype 'BaseReactPackage' is named 'reactContext'. This may cause problems when calling this function with named arguments.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/RNScreensPackage.kt:76:17 'constructor(name: String, className: String, canOverrideExistingModule: Boolean, needsEagerInit: Boolean, hasConstants: Boolean, isCxxModule: Boolean, isTurboModule: Boolean): ReactModuleInfo' is deprecated. This constructor is deprecated and will be removed in the future. Use ReactModuleInfo(String, String, boolean, boolean, boolean, boolean)].
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/Screen.kt:24:8 'class UIManagerModule : ReactContextBaseJavaModule, OnBatchCompleteListener, LifecycleEventListener, UIManager' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/Screen.kt:54:77 Unchecked cast of '(CoordinatorLayout.Behavior<View!>?..CoordinatorLayout.Behavior<*>?)' to 'BottomSheetBehavior<Screen>'.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/Screen.kt:426:42 'class UIManagerModule : ReactContextBaseJavaModule, OnBatchCompleteListener, LifecycleEventListener, UIManager' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenContainerViewManager.kt:6:8 'class LayoutShadowNode : ReactShadowNodeImpl' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenContainerViewManager.kt:56:78 'class LayoutShadowNode : ReactShadowNodeImpl' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenStackFragment.kt:222:31 'var targetElevation: Float' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenStackFragment.kt:225:13 'fun setHasOptionsMenu(p0: Boolean): Unit' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenStackFragment.kt:404:18 This declaration overrides a deprecated member but is not marked as deprecated itself. Add the '@Deprecated' annotation or suppress the diagnostic.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenStackFragment.kt:411:22 'fun onPrepareOptionsMenu(p0: Menu): Unit' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenStackFragment.kt:414:18 This declaration overrides a deprecated member but is not marked as deprecated itself. Add the '@Deprecated' annotation or suppress the diagnostic.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenStackFragment.kt:419:22 'fun onCreateOptionsMenu(p0: Menu, p1: MenuInflater): Unit' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenStackHeaderConfig.kt:441:22 'val reactNativeHost: ReactNativeHost' is deprecated. You should not use ReactNativeHost directly in the New Architecture. Use ReactHost instead.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenStackHeaderConfigShadowNode.kt:4:8 'class LayoutShadowNode : ReactShadowNodeImpl' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenStackHeaderConfigShadowNode.kt:10:5 'class LayoutShadowNode : ReactShadowNodeImpl' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenStackHeaderConfigViewManager.kt:9:8 'class LayoutShadowNode : ReactShadowNodeImpl' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenStackHeaderConfigViewManager.kt:37:78 'class LayoutShadowNode : ReactShadowNodeImpl' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenStackViewManager.kt:6:8 'class LayoutShadowNode : ReactShadowNodeImpl' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenStackViewManager.kt:65:78 'class LayoutShadowNode : ReactShadowNodeImpl' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenWindowTraits.kt:48:42 'fun replaceSystemWindowInsets(p0: Int, p1: Int, p2: Int, p3: Int): WindowInsetsCompat' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenWindowTraits.kt:49:39 'val systemWindowInsetLeft: Int' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenWindowTraits.kt:51:39 'val systemWindowInsetRight: Int' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreenWindowTraits.kt:52:39 'val systemWindowInsetBottom: Int' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreensShadowNode.kt:4:8 'class LayoutShadowNode : ReactShadowNodeImpl' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreensShadowNode.kt:5:8 'class NativeViewHierarchyManager : Any' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreensShadowNode.kt:6:8 'class NativeViewHierarchyOptimizer : Any' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreensShadowNode.kt:7:8 'class UIManagerModule : ReactContextBaseJavaModule, OnBatchCompleteListener, LifecycleEventListener, UIManager' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreensShadowNode.kt:11:5 'class LayoutShadowNode : ReactShadowNodeImpl' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreensShadowNode.kt:12:63 'class NativeViewHierarchyOptimizer : Any' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreensShadowNode.kt:14:34 'class UIManagerModule : ReactContextBaseJavaModule, OnBatchCompleteListener, LifecycleEventListener, UIManager' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/ScreensShadowNode.kt:14:106 'class NativeViewHierarchyManager : Any' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/bottomsheet/BottomSheetDialogRootView.kt:7:8 'object ReactFeatureFlags : Any' is deprecated. Use com.facebook.react.internal.featureflags.ReactNativeFeatureFlags instead.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/bottomsheet/BottomSheetDialogRootView.kt:25:13 'object ReactFeatureFlags : Any' is deprecated. Use com.facebook.react.internal.featureflags.ReactNativeFeatureFlags instead.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/bottomsheet/BottomSheetDialogRootView.kt:32:9 The corresponding parameter in the supertype 'ReactViewGroup' is named 'left'. This may cause problems when calling this function with named arguments.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/bottomsheet/BottomSheetDialogRootView.kt:33:9 The corresponding parameter in the supertype 'ReactViewGroup' is named 'top'. This may cause problems when calling this function with named arguments.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/bottomsheet/BottomSheetDialogRootView.kt:34:9 The corresponding parameter in the supertype 'ReactViewGroup' is named 'right'. This may cause problems when calling this function with named arguments.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/bottomsheet/BottomSheetDialogRootView.kt:35:9 The corresponding parameter in the supertype 'ReactViewGroup' is named 'bottom'. This may cause problems when calling this function with named arguments.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/bottomsheet/BottomSheetDialogRootView.kt:71:9 The corresponding parameter in the supertype 'RootView' is named 'childView'. This may cause problems when calling this function with named arguments.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/bottomsheet/BottomSheetDialogRootView.kt:72:9 The corresponding parameter in the supertype 'RootView' is named 'ev'. This may cause problems when calling this function with named arguments.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/bottomsheet/BottomSheetDialogRootView.kt:79:46 The corresponding parameter in the supertype 'RootView' is named 'ev'. This may cause problems when calling this function with named arguments.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/bottomsheet/BottomSheetDialogRootView.kt:83:9 The corresponding parameter in the supertype 'RootView' is named 'childView'. This may cause problems when calling this function with named arguments.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/bottomsheet/BottomSheetDialogRootView.kt:84:9 The corresponding parameter in the supertype 'RootView' is named 'ev'. This may cause problems when calling this function with named arguments.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/bottomsheet/BottomSheetDialogRootView.kt:95:34 The corresponding parameter in the supertype 'RootView' is named 't'. This may cause problems when calling this function with named arguments.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/bottomsheet/DimmingView.kt:63:9 The corresponding parameter in the supertype 'ReactCompoundView' is named 'touchX'. This may cause problems when calling this function with named arguments.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/bottomsheet/DimmingView.kt:64:9 The corresponding parameter in the supertype 'ReactCompoundView' is named 'touchY'. This may cause problems when calling this function with named arguments.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/bottomsheet/DimmingView.kt:68:9 The corresponding parameter in the supertype 'ReactCompoundViewGroup' is named 'touchX'. This may cause problems when calling this function with named arguments.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/bottomsheet/DimmingView.kt:69:9 The corresponding parameter in the supertype 'ReactCompoundViewGroup' is named 'touchY'. This may cause problems when calling this function with named arguments.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/gamma/tabs/TabsHostViewManager.kt:37:9 The corresponding parameter in the supertype 'TabsHostViewManager' is named 'view'. This may cause problems when calling this function with named arguments.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/safearea/SafeAreaView.kt:19:8 'class UIManagerModule : ReactContextBaseJavaModule, OnBatchCompleteListener, LifecycleEventListener, UIManager' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/safearea/SafeAreaView.kt:153:45 'fun consumeDisplayCutout(): WindowInsetsCompat' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/safearea/SafeAreaView.kt:194:58 'class UIManagerModule : ReactContextBaseJavaModule, OnBatchCompleteListener, LifecycleEventListener, UIManager' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/safearea/SafeAreaView.kt:201:31 'val uiImplementation: UIImplementation!' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/safearea/paper/SafeAreaViewShadowNode.kt:7:8 'class LayoutShadowNode : ReactShadowNodeImpl' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/safearea/paper/SafeAreaViewShadowNode.kt:8:8 'class NativeViewHierarchyOptimizer : Any' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/safearea/paper/SafeAreaViewShadowNode.kt:14:32 'class LayoutShadowNode : ReactShadowNodeImpl' is deprecated. Deprecated in Java.
+w: file:///home/xavrir/FreshTrack/apps/mobile/node_modules/react-native-screens/android/src/main/java/com/swmansion/rnscreens/safearea/paper/SafeAreaViewShadowNode.kt:83:63 'class NativeViewHierarchyOptimizer : Any' is deprecated. Deprecated in Java.
+
+> Task :react-native-screens:compileDebugJavaWithJavac
+> Task :react-native-screens:bundleLibCompileToJarDebug
+> Task :app:buildCMakeDebug[armeabi-v7a]
+> Task :react-native-screens:processDebugJavaRes
+> Task :react-native-screens:bundleLibRuntimeToJarDebug
+> Task :react-native-screens:bundleLibRuntimeToDirDebug
+> Task :app:configureCMakeDebug[x86]
+> Task :app:buildCMakeDebug[x86]
+> Task :app:mergeDebugJniLibFolders
+> Task :app:validateSigningDebug
+> Task :app:writeDebugAppMetadata
+> Task :app:writeDebugSigningConfigVersions
+> Task :app:mergeLibDexDebug
+> Task :app:mergeDebugNativeLibs
+> Task :app:stripDebugDebugSymbols
+> Task :app:processDebugResources
+> Task :app:compileDebugKotlin
+> Task :app:compileDebugJavaWithJavac
+> Task :app:dexBuilderDebug
+> Task :app:processDebugJavaRes
+> Task :app:mergeDebugGlobalSynthetics
+> Task :app:mergeProjectDexDebug
+> Task :app:mergeDebugJavaResource
+> Task :app:packageDebug
+> Task :app:createDebugApkListingFileRedirect
+> Task :app:assembleDebug
+
+[Incubating] Problems report is available at: file:///home/xavrir/FreshTrack/apps/mobile/android/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 9m 31s
+215 actionable tasks: 179 executed, 8 from cache, 28 up-to-date
+Starting Metro Bundler
+
+Waiting on http://localhost:8081
+CommandError: Failed to get properties for device (emulator-5554): Command failed: /home/xavrir/Android/Sdk/platform-tools/adb -s emulator-5554 shell getprop ro.product.cpu.abilist
+adb: device 'emulator-5554' not found
+

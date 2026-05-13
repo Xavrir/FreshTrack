@@ -1,4 +1,3 @@
-import React from 'react';
 import { Text as RNText, TextProps as RNTextProps } from 'react-native';
 import { useTheme } from '../theme/ThemeProvider';
 
@@ -41,7 +40,7 @@ export function Text({
     }
   };
 
-  const getFontFamily = () => {
+  const getFontFamily = (): string => {
     if (mono) {
       const monoFamily = typography.fontFamily.mono;
       switch (weight) {
@@ -51,18 +50,24 @@ export function Text({
       }
     }
 
-    const family = serif || variant === 'display' || variant === 'h1' || variant === 'h2'
-      ? typography.fontFamily.heading
-      : typography.fontFamily.body;
+    if (serif || variant === 'display' || variant === 'h1' || variant === 'h2') {
+      const family = typography.fontFamily.heading;
+      switch (weight) {
+        case 'bold': return family.bold;
+        default: return family.regular;
+      }
+    }
+
+    const family = typography.fontFamily.body;
 
     switch (weight) {
       case 'bold': return family.bold;
-      case 'medium': return family.medium ?? family.regular;
+      case 'medium': return family.medium;
       default: return family.regular;
     }
   };
 
-  const getColor = () => {
+  const getColor = (): string => {
     switch (color) {
       case 'surface': return colors.surface;
       case 'primaryText': return colors.primaryText;

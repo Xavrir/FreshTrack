@@ -45,7 +45,7 @@ export function BottomNav({ active }: BottomNavProps) {
         onPress={() => navigation.navigate('Scanner')}
         activeOpacity={0.8}
       >
-        <Icon name="barcode-scan" size={28} color="surface" />
+        <Icon name="camera-outline" size={28} color="surface" />
       </TouchableOpacity>
 
       <View

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FreshTrack - Low Stock Alert</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2aa0d", // Industrial Amber
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#0C0C0C",
+                        "surface": "#161616",
+                        "border-muted": "#2A2A2A",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "header": ["Barlow", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "8px",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .font-header { font-family: 'Barlow', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Top Navigation -->
+<header class="flex items-center bg-background-light dark:bg-surface p-4 border-b border-slate-200 dark:border-border-muted justify-between sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<button class="text-slate-900 dark:text-slate-100 p-1 hover:bg-slate-200 dark:hover:bg-white/10 rounded transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-header font-bold uppercase tracking-wider">Inventory Alerts</h2>
+</div>
+<div class="flex items-center gap-2">
+<button class="relative p-2 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-white/10 rounded transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+</button>
+</div>
+</header>
+<main class="flex-1 p-4 md:p-8 flex flex-col items-center justify-center max-w-2xl mx-auto w-full">
+<!-- Low Stock Alert Card -->
+<div class="w-full bg-white dark:bg-surface border border-slate-200 dark:border-border-muted rounded shadow-2xl overflow-hidden">
+<!-- Alert Header Badge -->
+<div class="bg-primary/10 border-b border-primary/20 px-4 py-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">warning</span>
+<span class="text-primary font-header font-bold text-xs uppercase tracking-[0.1em]">System Warning: Inventory Critical</span>
+</div>
+<div class="p-6 md:p-8 flex flex-col md:flex-row gap-6 items-start">
+<!-- Product Image -->
+<div class="w-full md:w-48 aspect-square rounded overflow-hidden bg-slate-100 dark:bg-background-dark border border-slate-200 dark:border-border-muted shrink-0 relative">
+<img alt="Organic Whole Milk carton" class="w-full h-full object-cover" data-alt="A fresh carton of organic whole milk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBg37fXssUJddPJPMdB72MJwLW2a8WwDJuTX46QwltlwHkaColXUoZjWjm-u-_3QQYqMR-FTdRkFx53i3lEw1sEPVr8rZXcklLzMrWhwmKRjGLhQCF5a2Z6gnO03Uq9eyu-MW3xgY5ESVy1R0vK_um9pfomRxQ9fctDTZXCkNym4n2GVSDKnr0ZY158BQUDsTdiVieutRtlUz5fvH6pQDz-SU5KDF-5P1B6W3TCzIxKk0xq7YmjylE6haDsoczEvPQxw1n0i90KQFZK"/>
+<div class="absolute top-2 right-2 bg-primary text-black font-header font-bold text-[10px] px-2 py-1 rounded-sm">
+                        LOW STOCK
+                    </div>
+</div>
+<!-- Alert Details -->
+<div class="flex-1 space-y-4">
+<div>
+<h1 class="text-2xl md:text-3xl font-header font-bold text-slate-900 dark:text-white leading-tight">Organic Whole Milk</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1 uppercase tracking-wide">Dairy / Fresh Produce</p>
+</div>
+<div class="bg-background-light dark:bg-background-dark p-4 rounded border border-slate-200 dark:border-border-muted">
+<div class="flex items-center justify-between mb-2">
+<span class="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold">Remaining Status</span>
+<span class="text-primary font-mono text-sm">CRITICAL</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-mono font-bold text-primary">0.5L</span>
+<span class="text-slate-400 dark:text-slate-500 font-mono text-sm">/ 2.0L Capacity</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full bg-slate-200 dark:bg-white/5 h-2 rounded-full mt-4 overflow-hidden">
+<div class="bg-primary h-full" style="width: 25%"></div>
+</div>
+</div>
+<p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                        Inventory level for <span class="text-slate-900 dark:text-white font-semibold">Organic Whole Milk</span> has dropped below the 25% safety threshold. Automated replenishment is required to prevent stockout.
+                    </p>
+</div>
+</div>
+<!-- Actions -->
+<div class="p-6 md:px-8 md:pb-8 flex flex-col sm:flex-row gap-3">
+<button class="flex-1 bg-primary hover:bg-primary/90 text-black font-header font-bold py-4 rounded transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-widest text-sm">
+<span class="material-symbols-outlined">shopping_cart</span>
+                    Shopping List
+                </button>
+<button class="flex-1 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-900 dark:text-slate-100 font-header font-bold py-4 rounded border border-slate-200 dark:border-border-muted transition-all active:scale-[0.98] uppercase tracking-widest text-sm">
+                    Dismiss
+                </button>
+</div>
+</div>
+<p class="mt-8 text-slate-500 dark:text-slate-600 text-[10px] font-mono uppercase tracking-[0.2em] text-center">
+            System ID: FT-INV-0092-B | Last Synced: 2m ago
+        </p>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="sticky bottom-0 w-full border-t border-slate-200 dark:border-border-muted bg-background-light dark:bg-surface px-4 pb-6 pt-2 z-10">
+<div class="flex max-w-lg mx-auto gap-2">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-[10px] font-semibold uppercase tracking-wider">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">inventory_2</span>
+<p class="text-[10px] font-semibold uppercase tracking-wider">Inventory</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">barcode_scanner</span>
+<p class="text-[10px] font-semibold uppercase tracking-wider">Scan</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">format_list_bulleted</span>
+<p class="text-[10px] font-semibold uppercase tracking-wider">List</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-[10px] font-semibold uppercase tracking-wider">Settings</p>
+</a>
+</div>
+</nav>
+</body></html>

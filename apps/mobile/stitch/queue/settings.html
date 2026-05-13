@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e8913b",
+                        "background-light": "#fbf7f0",
+                        "background-dark": "#211911",
+                        "card-light": "#ffffff",
+                        "accent-red": "#D64545",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "mono": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .neo-shadow {
+            box-shadow: 0 4px 20px -2px rgba(232, 145, 59, 0.08), 0 2px 8px -2px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-full min-h-screen w-full max-w-[393px] mx-auto flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- Header -->
+<div class="flex items-center p-6 pb-4 justify-between">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full bg-card-light dark:bg-slate-800 neo-shadow cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-tight flex-1 text-center pr-10">Settings</h2>
+</div>
+<div class="flex flex-col gap-6 px-4 pb-10">
+<!-- Card 1: Household -->
+<div class="flex flex-col gap-3">
+<h4 class="text-primary text-xs font-bold leading-normal tracking-widest px-1 uppercase">Household</h4>
+<div class="bg-card-light dark:bg-slate-800 rounded-xl p-5 neo-shadow flex flex-col gap-5">
+<div class="flex items-center gap-4">
+<div class="size-14 rounded-lg bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl">home_storage</span>
+</div>
+<div class="flex flex-col">
+<p class="text-slate-900 dark:text-slate-100 text-lg font-bold">Keluarga Rizki</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Shared pantry manager</p>
+</div>
+</div>
+<!-- Invite Code -->
+<div class="flex items-center justify-between bg-background-light dark:bg-slate-900/50 p-4 rounded-lg border border-primary/10">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Invite Code</span>
+<p class="font-mono text-primary text-lg font-bold tracking-wider uppercase">FT-A7X2</p>
+</div>
+<button class="text-primary hover:bg-primary/10 p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">content_copy</span>
+</button>
+</div>
+<!-- Members -->
+<div class="flex flex-col gap-3">
+<p class="text-xs font-bold text-slate-400 uppercase">Members</p>
+<div class="flex items-center -space-x-2">
+<div class="size-10 rounded-full border-2 border-card-light dark:border-slate-800 bg-primary flex items-center justify-center text-white text-xs font-bold ring-2 ring-primary/20">
+                                You
+                            </div>
+<div class="size-10 rounded-full border-2 border-card-light dark:border-slate-800 bg-amber-200 flex items-center justify-center text-amber-800 text-xs font-bold">
+                                Ma
+                            </div>
+<div class="size-10 rounded-full border-2 border-card-light dark:border-slate-800 bg-emerald-200 flex items-center justify-center text-emerald-800 text-xs font-bold">
+                                Ad
+                            </div>
+<button class="size-10 rounded-full border-2 border-dashed border-slate-300 dark:border-slate-600 flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2: Expiry Reminders -->
+<div class="flex flex-col gap-3">
+<h4 class="text-primary text-xs font-bold leading-normal tracking-widest px-1 uppercase">Expiry Reminders</h4>
+<div class="bg-card-light dark:bg-slate-800 rounded-xl p-2 neo-shadow overflow-hidden">
+<!-- Row 1 -->
+<div class="flex items-center justify-between p-4 border-b border-slate-50 dark:border-slate-700/50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400">notification_important</span>
+<span class="text-slate-700 dark:text-slate-200 font-medium">7 days before</span>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<div class="w-11 h-6 bg-primary rounded-full transition-colors"></div>
+<div class="absolute left-6 top-1 bg-white w-4 h-4 rounded-full transition-transform"></div>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="flex items-center justify-between p-4 border-b border-slate-50 dark:border-slate-700/50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400">warning</span>
+<span class="text-slate-700 dark:text-slate-200 font-medium">3 days before</span>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<div class="w-11 h-6 bg-primary rounded-full transition-colors"></div>
+<div class="absolute left-6 top-1 bg-white w-4 h-4 rounded-full transition-transform"></div>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="flex items-center justify-between p-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400">event_busy</span>
+<span class="text-slate-700 dark:text-slate-200 font-medium">Day of expiry</span>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<div class="w-11 h-6 bg-primary rounded-full transition-colors"></div>
+<div class="absolute left-6 top-1 bg-white w-4 h-4 rounded-full transition-transform"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3: Account -->
+<div class="flex flex-col gap-3">
+<h4 class="text-primary text-xs font-bold leading-normal tracking-widest px-1 uppercase">Account</h4>
+<div class="bg-card-light dark:bg-slate-800 rounded-xl p-2 neo-shadow">
+<button class="flex w-full items-center justify-between p-4 text-accent-red active:bg-red-50 dark:active:bg-red-900/10 rounded-lg transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-bold">Sign Out</span>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- App Info -->
+<div class="flex flex-col items-center justify-center gap-1 pt-4 opacity-40">
+<p class="text-xs font-bold text-slate-500">FreshTrack v2.4.0</p>
+<p class="text-[10px] text-slate-400">Made for your kitchen</p>
+</div>
+</div>
+<!-- Navigation Placeholder (iOS Style) -->
+<div class="mt-auto pb-8 flex justify-center">
+<div class="w-32 h-1.5 bg-slate-300 dark:bg-slate-700 rounded-full"></div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FreshTrack - Refined Utility Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#F0A500",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#0C0C0C",
+                        "surface-dark": "#161616",
+                        "border-dark": "#262626",
+                    },
+                    fontFamily: {
+                        "display": ["Barlow", "sans-serif"],
+                        "body": ["Plus Jakarta Sans", "Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "8px",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "full": "9999px",
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        h1, h2, h3, .font-barlow {
+            font-family: 'Barlow', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen pb-24">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-background-dark/80 backdrop-blur-md border-b border-border-dark px-4 py-4">
+<div class="max-w-md mx-auto flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-primary/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary text-2xl">kitchen</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight text-slate-100 uppercase">FreshTrack</h1>
+<p class="text-[10px] text-slate-500 font-medium tracking-widest uppercase">Family Inventory</p>
+</div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-dark border border-border-dark">
+<span class="material-symbols-outlined text-slate-400">notifications</span>
+</button>
+</div>
+</header>
+<main class="max-w-md mx-auto px-4 pt-6">
+<!-- Search & Filter Bar -->
+<div class="mb-6">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-dark border-border-dark rounded-lg pl-10 pr-4 py-3 text-slate-200 focus:ring-1 focus:ring-primary focus:border-primary placeholder:text-slate-600" placeholder="Search your kitchen..." type="text"/>
+</div>
+</div>
+<!-- Quick Stats / Tabs -->
+<div class="flex gap-2 mb-8 overflow-x-auto pb-2 no-scrollbar">
+<button class="flex-shrink-0 px-4 py-2 bg-primary text-background-dark font-bold text-sm rounded-lg flex items-center gap-2">
+                All Items <span class="bg-background-dark/20 px-1.5 rounded text-[10px]">24</span>
+</button>
+<button class="flex-shrink-0 px-4 py-2 bg-surface-dark border border-border-dark text-slate-400 font-semibold text-sm rounded-lg flex items-center gap-2 hover:border-primary/50 transition-colors">
+                Expiring <span class="bg-red-500/20 text-red-400 px-1.5 rounded text-[10px]">3</span>
+</button>
+<button class="flex-shrink-0 px-4 py-2 bg-surface-dark border border-border-dark text-slate-400 font-semibold text-sm rounded-lg flex items-center gap-2 hover:border-primary/50 transition-colors">
+                Categories
+            </button>
+</div>
+<!-- Inventory List -->
+<div class="space-y-4">
+<h2 class="text-xs font-bold text-slate-500 tracking-widest uppercase mb-4">Recent Stock</h2>
+<!-- Card 1 -->
+<div class="bg-surface-dark border border-border-dark rounded-lg overflow-hidden flex flex-col">
+<div class="flex p-3 gap-4">
+<div class="relative w-24 h-24 rounded-lg overflow-hidden bg-slate-800 flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close up of a fresh milk carton" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAm2KsKcuwxgxSc5IZ3v9KN_2OWoA1oWoBm7Cy8GJ5JH3RzFlnR6bjwX-iQKQhN1N7Swjh-M1VB2piVqWNAShVKs5HQBYCrir6-AVtx5qCZRGpjzHwyhXo2Qv-FIpX6DfPtm1DYwuUULD9keJH6-VPA2LYD1TZ6CAIkMUmrqmLMu3zDg4Hmuk1CWYDUEv4OGNzw8Aj-EqoafmJH4Q4gqEWBAbHvfRf3kY83ayrrSEhkPa9EBOVJQseEThW2I6T1PuHcdQPFl3W7F8It"/>
+</div>
+<div class="flex flex-col justify-between flex-1 py-1">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-display text-lg font-bold text-slate-100">Whole Milk</h3>
+<span class="material-symbols-outlined text-slate-600 text-xl cursor-pointer">more_vert</span>
+</div>
+<p class="text-xs text-slate-500 font-body">2.5L • Dairy</p>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<div class="bg-red-500/10 text-red-500 text-[10px] font-bold px-2 py-1 rounded border border-red-500/20 uppercase tracking-wider">
+                                3 Days Left
+                            </div>
+<div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
+<div class="bg-red-500 h-full w-1/4"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-dark border border-border-dark rounded-lg overflow-hidden flex flex-col">
+<div class="flex p-3 gap-4">
+<div class="relative w-24 h-24 rounded-lg overflow-hidden bg-slate-800 flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Bowl of fresh red strawberries" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJVkn8H5jp46s42bleJn42SmLe2IVAA0d0u9SgSMPQb6WBmiXAdwrlr6ebPJHolaAj3GuK88w16yEP-ezyFhIKmvu65_3tS6Pwv0JuaUlA4LVLiJdlYd3fMKrx0UHnBcUUgeHwF0-znQYBSm0fMEC-Rpev8S_8-YipG35_fzVRniQ4yl2vrVJ_CYqg9L_cOzeMvllLC15x6yP04Nw3vMhwyH4yqHx5-lwqwjSGKvHZP1WFoWxZmVpGyqd9ZZyV8VHYmxVJ5J-op_MZ"/>
+</div>
+<div class="flex flex-col justify-between flex-1 py-1">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-display text-lg font-bold text-slate-100">Organic Strawberries</h3>
+<span class="material-symbols-outlined text-slate-600 text-xl cursor-pointer">more_vert</span>
+</div>
+<p class="text-xs text-slate-500 font-body">1 lb • Produce</p>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<div class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded border border-primary/20 uppercase tracking-wider">
+                                5 Days Left
+                            </div>
+<div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-1/2"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-dark border border-border-dark rounded-lg overflow-hidden flex flex-col">
+<div class="flex p-3 gap-4">
+<div class="relative w-24 h-24 rounded-lg overflow-hidden bg-slate-800 flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Pack of fresh raw ribeye steaks" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDX7KNS3GSusWIjEVKRZKU8VPw5wrhkcqFCut9DyC4br81jPoO9Z-4qdOUGwtf4BN-E0mO2oF4vCKH_Kj6FlbZTIaLIsEgEBtq83XQQHs1hxNA3TA9JHzovTAyDqT5H1vPL8NHqic1G8NLjSIJ6-vdrsWodBnh-YAAOgkNnuMa__NA9sqF3FO7XT7qxXTxGVN514nFI1lSZMO1Y-2PJEW_SeNhvdxvhP2GVXCpj7mUOYZIxoxBLt3zXrRzt4n5cjPFTWdiEqoyS9fLA"/>
+</div>
+<div class="flex flex-col justify-between flex-1 py-1">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-display text-lg font-bold text-slate-100">Ribeye Steak</h3>
+<span class="material-symbols-outlined text-slate-600 text-xl cursor-pointer">more_vert</span>
+</div>
+<p class="text-xs text-slate-500 font-body">2 Packs • Meat</p>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<div class="bg-emerald-500/10 text-emerald-500 text-[10px] font-bold px-2 py-1 rounded border border-emerald-500/20 uppercase tracking-wider">
+                                12 Days Left
+                            </div>
+<div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
+<div class="bg-emerald-500 h-full w-4/5"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Scanner & Floating Action -->
+<div class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50">
+<button class="bg-primary hover:bg-primary/90 text-background-dark font-bold py-3 px-6 rounded-full flex items-center gap-2 shadow-2xl shadow-primary/20 border-4 border-background-dark">
+<span class="material-symbols-outlined">barcode_scanner</span>
+<span class="font-display uppercase tracking-tight text-sm">Scan Barcode</span>
+</button>
+</div>
+<!-- Bottom Nav Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-surface-dark/95 backdrop-blur-xl border-t border-border-dark px-4 pb-6 pt-2 z-40">
+<div class="max-w-md mx-auto flex items-center justify-between">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">grid_view</span>
+<span class="text-[10px] font-bold font-body uppercase tracking-tighter">Inventory</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-slate-300" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-bold font-body uppercase tracking-tighter">Recipes</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-slate-300" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="text-[10px] font-bold font-body uppercase tracking-tighter">List</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-slate-300" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold font-body uppercase tracking-tighter">Settings</span>
+</a>
+</div>
+</nav>
+</body></html>

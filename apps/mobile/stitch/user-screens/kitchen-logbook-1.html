@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Crew &amp; System Config</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;family=Young+Serif&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "utility-bg": "#F5F2ED",
+                        "utility-border": "#000000",
+                        "utility-text": "#000000",
+                        "utility-green": "#4c9a66",
+                        "utility-red": "#dc2626",
+                        "utility-amber": "#d97706",
+                    },
+                    fontFamily: {
+                        "display": ["Young Serif", "serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0", "lg": "0", "xl": "0", "full": "0"},
+                },
+            },
+        }
+    </script>
+<style>
+        .stamp {
+            display: inline-block;
+            padding: 0.1rem 0.4rem;
+            text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+            font-size: 0.75rem;
+            border: 2px solid;
+            border-radius: 2px;
+            opacity: 0.9;
+        }
+        .stamp.owner {
+            color: #000000;
+            border-color: #000000;
+            background-color: #13ec5b;
+        }
+        .stamp.active {
+            color: #4c9a66;
+            border-color: #4c9a66;
+            background-color: transparent;
+        }
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-utility-bg text-utility-text font-mono min-h-screen antialiased selection:bg-primary selection:text-black">
+<div class="relative flex h-auto min-h-screen w-full flex-col max-w-md mx-auto border-x-2 border-utility-border overflow-x-hidden">
+<header class="flex items-center justify-between border-b-2 border-utility-border p-4 bg-utility-bg sticky top-0 z-10">
+<button aria-label="Menu" class="flex items-center justify-center w-10 h-10 border-2 border-utility-border hover:bg-primary/20 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-utility-bg">
+<span class="material-symbols-outlined text-utility-text">menu</span>
+</button>
+<h1 class="text-xl font-display font-bold text-center flex-1 tracking-tight text-utility-text uppercase">Crew &amp; Config</h1>
+<button aria-label="Notifications" class="flex items-center justify-center w-10 h-10 border-2 border-utility-border hover:bg-primary/20 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-utility-bg">
+<span class="material-symbols-outlined text-utility-text">notifications</span>
+</button>
+</header>
+<main class="flex-1 flex flex-col p-4 gap-6">
+<div class="flex flex-col gap-2">
+<h2 class="font-bold text-sm uppercase tracking-wider flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">vpn_key</span>
+                Household Invite Code
+            </h2>
+<div class="bg-black text-white p-4 flex items-center justify-between border-2 border-black group cursor-pointer hover:bg-gray-900 transition-colors active:scale-[0.99]">
+<span class="font-mono text-xl tracking-[0.2em] font-bold">X7B-9M2-K4Q</span>
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">content_copy</span>
+</div>
+<p class="text-xs text-utility-text/70 uppercase tracking-wide">Share this code to add new crew members.</p>
+</div>
+<div class="flex flex-col gap-2">
+<h2 class="font-bold text-sm uppercase tracking-wider flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">groups</span>
+                Crew Roster
+            </h2>
+<div class="flex flex-col border-2 border-utility-border">
+<div class="grid grid-cols-[1fr_auto] gap-4 p-2 border-b-2 border-utility-border bg-utility-bg font-bold text-xs uppercase tracking-wider">
+<div>Identifier</div>
+<div class="text-right w-20">Status</div>
+</div>
+<div class="relative flex items-center justify-between p-3 border-b-2 border-utility-border bg-white group hover:bg-primary/5 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 border-2 border-utility-border flex items-center justify-center bg-primary shrink-0">
+<span class="font-bold text-sm">JD</span>
+</div>
+<div class="flex flex-col">
+<p class="font-bold text-base leading-tight uppercase">John Doe</p>
+<p class="text-sm text-utility-text/70">SysAdmin</p>
+</div>
+</div>
+<div class="flex items-center justify-end w-20">
+<span class="stamp owner">Owner</span>
+</div>
+</div>
+<div class="relative flex items-center justify-between p-3 border-b-2 border-utility-border bg-utility-bg group hover:bg-primary/5 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 border-2 border-utility-border flex items-center justify-center bg-white shrink-0">
+<span class="font-bold text-sm">AS</span>
+</div>
+<div class="flex flex-col">
+<p class="font-bold text-base leading-tight uppercase">Alice Smith</p>
+<p class="text-sm text-utility-text/70">Resident</p>
+</div>
+</div>
+<div class="flex items-center justify-end w-20">
+<span class="stamp active">Active</span>
+</div>
+</div>
+<div class="relative flex items-center justify-between p-3 bg-white group hover:bg-primary/5 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 border-2 border-utility-border flex items-center justify-center bg-utility-bg shrink-0">
+<span class="font-bold text-sm">RJ</span>
+</div>
+<div class="flex flex-col">
+<p class="font-bold text-base leading-tight uppercase">Rob Jones</p>
+<p class="text-sm text-utility-text/70">Resident</p>
+</div>
+</div>
+<div class="flex items-center justify-end w-20">
+<span class="stamp active">Active</span>
+</div>
+</div>
+</div>
+</div>
+<button class="mt-2 w-full bg-white text-utility-text font-bold text-sm py-3 border-2 border-utility-border hover:bg-utility-bg transition-colors focus:outline-none focus:ring-2 focus:ring-utility-border focus:ring-offset-2 focus:ring-offset-utility-bg uppercase tracking-widest flex items-center justify-center gap-2">
+<span class="material-symbols-outlined font-bold text-lg">person_add</span>
+            Generate Temp Link
+        </button>
+</main>
+<nav class="border-t-2 border-utility-border bg-utility-bg pb-safe pt-2 px-2 sticky bottom-0 z-10">
+<div class="flex justify-around items-center h-16">
+<a class="flex flex-col items-center justify-center w-full h-full text-utility-text/60 hover:text-utility-text border-2 border-transparent hover:border-utility-border focus:border-utility-border focus:outline-none transition-colors group" href="#">
+<span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">inventory_2</span>
+<span class="text-[10px] font-bold uppercase mt-1">Stock</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-utility-text/60 hover:text-utility-text border-2 border-transparent hover:border-utility-border focus:border-utility-border focus:outline-none transition-colors group" href="#">
+<span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">menu_book</span>
+<span class="text-[10px] font-bold uppercase mt-1">Recipes</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-utility-text border-2 border-transparent hover:border-utility-border focus:border-utility-border focus:outline-none transition-colors group" href="#">
+<span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">settings</span>
+<span class="text-[10px] font-bold uppercase mt-1">Config</span>
+</a>
+</div>
+</nav>
+</div>
+
+</body></html>

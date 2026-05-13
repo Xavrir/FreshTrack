@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2aa0d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#1a160f",
+                        "surface": "#2d2416",
+                        "border-muted": "#493d22",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .mono-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .hard-border {
+            border-width: 2px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex items-center justify-center p-4">
+<!-- Modal Overlay -->
+<div class="fixed inset-0 bg-background-dark/80 backdrop-blur-md flex items-center justify-center z-50">
+<!-- Record Usage Card -->
+<div class="w-full max-w-md bg-surface border-2 border-border-muted rounded-lg shadow-2xl overflow-hidden">
+<!-- BottomSheetHandle Style Header (Visual only) -->
+<div class="flex h-6 w-full items-center justify-center border-b border-border-muted/50">
+<div class="h-1 w-10 rounded-full bg-border-muted"></div>
+</div>
+<div class="p-6 flex flex-col gap-6">
+<!-- Product Info Section -->
+<div class="flex flex-col gap-4">
+<div class="flex items-start justify-between gap-4">
+<div class="flex-1">
+<h2 class="text-slate-100 text-2xl font-bold font-display leading-tight">FreshTrack Product</h2>
+<p class="text-primary text-sm font-medium tracking-wide uppercase mt-1">Record Current Usage</p>
+</div>
+<div class="w-20 h-20 rounded-lg border-2 border-border-muted bg-cover bg-center" data-alt="Close up of a organic food product label" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC7hjugSN1vkn2l2apvfcl_HCBPEs3EyCEOzbOVaceatEthdKmfbZFwviL2GUqIO7cFkU-oT7tRxlBUGTigqg6cMO3TJLT4OFpVIiTZ6nBZ-MoT3uz8sCvGMDvluIicDpHAEJ8fCUXczLKaR9q9AZwCLJhDfiUHTWum-nl3LQ3Tnn5-4SnMWkpRexIIlRhu-hjV5bUZz1O8N1ESBh3xS3kAAkbgBoSRg0dHNWnn5qgy_xlt7vMGT7JojlBH51XEFDlP2AxXLk7aGwI8')">
+</div>
+</div>
+</div>
+<!-- Quantity Input Area -->
+<div class="flex flex-col gap-3">
+<label class="text-slate-400 text-xs font-bold tracking-widest uppercase">Quantity to Deduct</label>
+<div class="relative group">
+<input class="mono-font w-full bg-background-dark border-2 border-border-muted text-slate-100 text-5xl text-center py-6 rounded-lg focus:border-primary focus:ring-0 transition-colors" placeholder="0.0" type="text" value="12.5"/>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500">
+<span class="material-symbols-outlined">edit</span>
+</div>
+</div>
+</div>
+<!-- Stepper Controls -->
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-center gap-2 h-14 bg-background-dark border-2 border-border-muted text-slate-100 rounded-lg hover:bg-border-muted active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl">remove</span>
+<span class="mono-font font-bold">0.1</span>
+</button>
+<button class="flex items-center justify-center gap-2 h-14 bg-background-dark border-2 border-border-muted text-slate-100 rounded-lg hover:bg-border-muted active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl">add</span>
+<span class="mono-font font-bold">0.1</span>
+</button>
+<button class="flex items-center justify-center gap-2 h-14 bg-background-dark border-2 border-border-muted text-slate-100 rounded-lg hover:bg-border-muted active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl">keyboard_double_arrow_down</span>
+<span class="mono-font font-bold">1.0</span>
+</button>
+<button class="flex items-center justify-center gap-2 h-14 bg-background-dark border-2 border-border-muted text-slate-100 rounded-lg hover:bg-border-muted active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl">keyboard_double_arrow_up</span>
+<span class="mono-font font-bold">1.0</span>
+</button>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-3 pt-4">
+<button class="w-full h-14 bg-primary text-background-dark font-bold text-lg rounded-lg hard-border border-primary hover:bg-primary/90 transition-colors uppercase tracking-widest">
+                        Confirm Usage
+                    </button>
+<button class="w-full h-12 bg-transparent text-slate-400 font-bold text-sm rounded-lg hover:text-slate-100 transition-colors uppercase tracking-widest">
+                        Cancel
+                    </button>
+</div>
+</div>
+<!-- Footer Meta -->
+<div class="bg-background-dark/40 px-6 py-3 border-t border-border-muted flex justify-between items-center">
+<span class="text-[10px] text-slate-500 font-bold uppercase tracking-tighter">Current Stock: 45.0 units</span>
+<span class="text-[10px] text-slate-500 font-bold uppercase tracking-tighter">Warehouse A-12</span>
+</div>
+</div>
+</div>
+</body></html>

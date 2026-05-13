@@ -1,17 +1,58 @@
 # Runbook (Local Dev)
 
-## Supabase
+## Backend (Go + PostgreSQL)
 
 Prereq: Docker harus jalan.
 
 ```bash
-cd supabase
-npm install
-npm start          # Memulai Supabase lokal (berisi auth, db, dll)
-npm run reset      # Me-reset DB dengan migrations terbaru
+docker compose up -d postgres mailpit
+
+cd backend
+cp .env.example .env
+go mod tidy
 ```
 
-Supabase Studio (default): http://localhost:54323
+API health check:
+
+```bash
+curl http://localhost:8080/health
+curl http://localhost:8080/ready
+```
+
+Mailpit UI: http://localhost:8025
+
+### Database migrations
+
+Install goose if needed:
+
+```bash
+go install github.com/pressly/goose/v3/cmd/goose@latest
+```
+
+Run migrations from `backend/`:
+
+```bash
+set -a && source .env && set +a
+goose -dir db/migrations postgres "$DATABASE_URL" up
+```
+
+Start and validate the API from `backend/`:
+
+```bash
+go run ./cmd/api
+go test ./...
+go build -o /tmp/freshtrack-api ./cmd/api
+```
+
+Run backend integration tests against the migrated local database:
+
+```bash
+FRESHTRACK_TEST_DATABASE_URL="$DATABASE_URL" go test -tags=integration ./internal/server
+```
+
+## Supabase Legacy
+
+Supabase files still exist during migration, but the target backend is Go + PostgreSQL.
 
 ## Mobile (Expo)
 

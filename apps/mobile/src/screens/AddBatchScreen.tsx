@@ -13,8 +13,10 @@ export function AddBatchScreen() {
   const route = useRoute<RouteProp<RootStackParamList, 'AddBatch'>>();
   const { colors, spacing, borderWidth: bw, radii } = useTheme();
   const barcode = route.params?.barcode;
+  const capturedImageUri = route.params?.imageUri;
   const matchedItem = findMockInventoryByBarcode(barcode);
   const aiDetection = route.params?.aiDetection;
+  const isPhotoCaptureFlow = !!capturedImageUri && !barcode;
 
   const initialDraft = useMemo<ProductDetectionDraft | null>(() => {
     if (aiDetection) return aiDetection;
@@ -92,24 +94,35 @@ export function AddBatchScreen() {
           </View>
         )}
 
+        {isPhotoCaptureFlow && (
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.lg }}>
+            <Chip label="AI IDENTIFIED" variant="success" />
+            <Text variant="caption" color="textMuted" mono>
+              PHOTO CAPTURED
+            </Text>
+          </View>
+        )}
+
         <Card elevated style={{ borderRadius: radii.lg, marginBottom: spacing.lg }}>
           <TouchableOpacity activeOpacity={0.88} onPress={() => Alert.alert('Photo upload next', 'The product photo flow is the next frontend piece to wire after the inventory data integration pass.') }>
             <View style={[styles.captureArea, { borderRadius: radii.md, backgroundColor: colors.backgroundAlt, borderWidth: bw.medium, borderColor: colors.border }]}> 
-              {matchedItem ? (
-                <Image source={{ uri: aiDetection?.imageUri ?? matchedItem.imageUri }} style={[styles.captureImage, { borderRadius: radii.md }]} resizeMode="cover" />
+              {capturedImageUri || initialDraft?.imageUri ? (
+                <Image source={{ uri: capturedImageUri ?? initialDraft?.imageUri }} style={[styles.captureImage, { borderRadius: radii.md }]} resizeMode="cover" />
               ) : (
                 <View style={[styles.cameraIcon, { borderRadius: radii.full, backgroundColor: colors.surface, borderWidth: bw.medium, borderColor: colors.border }]}> 
                   <Icon name="camera-plus-outline" size={24} color="primary" />
                 </View>
               )}
               <Text variant="body" weight="bold">
-                {initialDraft?.imageUri ? 'AI product preview loaded' : matchedItem ? 'Photo matched from barcode' : 'Upload product photo'}
+                {capturedImageUri ? 'Captured item photo ready' : initialDraft?.imageUri ? 'Product photo captured' : 'Upload product photo'}
               </Text>
               <Text variant="caption" color="textMuted" align="center">
                 {aiDetection
                   ? `AI confidence ${(aiDetection.confidence ?? 0) * 100 >> 0}% · review before saving.`
-                  : matchedItem
-                    ? 'Using a preview image for the scanned product.'
+                  : capturedImageUri
+                    ? 'Using the captured photo while AI item recognition is still in phase-one preview.'
+                    : initialDraft?.imageUri
+                    ? 'Using captured photo for this item.'
                     : 'Capture a quick label photo to help identify the item later.'}
               </Text>
             </View>

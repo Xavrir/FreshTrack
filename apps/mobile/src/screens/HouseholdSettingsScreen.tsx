@@ -12,13 +12,15 @@ import { BOTTOM_NAV_CLEARANCE } from '../components/BottomNav';
 export function HouseholdSettingsScreen() {
   const navigation = useNavigation<RootNavigationProp>();
   const insets = useSafeAreaInsets();
-  const { user, signOut } = useAuth();
+  const { user, signOut, updateDisplayName } = useAuth();
   const { members, settings, inviteCode, isOwner, updateSettings, removeMember } = useHousehold();
   const { colors, spacing, borderWidth: bw, radii } = useTheme();
 
+  const [displayName, setDisplayName] = useState((user?.user_metadata?.full_name as string | undefined) ?? '');
   const [reminderTime, setReminderTime] = useState(settings?.reminderTimeLocal ?? '09:00');
   const [leadDaysText, setLeadDaysText] = useState(settings?.leadDays?.join(', ') ?? '7, 3, 0');
   const [saving, setSaving] = useState(false);
+  const [profileSaving, setProfileSaving] = useState(false);
 
   useEffect(() => {
     if (settings) {
@@ -26,6 +28,10 @@ export function HouseholdSettingsScreen() {
       setLeadDaysText(settings.leadDays.join(', '));
     }
   }, [settings]);
+
+  useEffect(() => {
+    setDisplayName((user?.user_metadata?.full_name as string | undefined) ?? '');
+  }, [user?.user_metadata]);
 
   const handleSaveSettings = async () => {
     const leadDays = leadDaysText
@@ -74,8 +80,20 @@ export function HouseholdSettingsScreen() {
     ]);
   };
 
+  const handleSaveProfile = async () => {
+    setProfileSaving(true);
+    const { error } = await updateDisplayName(displayName);
+    setProfileSaving(false);
+
+    if (error) {
+      Alert.alert('Error', error);
+    } else {
+      Alert.alert('Saved', 'Profile name updated.');
+    }
+  };
+
   return (
-    <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}> 
+    <SafeAreaView edges={['left', 'right', 'bottom']} style={[styles.safe, { backgroundColor: colors.background }]}> 
       <View
         style={[
           styles.header,
@@ -83,8 +101,8 @@ export function HouseholdSettingsScreen() {
             borderBottomWidth: bw.medium,
             borderBottomColor: colors.border,
             paddingHorizontal: spacing.xl,
-            paddingTop: insets.top + spacing.lg,
-            paddingBottom: spacing.lg,
+            paddingTop: Math.max(insets.top, spacing.sm),
+            paddingBottom: spacing.md,
           },
         ]}
       >
@@ -101,6 +119,40 @@ export function HouseholdSettingsScreen() {
       </View>
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: spacing.xl, paddingBottom: insets.bottom + BOTTOM_NAV_CLEARANCE, gap: spacing.lg }}>
+        <Text variant="label" color="primary" mono tracking="widest">
+          PROFILE
+        </Text>
+
+        <Card elevated style={{ borderRadius: radii.lg }}>
+          <View style={[styles.memberRow, { marginBottom: spacing.lg }]}> 
+            <View style={[styles.avatar, { backgroundColor: colors.backgroundAlt, borderColor: colors.primary, borderRadius: radii.full, borderWidth: bw.medium }]}> 
+              <Text variant="label" mono color="primary">
+                {((displayName || user?.email || 'U').trim().charAt(0) || 'U').toUpperCase()}
+              </Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text variant="body" weight="bold">
+                {displayName || 'Household operator'}
+              </Text>
+              <Text variant="caption" color="textMuted" style={{ marginTop: 4 }}>
+                {user?.email ?? 'demo@freshtrack.local'}
+              </Text>
+            </View>
+            <Chip label="ACCOUNT" variant="warning" />
+          </View>
+
+          <TextInput
+            label="DISPLAY NAME"
+            placeholder="Your name"
+            value={displayName}
+            onChangeText={setDisplayName}
+          />
+
+          <Button variant="primary" block loading={profileSaving} onPress={handleSaveProfile}>
+            SAVE PROFILE
+          </Button>
+        </Card>
+
         <Text variant="label" color="primary" mono tracking="widest">
           MEMBERS
         </Text>

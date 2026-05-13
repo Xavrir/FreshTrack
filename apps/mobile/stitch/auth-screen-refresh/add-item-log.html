@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FreshTrack - Add Item</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@700&amp;family=JetBrains+Mono&amp;family=Plus+Jakarta+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#F0A500",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#0C0C0C",
+                        "neutral-dark": "#1A1A1A",
+                        "border-muted": "#333333"
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "header": ["Barlow", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .font-header { font-family: 'Barlow', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full max-w-md mx-auto flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- Header -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-6 pb-4 justify-between border-b-2 border-border-muted">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-header font-bold leading-tight tracking-wider flex-1 text-center uppercase">ADD ITEM</h2>
+<div class="size-10 shrink-0"></div> <!-- Spacer for centering -->
+</div>
+<!-- Photo Upload Placeholder -->
+<div class="flex flex-col p-6">
+<div class="flex flex-col items-center gap-4 rounded-lg border-2 border-dashed border-border-muted bg-neutral-dark/50 px-6 py-12 transition-colors hover:border-primary/50">
+<div class="bg-primary/10 p-4 rounded-full">
+<span class="material-symbols-outlined text-primary text-4xl">add_a_photo</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<p class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight">Food Photo</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal text-center">Tap to upload or take a photo</p>
+</div>
+<button class="mt-2 flex min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-neutral-dark border-2 border-border-muted text-slate-100 text-sm font-bold tracking-wide uppercase transition-all hover:bg-border-muted">
+                    Add Photo
+                </button>
+</div>
+</div>
+<!-- Form Fields -->
+<div class="flex flex-col gap-2 px-6 pb-24">
+<!-- Item Name -->
+<div class="flex flex-col py-3">
+<label class="flex flex-col w-full">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-wider pb-2">Item Name</p>
+<input class="form-input flex w-full rounded-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border-2 border-border-muted bg-white dark:bg-neutral-dark h-14 placeholder:text-slate-400 dark:placeholder:text-slate-600 px-4 text-base font-normal" placeholder="e.g. Organic Whole Milk" value=""/>
+</label>
+</div>
+<!-- Quantity & Unit Row -->
+<div class="flex flex-row gap-4 py-3">
+<label class="flex flex-col flex-[2]">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-wider pb-2">Quantity</p>
+<input class="form-input flex w-full rounded-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border-2 border-border-muted bg-white dark:bg-neutral-dark h-14 placeholder:text-slate-400 dark:placeholder:text-slate-600 px-4 text-base font-normal" placeholder="1" type="number" value=""/>
+</label>
+<label class="flex flex-col flex-[3]">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-wider pb-2">Unit</p>
+<input class="form-input flex w-full rounded-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border-2 border-border-muted bg-white dark:bg-neutral-dark h-14 placeholder:text-slate-400 dark:placeholder:text-slate-600 px-4 text-base font-normal" placeholder="Liters, kg, pcs" value=""/>
+</label>
+</div>
+<!-- Expiry Date -->
+<div class="flex flex-col py-3">
+<label class="flex flex-col w-full">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-wider pb-2">Expiry Date</p>
+<div class="relative flex w-full items-stretch rounded-lg">
+<input class="form-input flex w-full rounded-lg rounded-r-none border-r-0 text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border-2 border-border-muted bg-white dark:bg-neutral-dark h-14 placeholder:text-slate-400 dark:placeholder:text-slate-600 px-4 text-base font-mono" placeholder="YYYY-MM-DD" value=""/>
+<div class="flex items-center justify-center px-4 rounded-r-lg border-2 border-l-0 border-border-muted bg-white dark:bg-neutral-dark text-slate-400 dark:text-slate-500">
+<span class="material-symbols-outlined">calendar_today</span>
+</div>
+</div>
+</label>
+</div>
+</div>
+<!-- Action Button -->
+<div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-6 bg-gradient-to-t from-background-dark via-background-dark to-transparent">
+<button class="w-full bg-primary hover:bg-primary/90 text-background-dark font-header font-bold text-lg py-4 rounded-lg uppercase tracking-widest shadow-lg transition-transform active:scale-[0.98]">
+                SAVE TO LOG
+            </button>
+</div>
+</div>
+</body></html>

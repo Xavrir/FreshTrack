@@ -77,3 +77,18 @@ export async function detectProductDraft({ barcode, householdId }: DetectProduct
 
   return (data?.autofill as ProductDetectionDraft | undefined) ?? null;
 }
+
+export async function detectProductFromImage(imageUri: string): Promise<ProductDetectionDraft> {
+  // Phase 1: Mock implementation. Real backend vision AI to come later.
+  // For now, we return a draft that just carries the image forward.
+  return {
+    imageUri,
+    name: 'Review captured item',
+    brand: '',
+    category: 'Unsorted',
+    storage: 'Review storage',
+    notes: 'Phase 1 photo capture saved the image. Update item details before saving.',
+    confidence: 0,
+    sources: ['camera-capture'],
+  };
+}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@800&amp;family=JetBrains+Mono:wght@500&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#F0A500",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#0C0C0C",
+                        "surface": "#161616",
+                        "border-muted": "#2A2A2A",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans"],
+                        "logo": ["Barlow"],
+                        "mono": ["JetBrains Mono"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .logo-tracking {
+            letter-spacing: 0.25em;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<div class="relative flex min-h-screen w-full flex-col items-center justify-center p-6">
+<header class="mb-12 flex flex-col items-center">
+<div class="flex flex-col items-center text-center">
+<span class="font-logo text-6xl md:text-7xl font-extrabold leading-none tracking-tight dark:text-white uppercase">
+                    FRESH
+                </span>
+<span class="font-logo text-6xl md:text-7xl font-extrabold leading-none logo-tracking text-primary uppercase">
+                    TRACK
+                </span>
+</div>
+<div class="mt-4 flex items-center gap-2 text-slate-500 dark:text-slate-400 uppercase tracking-widest text-xs font-mono">
+<span class="material-symbols-outlined text-sm">verified_user</span>
+                REFINED UTILITY SYSTEM v2.0
+            </div>
+</header>
+<main class="w-full max-w-[440px]">
+<div class="bg-white dark:bg-surface border-2 border-slate-200 dark:border-border-muted rounded-lg p-8 shadow-2xl">
+<div class="mb-8">
+<h2 class="text-xl font-bold mb-2">Authentication Required</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Enter your enterprise credentials to access the FreshTrack logistics dashboard.</p>
+</div>
+<form class="space-y-6">
+<div class="flex flex-col gap-2">
+<label class="font-mono text-[10px] uppercase tracking-widest text-primary font-bold">
+                            EMAIL_ADDRESS
+                        </label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-500 text-xl">alternate_email</span>
+</div>
+<input class="w-full bg-slate-50 dark:bg-background-dark border border-slate-200 dark:border-border-muted rounded-lg py-4 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-primary text-slate-900 dark:text-white transition-all placeholder:text-slate-600" placeholder="name@freshtrack.io" type="email"/>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-background-dark font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-colors uppercase tracking-wider text-sm">
+<span>SEND ACCESS CODE</span>
+<span class="material-symbols-outlined font-bold">arrow_forward</span>
+</button>
+</form>
+<div class="mt-8 pt-6 border-t border-slate-100 dark:border-border-muted flex flex-col gap-4">
+<div class="flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-slate-400">
+<span class="uppercase">Status: Ready</span>
+<span class="uppercase">Node: US-EAST-1</span>
+</div>
+<div class="flex gap-4">
+<a class="text-xs text-slate-500 hover:text-primary transition-colors underline underline-offset-4 decoration-slate-700" href="#">Single Sign-On</a>
+<a class="text-xs text-slate-500 hover:text-primary transition-colors underline underline-offset-4 decoration-slate-700" href="#">Support Terminal</a>
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-auto py-8 text-center">
+<p class="text-[10px] font-mono text-slate-600 dark:text-slate-500 tracking-tighter uppercase">
+                © 2024 FreshTrack Logistics Systems Corp. All rights reserved. 
+            </p>
+</footer>
+</div>
+</body></html>

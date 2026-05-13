@@ -1,0 +1,122 @@
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">
+        :root {
+            --background-warm: #FBF7F0;
+            --soft-white: #FFFFFF;
+            --terracotta-amber: #E8913A;
+            --espresso: #2D1B0E;
+            --warm-gray-brown: #7A7067;
+            --divider-color: #E8E0D6;
+            --alarm-red: #D64545;
+        }
+        @config {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#E8913A",
+                        "espresso": "#2D1B0E",
+                        "warm-gray-brown": "#7A7067",
+                        "alarm-red": "#D64545",
+                        "warm-cream": "#FBF7F0",
+                        "divider-tan": "#E8E0D6",
+                    },
+                    fontFamily: {
+                        "dm": ["DM Sans", "sans-serif"],
+                        "space": ["Space Grotesk", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-warm-cream font-dm text-espresso antialiased">
+<div class="relative flex min-h-screen w-full max-w-[430px] mx-auto flex-col bg-warm-cream overflow-x-hidden">
+<header class="flex items-center px-4 h-[60px] sticky top-0 z-50 bg-warm-cream/90 backdrop-blur-md">
+<button class="w-10 flex items-center justify-start text-espresso">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<h1 class="flex-1 text-center text-[18px] font-bold">Item Details</h1>
+<div class="w-10 flex items-center justify-end">
+<button class="text-primary text-[16px] font-bold">Edit</button>
+</div>
+</header>
+<main class="flex-1 px-5 pt-2 pb-8">
+<div class="bg-white rounded-[16px] shadow-[0_4px_20px_rgba(45,27,14,0.06)] overflow-hidden">
+<div class="w-full aspect-[4/3] bg-center bg-no-repeat bg-cover" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBkiAMYyf0w8svEvlxR5hI_tzpe8pAtnc_AMK6-2DXFJK842nQik1q5f2frGkVrtScdIza6briElN7BCK5_B9G7CJXjce6e-XVzIKO4gmqUyNSm5BfwFGlWkfjky6Z0pSW3KLdsDrMIacYb9q6i80d4I6Qilo2l7IwjHPC2XWIFxJlV9uUl6jmeEvYqsACJ6APKb6N5Q9kBoD7moGRnv1wYbHb39LmTtjR-GjMXLxTHHtfcXfP98akZztyXA9_5tZlEeYocypyYwo6i");'></div>
+<div class="p-6">
+<div class="flex flex-col gap-0.5 mb-4">
+<h2 class="text-[22px] font-bold text-espresso leading-tight">Susu UHT Diamond</h2>
+<div class="flex items-center justify-between">
+<span class="text-[14px] text-warm-gray-brown">Diamond</span>
+<span class="text-[13px] font-space text-warm-gray-brown/80 tracking-tight">8999999034560</span>
+</div>
+</div>
+<div class="mb-6">
+<span class="inline-flex bg-alarm-red text-white text-[11px] font-bold px-3 py-1.5 rounded-full tracking-wider uppercase font-dm">
+                            Expires in 2 days
+                        </span>
+</div>
+<div class="h-[1px] w-full bg-divider-tan mb-6"></div>
+<div class="grid grid-cols-2">
+<div class="flex flex-col gap-1">
+<span class="text-[11px] font-bold text-warm-gray-brown/70 tracking-widest uppercase">Quantity</span>
+<span class="text-[20px] font-bold font-space text-espresso">3 pcs</span>
+</div>
+<div class="flex flex-col gap-1 border-l border-divider-tan pl-6">
+<span class="text-[11px] font-bold text-warm-gray-brown/70 tracking-widest uppercase">Expires</span>
+<span class="text-[18px] font-bold font-space text-espresso">Mar 12, 2026</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-6 bg-[#F5EFE6] rounded-[16px] p-4 flex gap-3 border border-divider-tan/30">
+<span class="material-symbols-outlined text-primary text-[20px]">info</span>
+<p class="text-[13px] text-warm-gray-brown leading-relaxed font-medium">
+                    Store in a cool, dry place. Once opened, keep refrigerated and consume within 7 days.
+                </p>
+</div>
+<div class="flex flex-col gap-3 mt-8">
+<button class="w-full h-[52px] bg-primary text-espresso font-bold rounded-[14px] shadow-lg shadow-primary/20 flex items-center justify-center text-[16px] active:scale-[0.98] transition-transform">
+                    Record Consumed
+                </button>
+<button class="w-full h-[52px] bg-transparent border-2 border-alarm-red text-alarm-red font-bold rounded-[14px] flex items-center justify-center text-[16px] active:scale-[0.98] transition-transform">
+                    Record Wasted
+                </button>
+</div>
+<div class="mt-10 mb-4 text-center">
+<p class="text-[12px] text-warm-gray-brown">
+                    Added on Feb 28, 2026 by <span class="font-bold text-primary">You</span>
+</p>
+</div>
+</main>
+<nav class="sticky bottom-0 w-full border-t border-divider-tan bg-white/95 backdrop-blur-md px-4 pb-8 pt-3 flex justify-between items-center">
+<a class="flex flex-1 flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1">inventory_2</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Pantry</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-warm-gray-brown" href="#">
+<span class="material-symbols-outlined">barcode_scanner</span>
+<p class="text-[10px] font-bold uppercase tracking-widest text-warm-gray-brown/60">Scan</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-warm-gray-brown" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<p class="text-[10px] font-bold uppercase tracking-widest text-warm-gray-brown/60">Recipes</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-warm-gray-brown" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-bold uppercase tracking-widest text-warm-gray-brown/60">Profile</p>
+</a>
+</nav>
+</div>
+
+</body></html>

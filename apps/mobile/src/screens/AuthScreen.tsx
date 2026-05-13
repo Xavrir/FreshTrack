@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Alert, StyleSheet, Pressable, TextInput as RNTextInput, TouchableOpacity } from 'react-native';
+import { View, Alert, StyleSheet, Pressable, TextInput as RNTextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Text, Button, Divider, Card, Icon } from '../components';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { RootNavigationProp, RootStackParamList } from '../navigation/types';
@@ -38,129 +38,135 @@ export function AuthScreen() {
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}> 
-      <View style={[styles.container, { padding: spacing.xl }]}> 
-        <View style={[styles.topBar, { marginBottom: spacing.xxl }]}> 
-          <TouchableOpacity
-            style={[styles.backButton, { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: bw.medium, borderRadius: radii.md }]}
-            onPress={() => navigation.navigate(isSignUp ? 'SignUp' : 'Login')}
-          >
-            <Icon name="arrow-left" size={18} color="text" />
-          </TouchableOpacity>
-          <Text variant="label" color="textSubtle" mono tracking="widest">
-            ACCESS CODE PAGE
-          </Text>
-          <View style={{ width: 44 }} />
-        </View>
-
-        <View style={{ marginTop: spacing.xxl, marginBottom: spacing['4xl'] }}>
-          <Text variant="label" color="primary" mono tracking="widest" style={{ marginBottom: spacing.sm }}>
-            REFINED UTILITY SYSTEM
-          </Text>
-          <Text variant="display" weight="bold" uppercase>
-            FRESH
-          </Text>
-          <Text variant="display" weight="bold" uppercase color="primary" style={{ marginTop: -6 }}>
-            TRACK
-          </Text>
-          <Text variant="body" color="textMuted" style={{ marginTop: spacing.md, maxWidth: 280 }}>
-            Access your household inventory console, monitor expiring stock, and keep the kitchen in sync.
-          </Text>
-        </View>
-
-        <Card elevated style={[styles.authCard, { backgroundColor: colors.surface, borderRadius: radii.lg }]}> 
-          <Text variant="label" color="primary" mono tracking="widest" style={{ marginBottom: spacing.md }}>
-            {isSignUp ? 'ACCOUNT ACTIVATION' : 'AUTHENTICATION NODE'}
-          </Text>
-
-          <Text variant="h1" weight="bold" uppercase style={{ marginBottom: spacing.sm }}>
-            {isSignUp ? 'Create Access Code' : 'Send Access Code'}
-          </Text>
-          <Text variant="body" color="textMuted" style={{ marginBottom: spacing.xl }}>
-            {isSignUp
-              ? 'We will send a one-time code to verify your email and start household setup.'
-              : 'Continue with email OTP to unlock your live pantry dashboard.'}
-          </Text>
-
-          <View style={{ marginBottom: spacing.sm }}>
-            <Text variant="label" color="textSubtle" mono tracking="widest" style={{ marginBottom: spacing.sm }}>
-              EMAIL ADDRESS
-            </Text>
-            <View
-              style={[
-                styles.inputShell,
-                {
-                  backgroundColor: colors.backgroundAlt,
-                  borderColor: colors.border,
-                  borderRadius: radii.md,
-                },
-              ]}
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+        <ScrollView
+          contentContainerStyle={[styles.scrollContent, { padding: spacing.xl }]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={[styles.topBar, { marginBottom: spacing.xxl }]}> 
+            <TouchableOpacity
+              style={[styles.backButton, { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: bw.medium, borderRadius: radii.md }]}
+              onPress={() => navigation.navigate(isSignUp ? 'SignUp' : 'Login')}
             >
-              <View style={[styles.inputIcon, { backgroundColor: colors.surfaceMuted, borderRadius: radii.sm }]}>
-                <Icon name="at" size={16} color="primary" />
+              <Icon name="arrow-left" size={18} color="text" />
+            </TouchableOpacity>
+            <Text variant="label" color="textSubtle" mono tracking="widest">
+              ACCESS CODE PAGE
+            </Text>
+            <View style={{ width: 44 }} />
+          </View>
+
+          <View style={{ marginTop: spacing.xxl, marginBottom: spacing['4xl'] }}>
+            <Text variant="label" color="primary" mono tracking="widest" style={{ marginBottom: spacing.sm }}>
+              REFINED UTILITY SYSTEM
+            </Text>
+            <Text variant="display" weight="bold" uppercase>
+              FRESH
+            </Text>
+            <Text variant="display" weight="bold" uppercase color="primary" style={{ marginTop: -6 }}>
+              TRACK
+            </Text>
+            <Text variant="body" color="textMuted" style={{ marginTop: spacing.md, maxWidth: 280 }}>
+              Access your household inventory console, monitor expiring stock, and keep the kitchen in sync.
+            </Text>
+          </View>
+
+          <Card elevated style={[styles.authCard, { backgroundColor: colors.surface, borderRadius: radii.lg }]}> 
+            <Text variant="label" color="primary" mono tracking="widest" style={{ marginBottom: spacing.md }}>
+              {isSignUp ? 'ACCOUNT ACTIVATION' : 'AUTHENTICATION NODE'}
+            </Text>
+
+            <Text variant="h1" weight="bold" uppercase style={{ marginBottom: spacing.sm }}>
+              {isSignUp ? 'Create Access Code' : 'Send Access Code'}
+            </Text>
+            <Text variant="body" color="textMuted" style={{ marginBottom: spacing.xl }}>
+              {isSignUp
+                ? 'We will send a one-time code to verify your email and start household setup.'
+                : 'Continue with email OTP to unlock your live pantry dashboard.'}
+            </Text>
+
+            <View style={{ marginBottom: spacing.sm }}>
+              <Text variant="label" color="textSubtle" mono tracking="widest" style={{ marginBottom: spacing.sm }}>
+                EMAIL ADDRESS
+              </Text>
+              <View
+                style={[
+                  styles.inputShell,
+                  {
+                    backgroundColor: colors.backgroundAlt,
+                    borderColor: colors.border,
+                    borderRadius: radii.md,
+                  },
+                ]}
+              >
+                <View style={[styles.inputIcon, { backgroundColor: colors.surfaceMuted, borderRadius: radii.sm }]}> 
+                  <Icon name="at" size={16} color="primary" />
+                </View>
+                <RNTextInput
+                  placeholder="operator@freshtrack.app"
+                  placeholderTextColor={colors.textFaint}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  value={email}
+                  onChangeText={setEmail}
+                  style={{ flex: 1, color: colors.text, fontSize: 14 }}
+                />
               </View>
-              <RNTextInput
-                placeholder="operator@freshtrack.app"
-                placeholderTextColor={colors.textFaint}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                value={email}
-                onChangeText={setEmail}
-                style={{ flex: 1, color: colors.text, fontSize: 14 }}
-              />
             </View>
-          </View>
 
-          <Button variant="primary" block loading={loading} onPress={handleSendOtp}>
-            SEND ACCESS CODE
-          </Button>
-
-          {isMockMode && (
-            <Button variant="secondary" block style={{ marginTop: spacing.md }} onPress={signInMock}>
-              ENTER DEMO WORKSPACE
+            <Button variant="primary" block loading={loading} onPress={handleSendOtp}>
+              SEND ACCESS CODE
             </Button>
-          )}
 
-          <Divider style={{ marginVertical: spacing.xl }} />
+            {isMockMode && (
+              <Button variant="secondary" block style={{ marginTop: spacing.md }} onPress={signInMock}>
+                ENTER DEMO WORKSPACE
+              </Button>
+            )}
 
-          <View style={styles.metaRow}>
-            <View>
-              <Text variant="label" color="textSubtle" mono tracking="widest">
-                {isSignUp ? 'NEXT STEP' : 'STATUS'}
-              </Text>
-              <Text variant="body" color={isMockMode ? 'warning' : 'success'} weight="medium">
-                {isSignUp ? 'Household onboarding after verify' : isMockMode ? 'Offline demo channel ready' : 'Secure node online'}
-              </Text>
+            <Divider style={{ marginVertical: spacing.xl }} />
+
+            <View style={styles.metaRow}>
+              <View>
+                <Text variant="label" color="textSubtle" mono tracking="widest">
+                  {isSignUp ? 'NEXT STEP' : 'STATUS'}
+                </Text>
+                <Text variant="body" color={isMockMode ? 'warning' : 'success'} weight="medium">
+                  {isSignUp ? 'Household onboarding after verify' : isMockMode ? 'Offline demo channel ready' : 'Secure node online'}
+                </Text>
+              </View>
+              <View style={{ alignItems: 'flex-end' }}>
+                <Text variant="label" color="textSubtle" mono tracking="widest">
+                  REGION
+                </Text>
+                <Text variant="body" color="textMuted" mono>
+                  AP-SOUTHEAST
+                </Text>
+              </View>
             </View>
-            <View style={{ alignItems: 'flex-end' }}>
-              <Text variant="label" color="textSubtle" mono tracking="widest">
-                REGION
-              </Text>
-              <Text variant="body" color="textMuted" mono>
-                AP-SOUTHEAST
-              </Text>
+
+            <View style={[styles.linkRow, { marginTop: spacing.lg }]}> 
+              <Pressable onPress={() => navigation.navigate('SignUp')}>
+                <Text variant="label" color="textMuted" mono tracking="wider">
+                  {isSignUp ? 'EDIT ACCOUNT FLOW' : 'CREATE ACCOUNT'}
+                </Text>
+              </Pressable>
+              <Pressable onPress={() => navigation.navigate('Login')}>
+                <Text variant="label" color="textMuted" mono tracking="wider">
+                  RETURN TO LOGIN
+                </Text>
+              </Pressable>
             </View>
-          </View>
+          </Card>
 
-          <View style={[styles.linkRow, { marginTop: spacing.lg }]}>
-            <Pressable onPress={() => navigation.navigate('SignUp')}>
-              <Text variant="label" color="textMuted" mono tracking="wider">
-                {isSignUp ? 'EDIT ACCOUNT FLOW' : 'CREATE ACCOUNT'}
-              </Text>
-            </Pressable>
-            <Pressable onPress={() => navigation.navigate('Login')}>
-              <Text variant="label" color="textMuted" mono tracking="wider">
-                RETURN TO LOGIN
-              </Text>
-            </Pressable>
+          <View style={{ paddingTop: spacing.xxl }}>
+            <Text variant="caption" color="textFaint" mono align="center">
+              (C) 2026 FRESHTRACK SYSTEMS // HOUSEHOLD INVENTORY NETWORK
+            </Text>
           </View>
-        </Card>
-
-        <View style={{ marginTop: 'auto', paddingTop: spacing.xxl }}>
-          <Text variant="caption" color="textFaint" mono align="center">
-            (C) 2026 FRESHTRACK SYSTEMS // HOUSEHOLD INVENTORY NETWORK
-          </Text>
-        </View>
-      </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -171,6 +177,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   authCard: {
     paddingVertical: 24,

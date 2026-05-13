@@ -54,7 +54,7 @@ export function Button({
     }
   };
 
-  const getTextColor = (): 'primaryText' | 'text' | 'surface' | 'textMuted' => {
+  const getTextColor = (): 'primary' | 'primaryText' | 'text' | 'surface' | 'textMuted' => {
     if (disabled) return 'textMuted';
     switch (variant) {
       case 'primary': return 'primaryText';

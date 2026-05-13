@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Barlow:wght@600;700;800&amp;family=JetBrains+Mono:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2aa0d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#1a160f",
+                        "danger": "#ef4444",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "header": ["Barlow", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden max-w-2xl mx-auto">
+<!-- Top Navigation -->
+<div class="flex items-center p-4 pb-2 justify-between">
+<div class="flex size-12 shrink-0 items-center cursor-pointer text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="font-header text-xl font-bold leading-tight tracking-tight flex-1 text-center uppercase">Inventory Tracker</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex cursor-pointer items-center justify-center rounded-lg h-12 bg-transparent text-slate-900 dark:text-slate-100 p-0">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Hero Image -->
+<div class="@container px-4 py-2">
+<div class="w-full bg-center bg-no-repeat bg-cover flex flex-col justify-end overflow-hidden rounded-lg aspect-video border-2 border-primary/20 shadow-xl" data-alt="High resolution photo of fresh red strawberries in a basket" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCOyq4wYYBwOwTiSOn9EyJFU8qGHfK15qQYjzjCoBxWe_-yQtGjueAYcmstsvFzxtI2s6hO7dHgy5MzOmJEajmtsAgonNVyH-IpKiNTCK4eCrUgb93rAn1nTjZ1pR07o0_vDZyabi15mUEEMWihGnmjt8ueQo9CU6rleLN0lWY4LZNEodpTb70WqxjsSVzIJYnkxwgLWpUICq2Jm8K_idYlbW-lURNnqpNIPwOf2SmyhOWXAK5_1SQfP4zQFueSz49-q4py0btUfaaX");'>
+</div>
+</div>
+<!-- Item Title Section -->
+<div class="px-4 pt-6 pb-2">
+<div class="flex items-center gap-2 mb-1">
+<span class="bg-primary/20 text-primary text-[10px] font-bold px-2 py-0.5 rounded border border-primary/30 uppercase tracking-widest">Premium Produce</span>
+</div>
+<h1 class="text-slate-900 dark:text-slate-100 font-header text-4xl font-extrabold leading-none tracking-tight uppercase">Organic Strawberries</h1>
+<p class="text-slate-600 dark:text-slate-400 text-base font-normal leading-relaxed mt-3 border-l-2 border-primary pl-4 italic">
+                Sourced from local organic farm. Keep in original ventilated container for optimal shelf life.
+            </p>
+</div>
+<!-- Bento Grid Data Blocks -->
+<div class="grid grid-cols-2 gap-3 p-4">
+<!-- QTY Block (Spans 2 columns) -->
+<div class="col-span-2 flex flex-col gap-1 rounded-lg p-6 border-2 border-primary/30 bg-primary/5">
+<p class="text-primary font-header text-sm font-bold tracking-[0.2em] uppercase">Quantity Remaining</p>
+<div class="flex items-baseline gap-2">
+<p class="text-slate-900 dark:text-slate-100 font-mono text-5xl font-bold tracking-tighter">450</p>
+<p class="text-slate-500 dark:text-slate-400 font-header text-2xl font-bold uppercase">Grams</p>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-800 h-2 mt-4 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[85%]"></div>
+</div>
+</div>
+<!-- Expiry Block -->
+<div class="flex flex-col gap-2 rounded-lg p-5 border-2 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">event</span>
+<p class="text-slate-500 dark:text-slate-400 font-header text-xs font-bold tracking-widest uppercase">Expiry Date</p>
+</div>
+<p class="text-slate-900 dark:text-slate-100 font-header text-2xl font-bold uppercase">Oct 24</p>
+<p class="text-danger font-display text-[10px] font-bold uppercase">4 days left</p>
+</div>
+<!-- Location Block -->
+<div class="flex flex-col gap-2 rounded-lg p-5 border-2 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">ac_unit</span>
+<p class="text-slate-500 dark:text-slate-400 font-header text-xs font-bold tracking-widest uppercase">Storage</p>
+</div>
+<p class="text-slate-900 dark:text-slate-100 font-header text-2xl font-bold uppercase">Main Fridge</p>
+<p class="text-slate-500 dark:text-slate-400 font-display text-[10px] font-bold uppercase">Shelf 2, Bin A</p>
+</div>
+</div>
+<!-- History Preview (Subtle utility element) -->
+<div class="px-4 py-2">
+<div class="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-4 px-1">
+<span class="text-slate-500 dark:text-slate-400 font-header text-xs font-bold uppercase tracking-widest">Added to inventory</span>
+<span class="text-slate-900 dark:text-slate-100 font-display text-xs font-medium uppercase">Oct 18, 2023</span>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-3 p-4 mt-auto pb-10">
+<button class="flex w-full items-center justify-center gap-3 rounded-lg h-20 bg-primary hover:bg-primary/90 text-background-dark transition-colors border-b-4 border-black/20">
+<span class="material-symbols-outlined font-bold">check_circle</span>
+<span class="font-header text-xl font-extrabold uppercase tracking-tight">Mark Consumed</span>
+</button>
+<button class="flex w-full items-center justify-center gap-3 rounded-lg h-20 bg-danger hover:bg-danger/90 text-white transition-colors border-b-4 border-black/20">
+<span class="material-symbols-outlined font-bold">delete_forever</span>
+<span class="font-header text-xl font-extrabold uppercase tracking-tight">Mark Wasted</span>
+</button>
+</div>
+</div>
+</body></html>

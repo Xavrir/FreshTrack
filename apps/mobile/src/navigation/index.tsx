@@ -13,6 +13,8 @@ import { AuthScreen } from '../screens/AuthScreen';
 import { OTPScreen } from '../screens/OTPScreen';
 import { OnboardingScreen } from '../screens/OnboardingScreen';
 import { InventoryHome } from '../screens/InventoryHome';
+import { MenuRecommendationsScreen } from '../screens/MenuRecommendationsScreen';
+import { MenuRecommendationDetailScreen } from '../screens/MenuRecommendationDetailScreen';
 import { ScannerScreen } from '../screens/ScannerScreen';
 import { AddBatchScreen } from '../screens/AddBatchScreen';
 import { BatchDetailScreen } from '../screens/BatchDetailScreen';
@@ -80,6 +82,8 @@ export function Navigation() {
         ) : (
           <>
             <Stack.Screen name="Main" component={InventoryHome} options={{ animation: 'none' }} />
+            <Stack.Screen name="MenuRecommendations" component={MenuRecommendationsScreen} />
+            <Stack.Screen name="MenuRecommendationDetail" component={MenuRecommendationDetailScreen} />
             <Stack.Screen
               name="Scanner"
               component={ScannerScreen}

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=DM+Sans:wght@400;500;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e8913b",
+                        "background-light": "#fbf7f0",
+                        "background-dark": "#211911",
+                        "warm-sand": "#f5ede0",
+                        "gray-brown": "#8b7e74",
+                        "espresso": "#2d241e",
+                        "soft-white": "#ffffff"
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "dm": ["DM Sans", "sans-serif"],
+                        "space": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Plus Jakarta Sans", sans-serif;
+        }
+        .neo-shadow {
+            box-shadow: 0 4px 15px rgba(139, 126, 116, 0.15);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen">
+<div class="relative flex h-full min-h-screen w-full max-w-[430px] mx-auto flex-col bg-background-light dark:bg-background-dark overflow-x-hidden pb-10">
+<div class="flex items-center p-6 pb-4 justify-between sticky top-0 bg-background-light/80 backdrop-blur-md z-10">
+<div class="text-espresso dark:text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-warm-sand/50 transition-colors cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-espresso dark:text-slate-100 text-[18px] font-bold leading-tight tracking-tight flex-1 text-center font-dm">Add New Item</h2>
+<div class="size-10"></div> 
+</div>
+<div class="px-5 py-4">
+<div class="bg-soft-white dark:bg-slate-800 rounded-[16px] p-5 neo-shadow space-y-5">
+<div class="space-y-1.5">
+<label class="block text-[11px] font-bold tracking-widest text-gray-brown dark:text-gray-400 uppercase font-display">PRODUCT NAME</label>
+<div class="flex items-center bg-warm-sand dark:bg-slate-700 rounded-[12px] p-0.5 border-[1.5px] border-[#efe5d5] dark:border-slate-600">
+<input class="w-full border-none bg-transparent focus:ring-0 text-espresso dark:text-slate-100 placeholder:text-gray-brown/60 p-3 font-medium" placeholder="e.g. Susu UHT Diamond" type="text"/>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="block text-[11px] font-bold tracking-widest text-gray-brown dark:text-gray-400 uppercase font-display">BRAND (OPTIONAL)</label>
+<div class="flex items-center bg-warm-sand dark:bg-slate-700 rounded-[12px] p-0.5 border-[1.5px] border-[#efe5d5] dark:border-slate-600">
+<input class="w-full border-none bg-transparent focus:ring-0 text-espresso dark:text-slate-100 placeholder:text-gray-brown/60 p-3 font-medium" placeholder="Enter brand name" type="text"/>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1.5">
+<label class="block text-[11px] font-bold tracking-widest text-gray-brown dark:text-gray-400 uppercase font-display">QUANTITY</label>
+<div class="flex items-center bg-warm-sand dark:bg-slate-700 rounded-[12px] p-0.5 border-[1.5px] border-[#efe5d5] dark:border-slate-600">
+<input class="w-full border-none bg-transparent focus:ring-0 text-espresso dark:text-slate-100 p-3 font-space font-bold" type="number" value="1"/>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="block text-[11px] font-bold tracking-widest text-gray-brown dark:text-gray-400 uppercase font-display">UNIT</label>
+<div class="relative flex items-center bg-warm-sand dark:bg-slate-700 rounded-[12px] p-0.5 border-[1.5px] border-[#efe5d5] dark:border-slate-600">
+<select class="w-full border-none bg-transparent focus:ring-0 text-espresso dark:text-slate-100 p-3 font-medium appearance-none">
+<option>pcs</option>
+<option>kg</option>
+<option>ml</option>
+<option>box</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 pointer-events-none text-gray-brown">expand_more</span>
+</div>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="block text-[11px] font-bold tracking-widest text-gray-brown dark:text-gray-400 uppercase font-display">EXPIRY DATE</label>
+<div class="flex items-center bg-warm-sand dark:bg-slate-700 rounded-[12px] p-0.5 relative border-[1.5px] border-[#efe5d5] dark:border-slate-600">
+<input class="w-full border-none bg-transparent focus:ring-0 text-espresso dark:text-slate-100 p-3 font-medium" placeholder="Select date" type="text"/>
+<span class="material-symbols-outlined absolute right-4 text-gray-brown">calendar_today</span>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="block text-[11px] font-bold tracking-widest text-gray-brown dark:text-gray-400 uppercase font-display">BARCODE (OPTIONAL)</label>
+<div class="flex items-center bg-warm-sand dark:bg-slate-700 rounded-[12px] p-0.5 relative border-[1.5px] border-[#efe5d5] dark:border-slate-600">
+<input class="w-full border-none bg-transparent focus:ring-0 text-espresso dark:text-slate-100 p-3 font-medium" placeholder="Scan or enter code" type="text"/>
+<span class="material-symbols-outlined absolute right-4 text-gray-brown">barcode_scanner</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto px-5 pt-8 pb-10">
+<button class="w-full bg-[#E8913A] hover:bg-primary/90 transition-all h-[52px] rounded-[12px] shadow-lg flex items-center justify-center group active:scale-[0.98]">
+<span class="text-espresso font-dm font-bold text-[16px]">Add to Pantry</span>
+</button>
+</div>
+</div>
+
+</body></html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#F0A500",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#0C0C0C",
+                        "card-dark": "#161616",
+                        "border-dark": "#262626"
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans"],
+                        "heading": ["Barlow"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "8px",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header -->
+<header class="sticky top-0 z-10 bg-background-light dark:bg-background-dark border-b-2 border-slate-200 dark:border-border-dark px-4 py-4 flex items-center gap-4">
+<button class="text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-heading text-xl font-bold tracking-wider uppercase text-slate-900 dark:text-slate-100">Settings</h1>
+</header>
+<main class="flex-1 overflow-y-auto p-4 space-y-8">
+<!-- Members Section -->
+<section class="space-y-4">
+<h2 class="text-sm font-bold uppercase tracking-widest text-primary">Members</h2>
+<div class="space-y-3">
+<!-- Member Card 1 -->
+<div class="flex items-center justify-between p-4 bg-white dark:bg-card-dark border-2 border-slate-200 dark:border-border-dark rounded-lg">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-full border-2 border-primary/20 bg-cover bg-center" data-alt="Portrait of a male household member" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCLZcZiaRZv7PUCMU1JYaJzQ7UpegfqcWbD3k6eh40drxFiHlitBCOPGbPJnsF9KBQ9LOJsyHUmYZyYx_0EXaEezsqpDXmXPhUES-mTImKxmnQfHCQuxmMJtd4wWFrFPWRW6zy_7XWW6XpDLtBlu0lJB1WAOIld8C1MeAbpxdDffyj8C5USCrqi9b74VZsLx2vORBwmMd7U5VvGaLTkZMe4j022RkjzMNU5HQQcLCc7lzm5BTzmWeo71tll5T3f1U55nx8LoFlrg-RG')"></div>
+<div>
+<p class="font-semibold text-slate-900 dark:text-slate-100">Alex Thompson</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">alex.t@freshtrack.app</p>
+</div>
+</div>
+<span class="px-2 py-1 bg-primary text-background-dark text-[10px] font-bold rounded uppercase">Owner</span>
+</div>
+<!-- Member Card 2 -->
+<div class="flex items-center justify-between p-4 bg-white dark:bg-card-dark border-2 border-slate-200 dark:border-border-dark rounded-lg">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-full border-2 border-primary/20 bg-cover bg-center" data-alt="Portrait of a female household member" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD2ReLl8O-nl4ffbGxvASVT_FnW1wCWn_kKfBS3WB5DnPV4AuNDWnpPc1cshQXWBCmyW8Nr6piTSkiTr0_LOsTMbkXHflgaS7Jv-xodYLjOfF5ukZYeh1Zctne4EjC8pKJTmfSskMq04M5dbfqhMTMUBgaqw4p8U2DLeRuTM9S1w8j7kdr8Vg2xlS-io0IvPzc7pZxRvZjV0k7hqzDMxstsptvVb3Ug5bWOuKLJbTEghhciZ7CeVxbXmrmEYdGi2kfrAfeZ8a3bBsz9')"></div>
+<div>
+<p class="font-semibold text-slate-900 dark:text-slate-100">Jordan Smith</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">jordan.s@freshtrack.app</p>
+</div>
+</div>
+<span class="px-2 py-1 bg-slate-200 dark:bg-border-dark text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded uppercase">Member</span>
+</div>
+<!-- Add Member Button -->
+<button class="w-full flex items-center justify-center gap-2 p-3 border-2 border-dashed border-slate-300 dark:border-border-dark rounded-lg text-slate-500 dark:text-slate-400 hover:border-primary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">person_add</span>
+<span class="text-sm font-bold uppercase tracking-tight">Invite Member</span>
+</button>
+</div>
+</section>
+<!-- Reminders Section -->
+<section class="space-y-4">
+<h2 class="text-sm font-bold uppercase tracking-widest text-primary">Reminders</h2>
+<div class="p-4 bg-white dark:bg-card-dark border-2 border-slate-200 dark:border-border-dark rounded-lg space-y-6">
+<div class="flex items-center justify-between">
+<div>
+<p class="font-semibold text-slate-900 dark:text-slate-100">Weekly Summary</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Inventory and expiration digest</p>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 dark:bg-border-dark rounded-full peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Notification Time</label>
+<div class="flex items-center gap-2">
+<div class="flex-1 relative">
+<input class="w-full bg-background-light dark:bg-background-dark border-2 border-slate-200 dark:border-border-dark rounded-lg px-4 py-3 text-lg font-bold text-primary focus:ring-0 focus:border-primary uppercase" type="time" value="09:00"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 pointer-events-none">schedule</span>
+</div>
+<div class="flex flex-col gap-1">
+<button class="px-3 py-1 bg-primary text-background-dark text-[10px] font-bold rounded uppercase">AM</button>
+<button class="px-3 py-1 bg-slate-200 dark:bg-border-dark text-slate-500 text-[10px] font-bold rounded uppercase">PM</button>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t-2 border-slate-100 dark:border-border-dark flex items-center justify-between">
+<span class="text-sm text-slate-600 dark:text-slate-400 font-medium">Push Notifications</span>
+<span class="material-symbols-outlined text-primary">notifications_active</span>
+</div>
+</div>
+</section>
+<!-- Danger Zone -->
+<section class="space-y-4 pb-20">
+<h2 class="text-sm font-bold uppercase tracking-widest text-red-500">Danger Zone</h2>
+<button class="w-full p-4 border-2 border-red-500/30 text-red-500 rounded-lg font-bold uppercase text-xs tracking-widest hover:bg-red-500/10 transition-colors">
+                Leave Household
+            </button>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-card-dark border-t-2 border-slate-200 dark:border-border-dark px-2 pb-6 pt-2">
+<div class="flex justify-around items-center max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-[10px] font-bold uppercase">Inventory</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="text-[10px] font-bold uppercase">Shopping</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="text-[10px] font-bold uppercase">Insights</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary active-nav" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold uppercase">Settings</span>
+</a>
+</div>
+</nav>
+</body></html>

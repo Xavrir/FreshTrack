@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Product Scanner Cam</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;family=Young+Serif&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "utility-bg": "#F5F2ED",
+                        "utility-border": "#000000",
+                        "utility-text": "#000000",
+                        "utility-green": "#4c9a66",
+                        "utility-red": "#dc2626",
+                        "utility-amber": "#d97706",
+                    },
+                    fontFamily: {
+                        "display": ["Young Serif", "serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0", "lg": "0", "xl": "0", "full": "0"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-utility-bg text-utility-text font-mono min-h-screen antialiased selection:bg-primary selection:text-black">
+<div class="relative flex h-auto min-h-screen w-full flex-col max-w-md mx-auto border-x-2 border-utility-border overflow-x-hidden">
+<header class="flex items-center justify-between border-b-2 border-utility-border p-4 bg-utility-bg sticky top-0 z-10">
+<button aria-label="Back" class="flex items-center justify-center w-10 h-10 border-2 border-utility-border hover:bg-primary/20 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-utility-bg">
+<span class="material-symbols-outlined text-utility-text">arrow_back</span>
+</button>
+<h1 class="text-2xl font-display font-bold text-center flex-1 tracking-tight text-utility-text uppercase">Scanner</h1>
+<button aria-label="Flash" class="flex items-center justify-center w-10 h-10 border-2 border-utility-border hover:bg-primary/20 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-utility-bg">
+<span class="material-symbols-outlined text-utility-text">flash_on</span>
+</button>
+</header>
+<main class="flex-1 flex flex-col relative bg-[#d1d5db]">
+<div class="flex-1 flex flex-col items-center justify-center gap-8 z-10 p-4">
+<div class="bg-utility-bg border-2 border-utility-border px-4 py-2 text-center shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+<p class="font-mono font-bold text-sm tracking-wider uppercase">Align Barcode Within Frame</p>
+</div>
+<div class="w-64 h-40 border-2 border-utility-border relative flex items-center justify-center">
+<div class="absolute top-0 left-0 w-4 h-4 border-t-4 border-l-4 border-utility-border -mt-[2px] -ml-[2px]"></div>
+<div class="absolute top-0 right-0 w-4 h-4 border-t-4 border-r-4 border-utility-border -mt-[2px] -mr-[2px]"></div>
+<div class="absolute bottom-0 left-0 w-4 h-4 border-b-4 border-l-4 border-utility-border -mb-[2px] -ml-[2px]"></div>
+<div class="absolute bottom-0 right-0 w-4 h-4 border-b-4 border-r-4 border-utility-border -mb-[2px] -mr-[2px]"></div>
+<div class="w-full h-0.5 bg-primary absolute top-1/2 -translate-y-1/2 shadow-[0_0_8px_rgba(19,236,91,0.8)]"></div>
+</div>
+</div>
+<div class="absolute bottom-4 left-4 right-4 bg-utility-bg border-2 border-utility-border p-3 z-20 shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+<h2 class="font-mono font-bold text-xs uppercase mb-3 tracking-widest border-b-2 border-utility-border pb-1">Recognized</h2>
+<div class="flex gap-3 overflow-x-auto pb-1 hide-scrollbar">
+<div class="w-14 h-14 border-2 border-utility-border bg-white flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-2xl">water_drop</span>
+</div>
+<div class="w-14 h-14 border-2 border-utility-border bg-white flex items-center justify-center shrink-0 relative">
+<span class="material-symbols-outlined text-2xl">bakery_dining</span>
+<div class="absolute -top-2 -right-2 bg-primary w-5 h-5 border-2 border-utility-border rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px] font-bold">check</span>
+</div>
+</div>
+<div class="w-14 h-14 border-2 border-utility-border bg-white flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-2xl">egg_alt</span>
+</div>
+</div>
+</div>
+</main>
+<nav class="border-t-2 border-utility-border bg-utility-bg pb-safe pt-2 px-2 sticky bottom-0 z-10">
+<div class="flex justify-around items-center h-16">
+<a class="flex flex-col items-center justify-center w-full h-full text-utility-text/60 hover:text-utility-text border-2 border-transparent hover:border-utility-border focus:border-utility-border focus:outline-none transition-colors group" href="#">
+<span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">inventory_2</span>
+<span class="text-[10px] font-bold uppercase mt-1">Stock</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-utility-text border-2 border-utility-border transition-colors group bg-primary/10" href="#">
+<span class="material-symbols-outlined text-3xl scale-110">barcode_scanner</span>
+<span class="text-[10px] font-bold uppercase mt-1">Scan</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-utility-text/60 hover:text-utility-text border-2 border-transparent hover:border-utility-border focus:border-utility-border focus:outline-none transition-colors group" href="#">
+<span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">settings</span>
+<span class="text-[10px] font-bold uppercase mt-1">Config</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

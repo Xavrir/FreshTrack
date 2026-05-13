@@ -1,0 +1,11 @@
+
+> mobile@1.0.0 start
+> expo start
+
+Starting project at /home/xavrir/FreshTrack/apps/mobile
+› Port 8081 is running this app in another window
+  /home/xavrir/FreshTrack/apps/mobile (pid 220483)
+Input is required, but 'npx expo' is in non-interactive mode.
+Required input:
+> Use port 8082 instead?
+› Skipping dev server

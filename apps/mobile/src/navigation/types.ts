@@ -8,8 +8,10 @@ export type RootStackParamList = {
   OTP: { email: string; mode?: 'login' | 'signup' };
   Onboarding: undefined;
   Main: undefined;
+  MenuRecommendations: undefined;
+  MenuRecommendationDetail: { id: string };
   Scanner: undefined;
-  AddBatch: { barcode?: string; aiDetection?: ProductDetectionDraft | null };
+  AddBatch: { barcode?: string; aiDetection?: ProductDetectionDraft | null; imageUri?: string };
   BatchDetail: { id: string };
   ConsumeWaste: { id: string };
   EditBatch: { id: string };

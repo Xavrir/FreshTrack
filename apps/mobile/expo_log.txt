@@ -1,0 +1,8 @@
+Starting project at /home/xavrir/FreshTrack/apps/mobile
+Starting Metro Bundler
+
+The following packages should be updated for best compatibility with the installed expo version:
+  @types/jest@30.0.0 - expected version: 29.5.14
+Your project may not work correctly until you install the expected versions of the packages.
+› Opening exp://192.168.0.111:8081 on AndroidTV_API34
+- Fetching Expo Go

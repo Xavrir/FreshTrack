@@ -9,6 +9,7 @@ interface AuthContextValue {
   isMockMode: boolean;
   signInWithOtp: (email: string) => Promise<{ error: string | null }>;
   verifyOtp: (email: string, token: string) => Promise<{ error: string | null }>;
+  updateDisplayName: (fullName: string) => Promise<{ error: string | null }>;
   signInMock: () => void;
   signOut: () => Promise<void>;
 }
@@ -67,6 +68,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: error?.message ?? null };
   }, []);
 
+  const updateDisplayName = useCallback(async (fullName: string) => {
+    const trimmed = fullName.trim();
+    if (!trimmed) {
+      return { error: 'Please enter a valid name.' };
+    }
+
+    if (!isSupabaseConfigured) {
+      setSession((current) => {
+        if (!current) return current;
+        return {
+          ...current,
+          user: {
+            ...current.user,
+            user_metadata: {
+              ...current.user.user_metadata,
+              full_name: trimmed,
+            },
+          },
+        } as Session;
+      });
+      return { error: null };
+    }
+
+    const { data, error } = await supabase.auth.updateUser({
+      data: { full_name: trimmed },
+    });
+
+    if (!error && data.user) {
+      setSession((current) => (current ? { ...current, user: data.user } : current));
+    }
+
+    return { error: error?.message ?? null };
+  }, []);
+
   const signInMock = useCallback(() => {
     setSession(MOCK_SESSION);
   }, []);
@@ -87,6 +122,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isMockMode: !isSupabaseConfigured,
         signInWithOtp,
         verifyOtp,
+        updateDisplayName,
         signInMock,
         signOut,
       }}

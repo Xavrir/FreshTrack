@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Activity Feed Manifest</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;family=Young+Serif&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "utility-bg": "#F9F9F9","utility-border": "#000000",
+                        "utility-text": "#000000",
+                        "utility-green": "#22c55e",
+                        "utility-red": "#dc2626",
+                        "utility-amber": "#d97706",
+                    },
+                    fontFamily: {
+                        "display": ["Young Serif", "serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0", "lg": "0", "xl": "0", "full": "0"},
+                },
+            },
+        }
+    </script>
+<style>
+        .stamp {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.15rem 0.5rem;
+            text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            border: 2px solid;
+            border-radius: 2px;
+            transform: rotate(-3deg);
+            opacity: 0.9;
+            pointer-events: none;
+            background: transparent;
+        }
+        .stamp.added {
+            color: #22c55e;
+            border-color: #22c55e;
+            transform: rotate(2deg);
+        }
+        .stamp.consumed {
+            color: #000000;
+            border-color: #000000;
+            transform: rotate(-4deg);
+        }
+        .stamp.wasted {
+            color: #dc2626;
+            border-color: #dc2626;
+            transform: rotate(3deg);
+        }
+        .receipt-divider {
+            border-bottom: 2px dashed var(--tw-colors-utility-border);
+            width: 100%;
+            margin: 1rem 0;
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+            background-color: #e5e5e5;}
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-utility-text font-mono min-h-screen antialiased selection:bg-primary selection:text-black flex justify-center">
+<div class="relative flex h-auto min-h-screen w-full flex-col max-w-md bg-utility-bg border-x-2 border-utility-border overflow-x-hidden shadow-2xl">
+<header class="flex items-center justify-between border-b-2 border-utility-border p-4 bg-utility-bg sticky top-0 z-10">
+<button aria-label="Menu" class="flex items-center justify-center w-10 h-10 border-2 border-utility-border hover:bg-primary/20 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-utility-bg">
+<span class="material-symbols-outlined text-utility-text">menu</span>
+</button>
+<h1 class="text-xl font-display font-bold text-center flex-1 tracking-tight text-utility-text uppercase">Activity Manifest</h1>
+<button aria-label="Filter" class="flex items-center justify-center w-10 h-10 border-2 border-utility-border hover:bg-primary/20 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-utility-bg">
+<span class="material-symbols-outlined text-utility-text">filter_list</span>
+</button>
+</header>
+<main class="flex-1 flex flex-col p-6 pt-8">
+<div class="text-center flex flex-col items-center mb-6">
+<span class="material-symbols-outlined text-4xl mb-2">receipt_long</span>
+<h2 class="font-bold text-lg uppercase tracking-widest">System Log</h2>
+<p class="text-xs text-utility-text/70 mt-1">TERM: KITCHEN-01</p>
+<p class="text-xs text-utility-text/70">SEQ: #84920</p>
+</div>
+<div class="receipt-divider mt-0"></div>
+<div class="flex flex-col">
+<div class="relative flex flex-col py-4 border-b-2 border-dotted border-utility-border/50 group hover:bg-black/5 transition-colors px-2">
+<div class="flex justify-between items-start mb-1">
+<span class="text-xs font-bold text-utility-text/60">TODAY, 08:30 AM</span>
+</div>
+<div class="flex justify-between items-center w-full">
+<div class="flex flex-col">
+<p class="font-bold text-base uppercase leading-tight">Organic Milk</p>
+<p class="text-sm text-utility-text/80">1 Gallon</p>
+</div>
+<div class="shrink-0 ml-4">
+<div class="stamp consumed">CONSUMED</div>
+</div>
+</div>
+</div>
+<div class="relative flex flex-col py-4 border-b-2 border-dotted border-utility-border/50 group hover:bg-black/5 transition-colors px-2">
+<div class="flex justify-between items-start mb-1">
+<span class="text-xs font-bold text-utility-text/60">YESTERDAY, 14:20</span>
+</div>
+<div class="flex justify-between items-center w-full">
+<div class="flex flex-col">
+<p class="font-bold text-base uppercase leading-tight">Salmon Fillet</p>
+<p class="text-sm text-utility-text/80">1.5 lbs</p>
+</div>
+<div class="shrink-0 ml-4">
+<div class="stamp added">ADDED</div>
+</div>
+</div>
+</div>
+<div class="relative flex flex-col py-4 border-b-2 border-dotted border-utility-border/50 group hover:bg-black/5 transition-colors px-2">
+<div class="flex justify-between items-start mb-1">
+<span class="text-xs font-bold text-utility-text/60">OCT 24, 09:15 AM</span>
+</div>
+<div class="flex justify-between items-center w-full">
+<div class="flex flex-col">
+<p class="font-bold text-base uppercase leading-tight">Eggs</p>
+<p class="text-sm text-utility-text/80">1 Dozen</p>
+</div>
+<div class="shrink-0 ml-4">
+<div class="stamp wasted">WASTED</div>
+</div>
+</div>
+</div>
+<div class="relative flex flex-col py-4 border-b-2 border-dotted border-utility-border/50 group hover:bg-black/5 transition-colors px-2">
+<div class="flex justify-between items-start mb-1">
+<span class="text-xs font-bold text-utility-text/60">OCT 23, 18:45</span>
+</div>
+<div class="flex justify-between items-center w-full">
+<div class="flex flex-col">
+<p class="font-bold text-base uppercase leading-tight">Sourdough Bread</p>
+<p class="text-sm text-utility-text/80">1 Loaf</p>
+</div>
+<div class="shrink-0 ml-4">
+<div class="stamp added">ADDED</div>
+</div>
+</div>
+</div>
+<div class="relative flex flex-col py-4 group hover:bg-black/5 transition-colors px-2">
+<div class="flex justify-between items-start mb-1">
+<span class="text-xs font-bold text-utility-text/60">OCT 22, 12:30 PM</span>
+</div>
+<div class="flex justify-between items-center w-full">
+<div class="flex flex-col">
+<p class="font-bold text-base uppercase leading-tight">Avocados</p>
+<p class="text-sm text-utility-text/80">2 units</p>
+</div>
+<div class="shrink-0 ml-4">
+<div class="stamp consumed">CONSUMED</div>
+</div>
+</div>
+</div>
+</div>
+<div class="receipt-divider mb-4"></div>
+<div class="text-center text-xs text-utility-text/50 uppercase font-bold tracking-widest pb-8">
+            *** END OF LOG ***
+        </div>
+</main>
+<nav class="border-t-2 border-utility-border bg-utility-bg pb-safe pt-2 px-2 sticky bottom-0 z-10">
+<div class="flex justify-around items-center h-16">
+<a class="flex flex-col items-center justify-center w-full h-full text-utility-text/60 hover:text-utility-text border-2 border-transparent hover:border-utility-border focus:border-utility-border focus:outline-none transition-colors group" href="#">
+<span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">inventory_2</span>
+<span class="text-[10px] font-bold uppercase mt-1">Stock</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-utility-text border-2 border-utility-border bg-primary/10 focus:outline-none transition-colors group" href="#">
+<span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">history</span>
+<span class="text-[10px] font-bold uppercase mt-1">Activity</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-utility-text/60 hover:text-utility-text border-2 border-transparent hover:border-utility-border focus:border-utility-border focus:outline-none transition-colors group" href="#">
+<span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">settings</span>
+<span class="text-[10px] font-bold uppercase mt-1">Config</span>
+</a>
+</div>
+</nav>
+</div>
+
+</body></html>

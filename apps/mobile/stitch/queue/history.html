@@ -1,0 +1,132 @@
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=393, height=852, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Space+Grotesk:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#E8913A",
+                        "background-light": "#FBF7F0",
+                        "espresso": "#2D1B0E",
+                        "taupe": "#8B7E74",
+                        "warm-border": "#E8E0D6",
+                        "success": "#3B9B6D",
+                        "danger": "#D64545",
+                        "terracotta": "#E8913A",
+                    },
+                    fontFamily: {
+                        "sans": ["DM Sans", "sans-serif"],
+                        "mono": ["Space Grotesk", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply bg-background-light text-espresso;
+                font-family: 'DM Sans', sans-serif;
+            }
+        }
+        .neo-btn-shadow {
+            box-shadow: 2px 2px 5px rgba(232, 224, 214, 0.8), -1px -1px 4px rgba(255, 255, 255, 0.9);
+        }
+        .history-row {
+            height: 56px;
+        }.no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen flex flex-col overflow-hidden">
+<header class="sticky top-0 z-20 bg-background-light/95 backdrop-blur-sm px-4 pt-14 pb-4 flex items-center border-b border-warm-border/60">
+<button class="w-10 h-10 flex items-center justify-start rounded-full text-espresso">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<h1 class="flex-1 text-center text-[18px] font-bold leading-none -ml-10">History</h1>
+</header>
+<main class="flex-1 overflow-y-auto no-scrollbar">
+<div class="history-row flex items-center px-6 border-b border-warm-border">
+<div class="w-2 h-2 rounded-full bg-success shrink-0 mr-4"></div>
+<p class="flex-1 text-[15px] font-medium truncate">Added Susu UHT Diamond</p>
+<span class="font-mono text-[13px] text-taupe shrink-0 ml-2">2h ago</span>
+</div>
+<div class="history-row flex items-center px-6 border-b border-warm-border">
+<div class="w-2 h-2 rounded-full bg-terracotta shrink-0 mr-4"></div>
+<p class="flex-1 text-[15px] font-medium truncate">Consumed 2 pcs of Indomie Goreng</p>
+<span class="font-mono text-[13px] text-taupe shrink-0 ml-2">5h ago</span>
+</div>
+<div class="history-row flex items-center px-6 border-b border-warm-border">
+<div class="w-2 h-2 rounded-full bg-danger shrink-0 mr-4"></div>
+<p class="flex-1 text-[15px] font-medium truncate">Wasted 1 pcs of Telur Ayam</p>
+<span class="font-mono text-[13px] text-taupe shrink-0 ml-2">Yesterday</span>
+</div>
+<div class="history-row flex items-center px-6 border-b border-warm-border">
+<div class="w-2 h-2 rounded-full bg-success shrink-0 mr-4"></div>
+<p class="flex-1 text-[15px] font-medium truncate">Added 5kg Jasmine Rice</p>
+<span class="font-mono text-[13px] text-taupe shrink-0 ml-2">Yesterday</span>
+</div>
+<div class="history-row flex items-center px-6 border-b border-warm-border">
+<div class="w-2 h-2 rounded-full bg-terracotta shrink-0 mr-4"></div>
+<p class="flex-1 text-[15px] font-medium truncate">Consumed Whole Grain Bread</p>
+<span class="font-mono text-[13px] text-taupe shrink-0 ml-2">Mar 2</span>
+</div>
+<div class="history-row flex items-center px-6 border-b border-warm-border">
+<div class="w-2 h-2 rounded-full bg-success shrink-0 mr-4"></div>
+<p class="flex-1 text-[15px] font-medium truncate">Added 2L Greek Yogurt</p>
+<span class="font-mono text-[13px] text-taupe shrink-0 ml-2">Mar 1</span>
+</div>
+<div class="history-row flex items-center px-6 border-b border-warm-border">
+<div class="w-2 h-2 rounded-full bg-danger shrink-0 mr-4"></div>
+<p class="flex-1 text-[15px] font-medium truncate">Wasted Leftover Pasta</p>
+<span class="font-mono text-[13px] text-taupe shrink-0 ml-2">Feb 28</span>
+</div>
+<div class="history-row flex items-center px-6 border-b border-warm-border">
+<div class="w-2 h-2 rounded-full bg-terracotta shrink-0 mr-4"></div>
+<p class="flex-1 text-[15px] font-medium truncate">Consumed 3 Apples</p>
+<span class="font-mono text-[13px] text-taupe shrink-0 ml-2">Feb 27</span>
+</div>
+</main>
+<nav class="bg-white/80 backdrop-blur-md border-t border-warm-border pb-8 pt-3 px-6">
+<div class="flex items-center justify-between max-w-md mx-auto relative">
+<a class="flex flex-col items-center gap-1" href="#">
+<span class="material-symbols-outlined text-taupe">grocery</span>
+<span class="text-[10px] font-medium text-taupe">Pantry</span>
+</a>
+<a class="flex flex-col items-center gap-1" href="#">
+<span class="material-symbols-outlined text-primary fill-[1]">history</span>
+<span class="text-[10px] font-bold text-primary">History</span>
+</a>
+<div class="relative -top-6">
+<button class="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-primary/30 ring-4 ring-background-light">
+<span class="material-symbols-outlined text-2xl font-bold">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1" href="#">
+<span class="material-symbols-outlined text-taupe">restaurant_menu</span>
+<span class="text-[10px] font-medium text-taupe">Recipes</span>
+</a>
+<a class="flex flex-col items-center gap-1" href="#">
+<span class="material-symbols-outlined text-taupe">person</span>
+<span class="text-[10px] font-medium text-taupe">Profile</span>
+</a>
+</div>
+</nav>
+<div class="fixed bottom-1 left-1/2 -translate-x-1/2 w-32 h-1 bg-espresso/10 rounded-full pointer-events-none"></div>
+
+</body></html>
