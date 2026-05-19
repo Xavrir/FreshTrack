@@ -491,12 +491,12 @@ type codeExec interface {
 
 func (s *Server) consumeCodeWith(ctx context.Context, exec codeExec, table string, userID uuid.UUID, code string) error {
 	hash := s.hashSecret(strings.TrimSpace(code))
-	query := fmt.Sprintf(`WITH candidate AS (
-		SELECT id, code_hash, attempts FROM %s WHERE user_id = $1 AND consumed_at IS NULL AND expires_at > now() ORDER BY created_at DESC LIMIT 1
-	), bumped AS (
-		UPDATE %s SET attempts = attempts + 1 WHERE id = (SELECT id FROM candidate) AND (SELECT attempts FROM candidate) < 5 RETURNING id, code_hash
-	)
-	UPDATE %s SET consumed_at = now() WHERE id = (SELECT id FROM bumped WHERE code_hash = $2)`, table, table, table)
+	query := fmt.Sprintf(`UPDATE %s SET attempts = attempts + 1, consumed_at = now()
+		WHERE id = (
+			SELECT id FROM %s
+			WHERE user_id = $1 AND consumed_at IS NULL AND expires_at > now()
+			ORDER BY created_at DESC LIMIT 1
+		) AND attempts < 5 AND code_hash = $2`, table, table)
 	tag, err := exec.Exec(ctx, query, userID, hash)
 	if err != nil {
 		return err
@@ -1012,7 +1012,7 @@ func (s *Server) recordInventoryAction(w http.ResponseWriter, r *http.Request, e
 	}
 	_, err = tx.Exec(r.Context(), `INSERT INTO inventory_events (batch_id, household_id, actor_user_id, event_type, amount, unit) VALUES ($1, $2, $3, $4, $5, $6)`, batchID, household.ID, mustUserID(r.Context()), eventType, req.Amount, unit)
 	if err == nil {
-		_, err = tx.Exec(r.Context(), `UPDATE inventory_batches SET quantity = $1, deleted_at = CASE WHEN $1 = 0 THEN now() ELSE deleted_at END, updated_at = now() WHERE id = $2`, newQuantity, batchID)
+		_, err = tx.Exec(r.Context(), `UPDATE inventory_batches SET quantity = $1, deleted_at = CASE WHEN $1::numeric = 0 THEN now() ELSE deleted_at END, updated_at = now() WHERE id = $2`, newQuantity, batchID)
 	}
 	if err != nil || tx.Commit(r.Context()) != nil {
 		httpx.Error(w, http.StatusInternalServerError, "record_action_failed", "Could not record inventory action")
