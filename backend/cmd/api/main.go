@@ -31,6 +31,10 @@ func main() {
 		os.Exit(1)
 	}
 	defer db.Close()
+	if err := database.Migrate(ctx, db); err != nil {
+		logger.Error("migrate database", "error", err)
+		os.Exit(1)
+	}
 
 	app := server.New(cfg, db, logger)
 	httpServer := &http.Server{

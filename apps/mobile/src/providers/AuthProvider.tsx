@@ -1,6 +1,26 @@
-import React, { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
-import { Session, User } from '@supabase/supabase-js';
-import { supabase, isSupabaseConfigured } from '../services/supabase';
+import React, { createContext, useCallback, useContext, useEffect, useState, ReactNode } from 'react';
+import {
+  ApiSession,
+  ApiUser,
+  apiRequest,
+  clearTokens,
+  isApiConfigured,
+  saveTokens,
+  storedAccessToken,
+  storedRefreshToken,
+} from '../services/api';
+
+interface Session {
+  access_token: string;
+  refresh_token: string;
+  user: User;
+}
+
+interface User {
+  id: string;
+  email?: string;
+  user_metadata: { full_name?: string | null };
+}
 
 interface AuthContextValue {
   session: Session | null;
@@ -19,99 +39,131 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 const MOCK_USER: User = {
   id: 'mock-user-id',
   email: 'demo@freshtrack.local',
-  aud: 'authenticated',
-  role: 'authenticated',
-  app_metadata: {},
   user_metadata: { full_name: 'Demo User' },
-  created_at: new Date().toISOString(),
-} as User;
+};
 
 const MOCK_SESSION: Session = {
   access_token: 'mock-token',
   refresh_token: 'mock-refresh',
-  expires_in: 3600,
-  token_type: 'bearer',
   user: MOCK_USER,
-} as Session;
+};
+
+function toSession(apiSession: ApiSession): Session {
+  return {
+    access_token: apiSession.accessToken,
+    refresh_token: apiSession.refreshToken,
+    user: toUser(apiSession.user),
+  };
+}
+
+function toUser(user: ApiUser): User {
+  return {
+    id: user.id,
+    email: user.email,
+    user_metadata: { full_name: user.fullName ?? undefined },
+  };
+}
+
+function fallbackPassword(email: string) {
+  return `FreshTrack-${email.toLowerCase()}-Passwordless`;
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isSupabaseConfigured) {
-      setLoading(false);
-      return;
+    async function restoreSession() {
+      if (!isApiConfigured) {
+        setLoading(false);
+        return;
+      }
+      const [accessToken, refreshToken] = await Promise.all([storedAccessToken(), storedRefreshToken()]);
+      if (!accessToken || !refreshToken) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const user = await apiRequest<ApiUser>('/v1/me', { method: 'GET' }, accessToken);
+        setSession({ access_token: accessToken, refresh_token: refreshToken, user: toUser(user) });
+      } catch {
+        await clearTokens();
+      } finally {
+        setLoading(false);
+      }
     }
-
-    supabase.auth.getSession().then(({ data: { session: s } }) => {
-      setSession(s);
-      setLoading(false);
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => {
-      setSession(s);
-    });
-
-    return () => subscription.unsubscribe();
+    restoreSession();
   }, []);
 
   const signInWithOtp = useCallback(async (email: string) => {
-    if (!isSupabaseConfigured) return { error: 'Supabase not configured. Use demo mode.' };
-    const { error } = await supabase.auth.signInWithOtp({ email });
-    return { error: error?.message ?? null };
+    const trimmed = email.trim().toLowerCase();
+    if (!isApiConfigured) return { error: 'API not configured. Use demo mode.' };
+    try {
+      await apiRequest('/v1/auth/signup', {
+        method: 'POST',
+        body: JSON.stringify({ email: trimmed, password: fallbackPassword(trimmed), fullName: '' }),
+      });
+      return { error: null };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Could not send access code';
+      if (!message.toLowerCase().includes('already')) return { error: message };
+      try {
+        await apiRequest('/v1/auth/resend-verification', {
+          method: 'POST',
+          body: JSON.stringify({ email: trimmed }),
+        });
+        return { error: null };
+      } catch (resendError) {
+        return { error: resendError instanceof Error ? resendError.message : 'Could not send access code' };
+      }
+    }
   }, []);
 
   const verifyOtp = useCallback(async (email: string, token: string) => {
-    if (!isSupabaseConfigured) return { error: 'Supabase not configured. Use demo mode.' };
-    const { error } = await supabase.auth.verifyOtp({ email, token, type: 'email' });
-    return { error: error?.message ?? null };
+    if (!isApiConfigured) return { error: 'API not configured. Use demo mode.' };
+    try {
+      const apiSession = await apiRequest<ApiSession>('/v1/auth/verify-email', {
+        method: 'POST',
+        body: JSON.stringify({ email: email.trim().toLowerCase(), code: token.trim() }),
+      });
+      await saveTokens(apiSession);
+      setSession(toSession(apiSession));
+      return { error: null };
+    } catch (error) {
+      return { error: error instanceof Error ? error.message : 'Verification failed' };
+    }
   }, []);
 
   const updateDisplayName = useCallback(async (fullName: string) => {
     const trimmed = fullName.trim();
-    if (!trimmed) {
-      return { error: 'Please enter a valid name.' };
-    }
-
-    if (!isSupabaseConfigured) {
-      setSession((current) => {
-        if (!current) return current;
-        return {
-          ...current,
-          user: {
-            ...current.user,
-            user_metadata: {
-              ...current.user.user_metadata,
-              full_name: trimmed,
-            },
-          },
-        } as Session;
-      });
+    if (!trimmed) return { error: 'Please enter a valid name.' };
+    if (!session) return { error: 'Not authenticated' };
+    try {
+      const user = await apiRequest<ApiUser>('/v1/me', {
+        method: 'PATCH',
+        body: JSON.stringify({ fullName: trimmed }),
+      }, session.access_token);
+      setSession((current) => (current ? { ...current, user: toUser(user) } : current));
       return { error: null };
+    } catch (error) {
+      return { error: error instanceof Error ? error.message : 'Could not update profile' };
     }
-
-    const { data, error } = await supabase.auth.updateUser({
-      data: { full_name: trimmed },
-    });
-
-    if (!error && data.user) {
-      setSession((current) => (current ? { ...current, user: data.user } : current));
-    }
-
-    return { error: error?.message ?? null };
-  }, []);
+  }, [session]);
 
   const signInMock = useCallback(() => {
     setSession(MOCK_SESSION);
   }, []);
 
   const signOut = useCallback(async () => {
-    if (isSupabaseConfigured) {
-      await supabase.auth.signOut();
+    if (session && isApiConfigured) {
+      await apiRequest('/v1/auth/logout', {
+        method: 'POST',
+        body: JSON.stringify({ refreshToken: session.refresh_token }),
+      }, session.access_token).catch(() => null);
+      await clearTokens();
     }
     setSession(null);
-  }, []);
+  }, [session]);
 
   return (
     <AuthContext.Provider
@@ -119,7 +171,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         session,
         user: session?.user ?? null,
         loading,
-        isMockMode: !isSupabaseConfigured,
+        isMockMode: !isApiConfigured,
         signInWithOtp,
         verifyOtp,
         updateDisplayName,

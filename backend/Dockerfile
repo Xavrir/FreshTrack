@@ -1,9 +1,9 @@
 FROM golang:1.25-alpine AS build
 
 WORKDIR /src
-COPY backend/go.mod backend/go.sum* ./
+COPY go.mod go.sum* ./
 RUN go mod download
-COPY backend/ ./
+COPY . ./
 RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/freshtrack-api ./cmd/api
 
 FROM alpine:3.22

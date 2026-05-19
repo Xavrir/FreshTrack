@@ -209,7 +209,13 @@ func (s *Server) verifyEmail(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, http.StatusInternalServerError, "verify_failed", "Could not verify email")
 		return
 	}
-	httpx.Data(w, http.StatusOK, map[string]bool{"verified": true})
+	user.EmailVerified = true
+	response, err := s.issueTokens(r.Context(), user, r)
+	if err != nil {
+		httpx.Error(w, http.StatusInternalServerError, "verify_failed", "Could not create session")
+		return
+	}
+	httpx.Data(w, http.StatusOK, response)
 }
 
 func (s *Server) resendVerification(w http.ResponseWriter, r *http.Request) {
@@ -220,7 +226,7 @@ func (s *Server) resendVerification(w http.ResponseWriter, r *http.Request) {
 		httpx.BadJSON(w, err)
 		return
 	}
-	if user, err := s.userByEmail(r.Context(), normalizeEmail(req.Email)); err == nil && !user.EmailVerified {
+	if user, err := s.userByEmail(r.Context(), normalizeEmail(req.Email)); err == nil {
 		if code, err := s.createEmailCode(r.Context(), "email_verification_codes", user.ID, 15*time.Minute); err == nil {
 			_ = s.mail.SendEmailVerification(r.Context(), user.Email, code)
 		}
