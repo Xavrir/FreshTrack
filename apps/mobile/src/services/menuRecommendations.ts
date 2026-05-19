@@ -1,5 +1,5 @@
 import { MOCK_INVENTORY, type MockInventoryItem } from '../data/mockInventory';
-import { isSupabaseConfigured, supabase } from './supabase';
+import { authenticatedApiRequest, isApiConfigured } from './api';
 
 export interface MenuIngredient {
   name: string;
@@ -22,6 +22,8 @@ export interface MenuRecommendation {
   steps: string[];
   summary: string;
 }
+
+const DEFAULT_MENU_IMAGE = 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=1200&q=80';
 
 const FALLBACK_MENUS: MenuRecommendation[] = [
   {
@@ -107,35 +109,41 @@ export function getFallbackMenuRecommendationById(id: string) {
   return FALLBACK_MENUS.find((menu) => menu.id === id);
 }
 
+function normalizeMenu(menu: Partial<MenuRecommendation>): MenuRecommendation {
+  return {
+    id: menu.id ?? `menu-${Date.now()}`,
+    name: menu.name ?? 'Inventory-inspired meal',
+    description: menu.description ?? menu.summary ?? 'A suggested meal based on your current inventory.',
+    imageUri: menu.imageUri ?? DEFAULT_MENU_IMAGE,
+    difficulty: menu.difficulty ?? 'easy',
+    canCook: menu.canCook ?? false,
+    matchScore: menu.matchScore ?? 75,
+    prepTime: menu.prepTime ?? '20 MIN',
+    servings: menu.servings ?? '2 SERVINGS',
+    ingredients: menu.ingredients ?? [],
+    steps: menu.steps ?? [],
+    summary: menu.summary ?? menu.description ?? 'Review ingredients before cooking.',
+  };
+}
+
 interface RecommendMenusParams {
   householdId?: string;
   inventory?: MockInventoryItem[];
 }
 
 export async function recommendMenus({ householdId, inventory = MOCK_INVENTORY }: RecommendMenusParams): Promise<MenuRecommendation[]> {
-  if (!isSupabaseConfigured || !householdId) {
+  if (!isApiConfigured || !householdId) {
     return getFallbackMenuRecommendations(inventory);
   }
 
-  const { data, error } = await supabase.functions.invoke('recommend-menus', {
-    body: {
-      household_id: householdId,
-      inventory: inventory.map((item) => ({
-        name: item.name,
-        brand: item.brand,
-        quantityValue: item.quantityValue,
-        unit: item.unit,
-        qtyLabel: item.qtyLabel,
-        category: item.category,
-        expiryIso: item.expiryIso,
-      })),
-    },
-  });
+  try {
+    const data = await authenticatedApiRequest<{ menus?: MenuRecommendation[] }>('/v1/menus/recommend', {
+      method: 'POST',
+      body: JSON.stringify({}),
+    });
 
-  if (error) {
+    return data.menus?.length ? data.menus.map(normalizeMenu) : getFallbackMenuRecommendations(inventory);
+  } catch {
     return getFallbackMenuRecommendations(inventory);
   }
-
-  const menus = data?.menus as MenuRecommendation[] | undefined;
-  return menus?.length ? menus : getFallbackMenuRecommendations(inventory);
 }

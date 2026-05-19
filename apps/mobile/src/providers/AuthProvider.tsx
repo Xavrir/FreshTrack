@@ -87,7 +87,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const user = await apiRequest<ApiUser>('/v1/me', { method: 'GET' }, accessToken);
         setSession({ access_token: accessToken, refresh_token: refreshToken, user: toUser(user) });
       } catch {
-        await clearTokens();
+        try {
+          const apiSession = await apiRequest<ApiSession>('/v1/auth/refresh', {
+            method: 'POST',
+            body: JSON.stringify({ refreshToken }),
+          });
+          await saveTokens(apiSession);
+          setSession(toSession(apiSession));
+        } catch {
+          await clearTokens();
+        }
       } finally {
         setLoading(false);
       }

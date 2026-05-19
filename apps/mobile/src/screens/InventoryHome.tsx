@@ -1,40 +1,94 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { View, FlatList, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
 import { Text, BottomNav, Icon, Chip, Card } from '../components';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '../navigation/types';
 import { useTheme } from '../theme/ThemeProvider';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BOTTOM_NAV_CLEARANCE } from '../components/BottomNav';
-import { MOCK_INVENTORY, MockInventoryItem } from '../data/mockInventory';
+import { MOCK_INVENTORY } from '../data/mockInventory';
+import { inventoryRepo, type InventoryBatch } from '../services/InventoryRepository';
 
 const FILTERS = ['All', 'Expiring', 'Fresh', 'Low Stock'] as const;
 type FilterLabel = typeof FILTERS[number];
+
+const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80';
+
+function daysUntil(date?: string) {
+  if (!date) return null;
+  const today = new Date();
+  const expiry = new Date(`${date}T00:00:00`);
+  return Math.ceil((expiry.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+}
+
+function batchStatus(item: InventoryBatch) {
+  const days = daysUntil(item.expiryDate);
+  if (days !== null && days < 0) return 'expired';
+  if (days !== null && days <= 3) return 'soon';
+  return 'good';
+}
 
 export function InventoryHome() {
   const navigation = useNavigation<RootNavigationProp>();
   const insets = useSafeAreaInsets();
   const { colors, spacing, borderWidth: bw, radii } = useTheme();
   const [activeFilter, setActiveFilter] = useState<FilterLabel>('All');
+  const [items, setItems] = useState<InventoryBatch[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      setLoading(true);
+      inventoryRepo.getBatches()
+        .then((results) => {
+          if (active) setItems(results);
+        })
+        .catch(() => {
+          if (active) {
+            setItems(MOCK_INVENTORY.map((item) => ({
+              id: item.id,
+              name: item.name,
+              brand: item.brand,
+              barcode: item.barcode,
+              quantity: Number(item.quantityValue) || 1,
+              unit: item.unit,
+              category: item.category,
+              expiryDate: item.expiryIso,
+              imageUrl: item.imageUri,
+              createdAt: new Date().toISOString(),
+            })));
+          }
+        })
+        .finally(() => {
+          if (active) setLoading(false);
+        });
+      return () => {
+        active = false;
+      };
+    }, [])
+  );
 
   const filteredData = useMemo(() => {
     switch (activeFilter) {
       case 'Expiring':
-        return MOCK_INVENTORY.filter((item) => item.status === 'soon' || item.status === 'expired');
+        return items.filter((item) => batchStatus(item) === 'soon' || batchStatus(item) === 'expired');
       case 'Fresh':
-        return MOCK_INVENTORY.filter((item) => item.status === 'good');
+        return items.filter((item) => batchStatus(item) === 'good');
       case 'Low Stock':
-        return MOCK_INVENTORY.filter((item) => item.isLowStock);
+        return items.filter((item) => item.quantity <= 1);
       case 'All':
       default:
-        return MOCK_INVENTORY;
+        return items;
     }
-  }, [activeFilter]);
+  }, [activeFilter, items]);
 
-  const renderItem = ({ item }: { item: MockInventoryItem }) => {
-    const progress = item.status === 'expired' ? 0.18 : item.status === 'soon' ? 0.42 : 0.78;
-    const accentColor = item.status === 'expired' ? colors.danger : item.status === 'soon' ? colors.warning : colors.success;
-    const chipVariant = item.status === 'expired' ? 'danger' : item.status === 'soon' ? 'warning' : 'success';
+  const renderItem = ({ item }: { item: InventoryBatch }) => {
+    const status = batchStatus(item);
+    const daysLeft = daysUntil(item.expiryDate);
+    const progress = status === 'expired' ? 0.18 : status === 'soon' ? 0.42 : 0.78;
+    const accentColor = status === 'expired' ? colors.danger : status === 'soon' ? colors.warning : colors.success;
+    const chipVariant = status === 'expired' ? 'danger' : status === 'soon' ? 'warning' : 'success';
 
     return (
       <TouchableOpacity activeOpacity={0.88} onPress={() => navigation.navigate('BatchDetail', { id: item.id })}>
@@ -51,7 +105,7 @@ export function InventoryHome() {
                 },
               ]}
             >
-              <Image source={{ uri: item.imageUri }} style={[styles.thumbImage, { borderRadius: radii.md }]} resizeMode="cover" />
+              <Image source={{ uri: item.imageUrl ?? PLACEHOLDER_IMAGE }} style={[styles.thumbImage, { borderRadius: radii.md }]} resizeMode="cover" />
             </View>
 
             <View style={{ flex: 1 }}>
@@ -59,11 +113,11 @@ export function InventoryHome() {
                 {item.name}
               </Text>
               <Text variant="caption" color="textMuted">
-                {item.qtyLabel} · {item.category}
+                {item.quantity} {item.unit} · {item.category ?? 'Unsorted'}
               </Text>
               <View style={{ marginTop: spacing.sm }}>
                 <Chip
-                  label={item.status === 'expired' ? 'EXPIRED' : `${item.daysLeft} DAYS LEFT`}
+                  label={status === 'expired' ? 'EXPIRED' : daysLeft === null ? 'NO EXPIRY' : `${daysLeft} DAYS LEFT`}
                   variant={chipVariant}
                 />
               </View>
@@ -74,7 +128,7 @@ export function InventoryHome() {
                 <Icon name="dots-vertical" size={18} color="textSubtle" />
               </TouchableOpacity>
               <Text variant="caption" color="textSubtle" mono>
-                {item.expiry}
+                {item.expiryDate ?? 'No date'}
               </Text>
             </View>
           </View>
@@ -149,15 +203,15 @@ export function InventoryHome() {
                     LOW STOCK ALERT
                   </Text>
                   <Text variant="body" weight="bold">
-                    Strawberries and yogurt need attention.
+                    {loading ? 'Checking stock status.' : `${items.filter((item) => batchStatus(item) !== 'good' || item.quantity <= 1).length} items need attention.`}
                   </Text>
                   <Text variant="caption" color="textMuted" style={{ marginTop: 4 }}>
-                    2 items are within the next 48 hours.
+                    Review expiring, expired, and low-stock batches.
                   </Text>
                 </View>
                 <View style={[styles.alertBadge, { backgroundColor: colors.danger, borderRadius: radii.full }]}> 
                   <Text variant="label" color="surface" mono>
-                    02
+                    {String(items.filter((item) => batchStatus(item) !== 'good' || item.quantity <= 1).length).padStart(2, '0')}
                   </Text>
                 </View>
               </View>

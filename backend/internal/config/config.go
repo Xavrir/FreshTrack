@@ -34,7 +34,7 @@ type Config struct {
 func Load() Config {
 	return Config{
 		AppEnv:             env("APP_ENV", "development"),
-		APIPort:            env("API_PORT", "8080"),
+		APIPort:            env("API_PORT", env("PORT", "8080")),
 		DatabaseURL:        env("DATABASE_URL", "postgres://freshtrack:freshtrack@localhost:5432/freshtrack?sslmode=disable"),
 		AccessTokenSecret:  env("JWT_ACCESS_SECRET", devAccessTokenSecret),
 		AccessTokenTTL:     durationEnv("ACCESS_TOKEN_TTL", 15*time.Minute),

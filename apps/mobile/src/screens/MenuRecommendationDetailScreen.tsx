@@ -13,7 +13,7 @@ export function MenuRecommendationDetailScreen() {
   const route = useRoute<RouteProp<RootStackParamList, 'MenuRecommendationDetail'>>();
   const insets = useSafeAreaInsets();
   const { colors, spacing, borderWidth: bw, radii } = useTheme();
-  const menu = getFallbackMenuRecommendationById(route.params.id);
+  const menu = route.params.menu ?? getFallbackMenuRecommendationById(route.params.id);
 
   if (!menu) {
     return (

@@ -7,6 +7,7 @@ import { useTheme } from '../theme/ThemeProvider';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { findMockInventoryByBarcode } from '../data/mockInventory';
 import type { ProductDetectionDraft } from '../services/productDetection';
+import { inventoryRepo } from '../services/InventoryRepository';
 
 export function AddBatchScreen() {
   const navigation = useNavigation<RootNavigationProp>();
@@ -47,6 +48,7 @@ export function AddBatchScreen() {
   const [storageLocation, setStorageLocation] = useState(
     initialDraft ? [initialDraft.storage, initialDraft.storageDetail].filter(Boolean).join(' / ') : ''
   );
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     setName(initialDraft?.name ?? '');
@@ -162,9 +164,41 @@ export function AddBatchScreen() {
           variant="primary"
           block
           size="lg"
-          onPress={() => navigation.goBack()}
+          onPress={async () => {
+            const parsedQuantity = Number(quantity);
+            if (!name.trim()) {
+              Alert.alert('Missing item name', 'Enter an item name before saving.');
+              return;
+            }
+            if (!Number.isFinite(parsedQuantity) || parsedQuantity < 0) {
+              Alert.alert('Invalid quantity', 'Enter a valid quantity before saving.');
+              return;
+            }
+            setSaving(true);
+            try {
+              const [storage, storageDetail] = storageLocation.split('/').map((part) => part.trim());
+              await inventoryRepo.addBatch({
+                name: name.trim(),
+                brand: brand.trim() || undefined,
+                barcode,
+                quantity: parsedQuantity,
+                unit: unit.trim() || 'pcs',
+                category: category.trim() || undefined,
+                storage: storage || undefined,
+                storageDetail: storageDetail || undefined,
+                expiryDate: expiryDate.trim() || undefined,
+                imageUrl: capturedImageUri ?? initialDraft?.imageUri,
+                notes: initialDraft?.notes,
+              });
+              navigation.navigate('Main');
+            } catch (error) {
+              Alert.alert('Could not save item', error instanceof Error ? error.message : 'Please try again.');
+            } finally {
+              setSaving(false);
+            }
+          }}
         >
-          SAVE TO LOG
+          {saving ? 'SAVING…' : 'SAVE TO LOG'}
         </Button>
       </ScrollView>
     </SafeAreaView>

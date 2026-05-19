@@ -49,8 +49,25 @@ export async function apiRequest<T>(path: string, options: RequestInit = {}, tok
     },
   });
   const payload = await response.json().catch(() => ({}));
+  if (response.status === 401 && token && path !== '/v1/auth/refresh') {
+    const refreshToken = await storedRefreshToken();
+    if (refreshToken) {
+      const refreshed = await apiRequest<ApiSession>('/v1/auth/refresh', {
+        method: 'POST',
+        body: JSON.stringify({ refreshToken }),
+      });
+      await saveTokens(refreshed);
+      return apiRequest<T>(path, options, refreshed.accessToken);
+    }
+  }
   if (!response.ok) {
     throw new Error(payload?.error?.message ?? `Request failed with status ${response.status}`);
   }
   return payload.data as T;
+}
+
+export async function authenticatedApiRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const token = await storedAccessToken();
+  if (!token) throw new Error('Not authenticated');
+  return apiRequest<T>(path, options, token);
 }

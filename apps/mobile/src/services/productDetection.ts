@@ -1,5 +1,5 @@
 import { findMockInventoryByBarcode } from '../data/mockInventory';
-import { supabase, isSupabaseConfigured } from './supabase';
+import { authenticatedApiRequest, isApiConfigured } from './api';
 
 export interface ProductDetectionDraft {
   name?: string;
@@ -27,7 +27,7 @@ export async function detectProductDraft({ barcode, householdId }: DetectProduct
 
   const mock = findMockInventoryByBarcode(barcode);
 
-  if (!isSupabaseConfigured || !householdId) {
+  if (!isApiConfigured || !householdId) {
     return mock
       ? {
           barcode,
@@ -47,14 +47,14 @@ export async function detectProductDraft({ barcode, householdId }: DetectProduct
       : null;
   }
 
-  const { data, error } = await supabase.functions.invoke('product-detect', {
-    body: {
-      household_id: householdId,
-      barcode,
-    },
-  });
+  try {
+    const data = await authenticatedApiRequest<{ autofill?: ProductDetectionDraft }>('/v1/products/detect', {
+      method: 'POST',
+      body: JSON.stringify({ barcode }),
+    });
 
-  if (error) {
+    return data.autofill ?? null;
+  } catch (error) {
     if (mock) {
       return {
         barcode,
@@ -72,10 +72,8 @@ export async function detectProductDraft({ barcode, householdId }: DetectProduct
         sources: ['mock-fallback'],
       };
     }
-    throw new Error(error.message);
+    throw error instanceof Error ? error : new Error('Product detection failed');
   }
-
-  return (data?.autofill as ProductDetectionDraft | undefined) ?? null;
 }
 
 export async function detectProductFromImage(imageUri: string): Promise<ProductDetectionDraft> {

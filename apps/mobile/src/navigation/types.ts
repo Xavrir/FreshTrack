@@ -1,4 +1,5 @@
 import type { ProductDetectionDraft } from '../services/productDetection';
+import type { MenuRecommendation } from '../services/menuRecommendations';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
@@ -9,7 +10,7 @@ export type RootStackParamList = {
   Onboarding: undefined;
   Main: undefined;
   MenuRecommendations: undefined;
-  MenuRecommendationDetail: { id: string };
+  MenuRecommendationDetail: { id: string; menu?: MenuRecommendation };
   Scanner: undefined;
   AddBatch: { barcode?: string; aiDetection?: ProductDetectionDraft | null; imageUri?: string };
   BatchDetail: { id: string };

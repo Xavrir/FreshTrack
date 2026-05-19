@@ -10,5 +10,6 @@ FROM alpine:3.22
 RUN adduser -D -H freshtrack
 USER freshtrack
 COPY --from=build /bin/freshtrack-api /bin/freshtrack-api
+COPY --from=build /src/db /db
 EXPOSE 8080
 ENTRYPOINT ["/bin/freshtrack-api"]

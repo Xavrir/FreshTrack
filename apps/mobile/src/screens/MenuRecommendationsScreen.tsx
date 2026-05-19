@@ -68,7 +68,7 @@ export function MenuRecommendationsScreen() {
           </Card>
         }
         renderItem={({ item }) => (
-          <TouchableOpacity activeOpacity={0.88} onPress={() => navigation.navigate('MenuRecommendationDetail', { id: item.id })}>
+          <TouchableOpacity activeOpacity={0.88} onPress={() => navigation.navigate('MenuRecommendationDetail', { id: item.id, menu: item })}>
             <Card elevated style={{ marginBottom: spacing.md, borderRadius: radii.lg, overflow: 'hidden', padding: 0 }}>
               <Image source={{ uri: item.imageUri }} style={styles.heroImage} resizeMode="cover" />
               <View style={{ padding: spacing.lg }}>

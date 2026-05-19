@@ -5,6 +5,7 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { RootNavigationProp, RootStackParamList } from '../navigation/types';
 import { useTheme } from '../theme/ThemeProvider';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { inventoryRepo, type InventoryBatch } from '../services/InventoryRepository';
 
 const ITEM_RECORD: Record<string, { name: string; unit: string; remaining: number }> = {
   '1': { name: 'Organic Strawberries', unit: 'g', remaining: 450 },
@@ -17,10 +18,46 @@ export function ConsumeWasteScreen() {
   const navigation = useNavigation<RootNavigationProp>();
   const route = useRoute<RouteProp<RootStackParamList, 'ConsumeWaste'>>();
   const { colors, spacing, borderWidth: bw, radii } = useTheme();
-  const currentItem = ITEM_RECORD[route.params?.id ?? '1'] ?? ITEM_RECORD['1'];
+  const [batch, setBatch] = React.useState<InventoryBatch | null>(null);
+  const fallbackItem = ITEM_RECORD[route.params?.id ?? '1'] ?? ITEM_RECORD['1'];
+  const currentItem = batch
+    ? { name: batch.name, unit: batch.unit, remaining: batch.quantity }
+    : fallbackItem;
   const [amount, setAmount] = useState('150');
   const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
   const remaining = currentItem.remaining;
+
+  React.useEffect(() => {
+    let active = true;
+    void inventoryRepo.getBatch(route.params.id).then((result) => {
+      if (active) setBatch(result);
+    });
+    return () => {
+      active = false;
+    };
+  }, [route.params.id]);
+
+  async function record(type: 'consumed' | 'wasted') {
+    const num = parseFloat(amount);
+    if (isNaN(num) || num <= 0) {
+      setError('Amount must be greater than 0');
+      return;
+    }
+    if (num > remaining) {
+      setError(`Amount cannot exceed ${remaining}`);
+      return;
+    }
+    setSaving(true);
+    try {
+      await inventoryRepo.recordAction(route.params.id, type, num);
+      navigation.navigate('Main');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not record usage');
+    } finally {
+      setSaving(false);
+    }
+  }
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.overlay }]}> 
@@ -84,24 +121,13 @@ export function ConsumeWasteScreen() {
             <Button
               variant="primary"
               style={{ flex: 1 }}
-              onPress={() => {
-                const num = parseFloat(amount);
-                if (isNaN(num) || num <= 0) {
-                  setError('Amount must be greater than 0');
-                  return;
-                }
-                if (num > remaining) {
-                  setError(`Amount cannot exceed ${remaining}`);
-                  return;
-                }
-                navigation.navigate('Main');
-              }}
+              onPress={() => record('consumed')}
             >
-              CONFIRM
+              {saving ? 'SAVING…' : 'CONFIRM'}
             </Button>
           </View>
 
-          <Button variant="danger" block style={{ marginTop: spacing.md }} onPress={() => navigation.navigate('Main')}>
+          <Button variant="danger" block style={{ marginTop: spacing.md }} onPress={() => record('wasted')}>
             MARK AS WASTE
           </Button>
         </Card>
