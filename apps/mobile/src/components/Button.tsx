@@ -4,7 +4,7 @@ import { useTheme } from '../theme/ThemeProvider';
 import { Text } from './Text';
 
 export interface ButtonProps extends TouchableOpacityProps {
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'success';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   block?: boolean;

@@ -63,25 +63,6 @@
     updated_at timestamptz DEFAULT now()
   );
 
-  create table inventory_history (
-    id uuid primary key default gen_random_uuid(),
-    inventory_batch_id uuid not null references inventory_batches(id),
-    household_id uuid not null references households(id),
-    user_id uuid not null,
-    action text not null check (
-      action in ('add', 'consume', 'waste')
-    ),
-    quantity numeric not null,
-    created_at timestamptz not null default now()
-  );
-
-  create table profiles (
-    id uuid primary key references auth.users(id) on delete cascade,
-    username text unique not null,
-    display_name text not null,
-    created_at timestamptz default now()
-  );
-
   ALTER TABLE households ENABLE ROW LEVEL SECURITY;
   ALTER TABLE household_members ENABLE ROW LEVEL SECURITY;
   ALTER TABLE household_invites ENABLE ROW LEVEL SECURITY;
@@ -89,8 +70,6 @@
   ALTER TABLE inventory_batches ENABLE ROW LEVEL SECURITY;
   ALTER TABLE inventory_events ENABLE ROW LEVEL SECURITY;
   ALTER TABLE household_settings ENABLE ROW LEVEL SECURITY;
-  alter table inventory_history enable row level security;
-  alter table profiles enable row level security; 
 
   CREATE POLICY "Users can view their own household"
   ON households FOR SELECT
@@ -135,86 +114,3 @@
   CREATE POLICY "Owner can update settings"
   ON household_settings FOR UPDATE
   USING (household_id IN (SELECT household_id FROM household_members WHERE user_id = auth.uid() AND role = 'owner'));
-
-  create policy "Users can view household history"
-  on inventory_history
-  for select
-  using (
-    household_id in (
-      select household_id
-      from household_members
-      where user_id = auth.uid()
-    )
-  );
-
-  create policy "Users can insert history"
-  on inventory_history
-  for insert
-  with check (
-    household_id in (
-      select household_id
-      from household_members
-      where user_id = auth.uid()
-    )
-  );
-
-  create policy "Users can view profiles"
-  on profiles
-  for select
-  to authenticated
-  using (true);
-
-  create policy "Users can insert own profile"
-  on profiles
-  for insert
-  to authenticated
-  with check (auth.uid() = id);
-
-  create policy "Users can update own profile"
-  on profiles
-  for update
-  to authenticated
-  using (auth.uid() = id);
-
-  create policy "Users can create household"
-  on households
-  for insert
-  to authenticated
-  with check (
-    auth.uid() = owner_user_id
-  );
-
-  create policy "Anyone authenticated can view active invites"
-  on household_invites
-  for select
-  to authenticated
-  using (revoked_at is null);
-
-  create policy "Owners can view created households"
-  on households
-  for select
-  to authenticated
-  using (
-    owner_user_id = auth.uid()
-  );
-
-  create policy "Users can view profiles"
-  on profiles
-  for select
-  to authenticated
-  using (true);
-
-  create policy "Users can insert own profile"
-  on profiles
-  for insert
-  to authenticated
-  with check (auth.uid() = id);
-
-  create policy "Users can update own profile"
-  on profiles
-  for update
-  to authenticated
-  using (auth.uid() = id);
-
-
-  
