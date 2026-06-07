@@ -6,7 +6,7 @@ import { RootNavigationProp } from '../navigation/types';
 import { supabase } from '../lib/supabase';
 
 export function AuthScreen() {
-  // const navigation = useNavigation<RootNavigationProp>();
+  const navigation = useNavigation<RootNavigationProp>();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,6 +14,34 @@ export function AuthScreen() {
   const [username, setUsername] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSendOtp = async () => {
+    setErrorMessage('');
+
+    if (!email.trim()) {
+      setErrorMessage('Please enter your email address.');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const { error } = await supabase.auth.signInWithOtp({
+        email: email.trim(),
+        options: { shouldCreateUser: true },
+      });
+
+      if (error) {
+        setErrorMessage(error.message);
+        return;
+      }
+
+      navigation.navigate('OTP', { email: email.trim() });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogin = async () => {
     setErrorMessage('');
@@ -117,25 +145,25 @@ export function AuthScreen() {
         <Button 
           variant="primary" 
           block
-          // onPress={() => navigation.navigate('OTP', { email: 'test@example.com' })}
+          loading={loading}
           onPress={isSignup ? handleSignUp : handleLogin}
         >
           {isSignup ? 'Create Account' : 'Sign In'}
         </Button>
 
-        <Button variant="ghost" block onPress={() => setIsSignup(!isSignup)}>
-          {isSignup ? 'Already have an Account? Sign in' : "Don't have an Accound? Create One"}
+        <Button
+          variant="secondary"
+          block
+          style={{ marginTop: 12 }}
+          loading={loading}
+          onPress={handleSendOtp}
+        >
+          Email me a code
         </Button>
 
-        //Temp Button 
-        <Button 
-          variant="secondary" 
-          block
-          onPress={handleSignUp}
-        >
-          Create Test User
+        <Button variant="ghost" block onPress={() => setIsSignup(!isSignup)}>
+          {isSignup ? 'Already have an Account? Sign in' : "Don't have an Account? Create One"}
         </Button>
-        
       </Card>
     </Container>
   );
