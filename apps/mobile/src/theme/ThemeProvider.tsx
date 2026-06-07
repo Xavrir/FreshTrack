@@ -4,6 +4,7 @@ import { tokens, ThemeType } from './tokens';
 
 interface ThemeContextValue {
   theme: ThemeType;
+  themeMode: ThemeType | 'system';
   colors: typeof tokens.colors.light;
   spacing: typeof tokens.spacing;
   radii: typeof tokens.radii;
@@ -24,6 +25,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     <ThemeContext.Provider
       value={{
         theme: resolvedTheme as ThemeType,
+        themeMode,
         colors,
         spacing: tokens.spacing,
         radii: tokens.radii,

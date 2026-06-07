@@ -5,7 +5,7 @@ import { useTheme } from '../theme/ThemeProvider';
 export interface TextProps extends RNTextProps {
   variant?: 'h1' | 'h2' | 'h3' | 'body' | 'caption' | 'label';
   color?: 'text' | 'textMuted' | 'primary' | 'danger' | 'success' | 'surface';
-  weight?: 'regular' | 'medium' | 'bold' | 'black';
+  weight?: 'light' | 'regular' | 'medium' | 'bold' | 'black';
   align?: 'auto' | 'left' | 'right' | 'center' | 'justify';
   mono?: boolean;
 }
@@ -34,6 +34,14 @@ export function Text({
     }
   };
 
+  const fontWeightMap = {
+    light: '300',
+    regular: '400',
+    medium: '500',
+    bold: '700',
+    black: '900',
+  } as const
+
   const getFontFamily = () => {
     if (mono) return typography.fontFamily.mono;
     return typography.fontFamily.sans;
@@ -53,7 +61,7 @@ export function Text({
           fontSize: getFontSize(),
           fontFamily: getFontFamily(),
           color: getColor(),
-          fontWeight: typography.weights[weight],
+          fontWeight: fontWeightMap[weight ?? 'regular'],
           textAlign: align,
         },
         style,

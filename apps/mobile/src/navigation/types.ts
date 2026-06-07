@@ -8,7 +8,10 @@ export type RootStackParamList = {
   Scanner: undefined;
   AddBatch: { barcode?: string };
   BatchDetail: { id: string };
-  ConsumeWaste: { id: string };
+  ConsumeWaste: { 
+    id: string;
+    type: 'consume' | 'waste';
+   };
   HouseholdSettings: undefined;
   History: undefined;
 };
