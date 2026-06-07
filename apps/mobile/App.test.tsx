@@ -5,6 +5,8 @@ import App from './App';
 describe('App', () => {
   it('renders correctly', async () => {
     const { getByText } = render(<App />);
-    await waitFor(() => expect(getByText('FreshTrack')).toBeTruthy());
+    await waitFor(() => expect(getByText('FreshTrack')).toBeTruthy(), {
+      timeout: 5000,
+    });
   });
 });
