@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Container, Text, Button, Card, TextInput } from '../components';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { RootNavigationProp, RootStackParamList } from '../navigation/types';
 import { supabase } from '../lib/supabase';
+import { refreshReminderNotifications } from '../services/reminders';
 
 export function ConsumeWasteScreen() {
   const navigation = useNavigation<RootNavigationProp>();
@@ -16,11 +17,7 @@ export function ConsumeWasteScreen() {
   const [amount, setAmount] = useState('');
   const [reason, setReason] = useState('');
 
-  useEffect(() => {
-      loadItem();
-    }, []);
-  
-  async function loadItem() {
+  const loadItem = useCallback(async () => {
     const {data, error} = await supabase
       .from('inventory_batches')
       .select('*')
@@ -31,9 +28,14 @@ export function ConsumeWasteScreen() {
     console.log('ACTION ERROR:', error);
 
     if (data) {
-      setItem(data)
+      setItem(data);
+      setAmount(String(data.quantity ?? ''));
     }
-  }
+  }, [id]);
+
+  useEffect(() => {
+    loadItem();
+  }, [loadItem]);
 
   async function handleConfirm() {
     if (!item) {
@@ -42,7 +44,7 @@ export function ConsumeWasteScreen() {
 
     const amountNumber = Number(amount);
 
-    if (amountNumber <= 0) {
+    if (!Number.isFinite(amountNumber) || amountNumber <= 0) {
       alert('Invalid Amount!');
       return;
     }
@@ -95,6 +97,10 @@ export function ConsumeWasteScreen() {
         quantity: amountNumber,
         reason: type === 'waste' ? reason : null,
       });
+
+    await refreshReminderNotifications().catch((notificationError) => {
+      console.log('Reminder refresh error:', notificationError);
+    });
 
     navigation.navigate('Main');
     

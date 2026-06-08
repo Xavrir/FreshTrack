@@ -1,7 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList } from "react-native";
+import { FlatList } from "react-native";
 import { Container, Text, Card } from "../components";
 import { supabase } from "../lib/supabase";
+
+function actionLabel(action: string) {
+    switch (action) {
+        case 'add':
+            return 'Added';
+        case 'edit':
+            return 'Edited';
+        case 'consume':
+            return 'Consumed';
+        case 'waste':
+            return 'Wasted';
+        case 'delete':
+            return 'Deleted';
+        default:
+            return action;
+    }
+}
 
 export function HistoryScreen() {
     const [history, setHistory] = useState<any[]>([]);
@@ -50,7 +67,7 @@ export function HistoryScreen() {
                 renderItem={({ item }) => (
                     <Card elevated style={{ marginBottom: 12 }}>
                         <Text variant="h3" weight="bold">
-                            {item.action === 'consume' ? 'Consumed': item.action === 'waste' ? 'Wasted': 'Added'} - {item.inventory_batches?.name}
+                            {actionLabel(item.action)} - {item.inventory_batches?.name ?? 'Inventory item'}
                         </Text>
 
                         <Text>

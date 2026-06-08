@@ -7,12 +7,14 @@ export interface TextInputProps extends RNTextInputProps {
   label?: string;
   error?: string;
   helperText?: string;
+  mono?: boolean;
 }
 
 export function TextInput({
   label,
   error,
   helperText,
+  mono = false,
   style,
   ...rest
 }: TextInputProps) {
@@ -35,7 +37,7 @@ export function TextInput({
             borderRadius: radii.sm,
             paddingHorizontal: spacing.md,
             height: 48,
-            fontFamily: typography.fontFamily.sans,
+            fontFamily: mono ? typography.fontFamily.mono : typography.fontFamily.sans,
             fontSize: typography.sizes.md,
           },
         ]}

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { Container, Text, Button, Card, TextInput, Chip } from '../components';
-import { useNavigation } from '@react-navigation/native';
-import { RootNavigationProp } from '../navigation/types';
 import { useTheme } from '../theme/ThemeProvider';
 import { supabase } from '../lib/supabase';
+import { parseLeadDays, parseReminderTime, refreshReminderNotifications } from '../services/reminders';
 
 type HouseholdMember = {
   user_id: string;
@@ -14,10 +13,14 @@ type HouseholdMember = {
 };
 
 export function HouseholdSettingsScreen() {
-  const navigation = useNavigation<RootNavigationProp>();
   const { themeMode, setTheme } = useTheme();
   const [members, setMembers] = useState<HouseholdMember[]>([]);
   const [inviteCode, setInviteCode] = useState<string | null>(null);
+  const [householdId, setHouseholdId] = useState<string | null>(null);
+  const [isOwner, setIsOwner] = useState(false);
+  const [reminderTime, setReminderTime] = useState('09:00');
+  const [leadDays, setLeadDays] = useState('7, 3, 1');
+  const [savingSettings, setSavingSettings] = useState(false);
 
   function generateInviteCode() {
     return Math.random()
@@ -37,6 +40,7 @@ export function HouseholdSettingsScreen() {
       .maybeSingle();
 
     if (!member || member.role !== 'owner') {
+      Alert.alert('Owner only', 'Only household owners can create invite codes.');
       return;
     }
 
@@ -50,7 +54,7 @@ export function HouseholdSettingsScreen() {
       });
 
     if (error) {
-      console.log(error);
+      Alert.alert('Could not create invite', error.message);
       return;
     }
 
@@ -74,6 +78,7 @@ export function HouseholdSettingsScreen() {
       .maybeSingle()
 
     if (!currentMember) return;
+    setHouseholdId(currentMember.household_id);
     console.log('CURRENT MEMBERS: ', currentMember);
 
     const { data, error } = await supabase
@@ -116,7 +121,66 @@ export function HouseholdSettingsScreen() {
     console.log('MEMBERS ERROR: ', error);
 
     setMembers(mergedMembers);
+    setIsOwner((data ?? []).some((member) => member.user_id === user.id && member.role === 'owner'));
+
+    const { data: settings } = await supabase
+      .from('household_settings')
+      .select('reminder_time_local, lead_days')
+      .eq('household_id', currentMember.household_id)
+      .maybeSingle();
+
+    if (settings) {
+      setReminderTime(settings.reminder_time_local ?? '09:00');
+      setLeadDays((settings.lead_days ?? [7, 3, 1]).join(', '));
+    }
     
+  }
+
+  async function saveReminderSettings() {
+    if (!householdId) {
+      Alert.alert('No household', 'Create or join a household before saving reminders.');
+      return;
+    }
+
+    if (!isOwner) {
+      Alert.alert('Owner only', 'Only household owners can update reminder rules.');
+      return;
+    }
+
+    if (!parseReminderTime(reminderTime)) {
+      Alert.alert('Invalid time', 'Use 24-hour HH:MM format, for example 09:00.');
+      return;
+    }
+
+    const parsedLeadDays = parseLeadDays(leadDays);
+    if (parsedLeadDays.length === 0) {
+      Alert.alert('Invalid lead days', 'Enter days like 7, 3, 1.');
+      return;
+    }
+
+    setSavingSettings(true);
+    try {
+      const { error } = await supabase
+        .from('household_settings')
+        .upsert({
+          household_id: householdId,
+          reminder_time_local: reminderTime.trim(),
+          lead_days: parsedLeadDays,
+          updated_at: new Date().toISOString(),
+        })
+        .select()
+        .maybeSingle();
+
+      if (error) {
+        Alert.alert('Could not save reminders', error.message);
+        return;
+      }
+
+      const scheduled = await refreshReminderNotifications();
+      Alert.alert('Reminder rules saved', `${scheduled} expiry reminders scheduled on this device.`);
+    } finally {
+      setSavingSettings(false);
+    }
   }
 
   useEffect(() => {
@@ -163,9 +227,12 @@ export function HouseholdSettingsScreen() {
 
         <Card elevated style={{ marginBottom: 24 }}>
           <Text variant="h3" weight="bold" style={{ marginBottom: 16 }}>Reminder Settings</Text>
-          <TextInput label="Reminder Time" placeholder="09:00" />
-          <TextInput label="Lead Days" placeholder="7, 3, 0" helperText="Comma separated days before expiry." />
-          <Button variant="primary" block>Save Settings</Button>
+          <TextInput label="Reminder Time" placeholder="09:00" value={reminderTime} onChangeText={setReminderTime} />
+          <TextInput label="Lead Days" placeholder="7, 3, 1" helperText="Comma separated days before expiry." value={leadDays} onChangeText={setLeadDays} />
+          <Button variant="primary" block loading={savingSettings} onPress={saveReminderSettings}>Save Settings</Button>
+          <Text variant="caption" color="textMuted" style={{ marginTop: 12 }}>
+            FreshTrack schedules local reminders for H-7, H-3, and H-1 on this device.
+          </Text>
         </Card>
 
         <Card elevated style={{ marginBottom: 24 }}>

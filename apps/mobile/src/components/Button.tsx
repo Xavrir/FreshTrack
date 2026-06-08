@@ -29,6 +29,7 @@ export function Button({
       case 'primary': return colors.primary;
       case 'secondary': return colors.surfaceRaised;
       case 'danger': return colors.danger;
+      case 'success': return colors.success;
       case 'ghost': return 'transparent';
       default: return colors.primary;
     }
@@ -40,6 +41,7 @@ export function Button({
       case 'primary': return 'primaryText';
       case 'secondary': return 'text';
       case 'danger': return 'surface';
+      case 'success': return 'surface';
       case 'ghost': return 'text';
       default: return 'primaryText';
     }

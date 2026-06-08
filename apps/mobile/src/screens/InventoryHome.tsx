@@ -4,80 +4,27 @@ import { Container, Text, Button, Card, Chip, TextInput } from '../components';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { RootNavigationProp } from '../navigation/types';
 import { supabase } from '../lib/supabase'
+import { formatExpiryDetail, getExpiryInfo } from '../utils/expiry';
+import { refreshReminderNotifications } from '../services/reminders';
 
-function getExpiryInfo(expiryDate: string | null) {
+function displayExpiryInfo(expiryDate: string | null) {
   if (!expiryDate) {
     return {
-      label: 'No Expiry',
+      label: 'NO EXPIRY',
       variant: 'default' as const,
       daysLeft: null,
     };
   }
 
-  // Today's local date only
-  const today = new Date();
-
-  // Parse YYYY-MM-DD manually
-  const [year, month, day] = expiryDate.split('-').map(Number);
-
-  const expiry = new Date(year, month - 1, day);
-
-  // Strip time
-  today.setHours(0, 0, 0, 0);
-  expiry.setHours(0, 0, 0, 0);
-
-  const diffMs = expiry.getTime() - today.getTime();
-
-  const daysLeft = Math.floor(
-    diffMs / (1000 * 60 * 60 * 24)
-  );
-
-  if (daysLeft < 0) {
-    return {
-      label: 'Expired',
-      variant: 'danger' as const,
-      daysLeft,
-    };
-  }
-
-  if (daysLeft === 0) {
-    return {
-      label: 'Expires Today',
-      variant: 'danger' as const,
-      daysLeft,
-    };
-  }
-
-  if (daysLeft <= 3) {
-    return {
-      label: `${daysLeft} Day${daysLeft !== 1 ? 's' : ''} Left`,
-      variant: 'danger' as const,
-      daysLeft,
-    };
-  }
-
-  if (daysLeft <= 7) {
-    return {
-      label: `${daysLeft} Days Left`,
-      variant: 'warning' as const,
-      daysLeft,
-    };
-  }
-
-  return {
-    label: `${daysLeft} Days Left`,
-    variant: 'success' as const,
-    daysLeft,
-  };
-  
+  return getExpiryInfo(expiryDate);
 }
 
 function getExpiringItems(items: any[]) {
   return items.filter((item) => {
-    const expiryInfo = getExpiryInfo(item.expiry_date);
+    const expiryInfo = displayExpiryInfo(item.expiry_date);
 
     return (
-      expiryInfo.label === 'Expires Today' || expiryInfo.variant === 'danger'
+      expiryInfo.daysLeft !== null && expiryInfo.daysLeft <= 7
     );
   });
 }
@@ -132,6 +79,9 @@ export function InventoryHome() {
 
     if (items) {
       setInventory(items);
+      refreshReminderNotifications().catch((notificationError) => {
+        console.log('Reminder refresh error:', notificationError);
+      });
     }
     
   }
@@ -168,7 +118,7 @@ export function InventoryHome() {
   );
 
   const filteredInventory = searchedInventory.filter((item) => {
-    const expiryInfo = getExpiryInfo(item.expiry_date);
+    const expiryInfo = displayExpiryInfo(item.expiry_date);
 
     switch (expiryFilter) {
       case 'expired':
@@ -181,7 +131,7 @@ export function InventoryHome() {
         return (
           expiryInfo.daysLeft !== null &&
           expiryInfo.daysLeft >= 0 &&
-          expiryInfo.daysLeft <= 3
+          expiryInfo.daysLeft <= 7
         );
 
       case 'safe':
@@ -275,7 +225,7 @@ export function InventoryHome() {
             </View>
 
             {expiringItems.map((item) => {
-              const expiryInfo = getExpiryInfo(item.expiry_date);
+              const expiryInfo = displayExpiryInfo(item.expiry_date);
 
               return (
                 <View key={item.id} style={{ marginBottom: 8 }}>
@@ -285,6 +235,7 @@ export function InventoryHome() {
 
                   <Text variant="body" color="textMuted">
                     {expiryInfo.label}
+                    {item.expiry_date ? ` · ${formatExpiryDetail(item.expiry_date)}` : ''}
                   </Text>
                 </View>
               );
@@ -308,8 +259,13 @@ export function InventoryHome() {
                 <View>
                   <Text variant="h3" weight="bold" style={{ marginBottom: 4 }}>{item.name}</Text>
                   <Text variant="body" color="textMuted">{item.quantity} {item.unit}</Text>
+                  {item.expiry_date && (
+                    <Text variant="caption" color="textMuted">
+                      {formatExpiryDetail(item.expiry_date)}
+                    </Text>
+                  )}
                 </View>
-                <Chip label={getExpiryInfo(item.expiry_date).label} variant={getExpiryInfo(item.expiry_date).variant} />
+                <Chip label={displayExpiryInfo(item.expiry_date).label} variant={displayExpiryInfo(item.expiry_date).variant} />
               </View>
             </Card>
           </TouchableOpacity>

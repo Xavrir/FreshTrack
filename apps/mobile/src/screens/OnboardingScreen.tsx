@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Container, Text, Button, Card, TextInput } from '../components';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '../navigation/types';
-import { View } from 'react-native';
+import { Alert } from 'react-native';
 import { supabase } from '../lib/supabase';
 
 export function OnboardingScreen() {
@@ -15,14 +15,6 @@ export function OnboardingScreen() {
     } = await supabase.auth.getUser();
 
     if (!user) return;
-
-    console.log('AUTH ID: ', user.id);
-    
-    const payload = {
-      owner_user_id: user.id,
-    };
-
-    console.log('INSERT PAYLOAD: ', payload)
 
     const { error: householdError } = await supabase
       .from('households')
@@ -59,11 +51,22 @@ export function OnboardingScreen() {
       });
 
     if (memberError) {
-      console.log(memberError.message);
+      Alert.alert('Could not create household', memberError.message);
       return;
     }
 
-    // navigation.replace('Main');
+    await supabase
+      .from('household_settings')
+      .upsert({
+        household_id: household.id,
+        reminder_time_local: '09:00',
+        lead_days: [7, 3, 1],
+        updated_at: new Date().toISOString(),
+      })
+      .select()
+      .maybeSingle();
+
+    navigation.reset({ index: 0, routes: [{ name: 'Main' }] });
   };
 
   async function handleJoinHousehold() {
@@ -84,7 +87,7 @@ export function OnboardingScreen() {
     console.log('INVITE ERROR:', inviteError);
 
     if (inviteError || !invite) {
-      console.log('Invalid invite Code!');
+      Alert.alert('Invalid invite code', 'Check the code and try again.');
       return;
     }
 
@@ -97,11 +100,11 @@ export function OnboardingScreen() {
       });
 
     if (memberError) {
-      console.log(memberError);
+      Alert.alert('Could not join household', memberError.message);
       return;
     }
 
-    console.log('Joined Household!')
+    navigation.reset({ index: 0, routes: [{ name: 'Main' }] });
     
   }
   

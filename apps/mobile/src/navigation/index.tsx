@@ -1,11 +1,12 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from './types';
 import { useTheme } from '../theme/ThemeProvider';
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { Session } from '@supabase/supabase-js';
+import * as Notifications from 'expo-notifications';
 
 import { AuthScreen } from '../screens/AuthScreen';
 import { OTPScreen } from '../screens/OTPScreen';
@@ -17,9 +18,11 @@ import { BatchDetailScreen } from '../screens/BatchDetailScreen';
 import { ConsumeWasteScreen } from '../screens/ConsumeWasteScreen';
 import { HouseholdSettingsScreen } from '../screens/HouseholdSettingsScreen';
 import { HistoryScreen } from '../screens/HistoryScreen';
+import { EditBatchScreen } from '../screens/EditBatchScreen';
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+const navigationRef = createNavigationContainerRef<RootStackParamList>();
 
 export function Navigation() {
   const { colors, typography } = useTheme();
@@ -80,11 +83,25 @@ export function Navigation() {
     };
   }, []);
 
+  useEffect(() => {
+    const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
+      const batchId = response.notification.request.content.data?.batchId;
+      if (typeof batchId === 'string' && navigationRef.isReady()) {
+        navigationRef.navigate('BatchDetail', { id: batchId });
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   if (loading) return null;
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
+        initialRouteName={session ? (hasHousehold ? 'Main' : 'Onboarding') : 'Auth'}
         screenOptions={{
           headerStyle: {
             backgroundColor: colors.surface,
@@ -101,8 +118,13 @@ export function Navigation() {
       >
       
         {session ? (
-          hasHousehold ? (
-            <>
+          <>
+              <Stack.Screen
+                name="Onboarding"
+                component={OnboardingScreen}
+                options={{ headerShown: false }}
+              />
+
               <Stack.Screen
                 name="Main"
                 component={InventoryHome}
@@ -119,6 +141,12 @@ export function Navigation() {
                 name="AddBatch"
                 component={AddBatchScreen}
                 options={{ title: 'Add Item' }}
+              />
+
+              <Stack.Screen
+                name="EditBatch"
+                component={EditBatchScreen}
+                options={{ title: 'Edit Item' }}
               />
 
               <Stack.Screen
@@ -145,13 +173,6 @@ export function Navigation() {
                 options={{ title: 'History' }}
               />
             </>
-          ) : (
-            <Stack.Screen
-              name="Onboarding"
-              component={OnboardingScreen}
-              options={{ headerShown: false }}
-            />
-          )
         ) : (
           <>
             <Stack.Screen

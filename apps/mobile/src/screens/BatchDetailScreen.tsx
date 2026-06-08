@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Container, Text, Button, Card, Chip } from '../components';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { RootNavigationProp, RootStackParamList } from '../navigation/types';
 import { supabase } from '../lib/supabase';
+import { formatExpiryDetail, getExpiryInfo } from '../utils/expiry';
 
 export function BatchDetailScreen() {
   const navigation = useNavigation<RootNavigationProp>();
@@ -12,11 +13,7 @@ export function BatchDetailScreen() {
 
   const [item, setItem] = useState<any>(null);
 
-  useEffect(() => {
-    loadItem();
-  }, []);
-
-  async function loadItem() {
+  const loadItem = useCallback(async () => {
     const {data, error} = await supabase
       .from('inventory_batches')
       .select(`
@@ -38,7 +35,13 @@ export function BatchDetailScreen() {
     }
 
     
-  }
+  }, [id]);
+
+  useEffect(() => {
+    loadItem();
+  }, [loadItem]);
+
+  const expiryInfo = item.expiry_date ? getExpiryInfo(item.expiry_date) : null;
 
   if (!item) {
     return (
@@ -58,7 +61,7 @@ export function BatchDetailScreen() {
         <Card elevated style={{ marginBottom: 24 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
             <Text variant="h3" weight="bold">{item.name}</Text>
-            <Chip label="Dry Good" />
+            <Chip label={expiryInfo?.label ?? 'NO EXPIRY'} variant={expiryInfo?.variant ?? 'default'} />
           </View>
           
           <View style={{ flexDirection: 'row', gap: 32, marginBottom: 16 }}>
@@ -69,6 +72,11 @@ export function BatchDetailScreen() {
             <View>
               <Text variant="label" color="textMuted">Expiry Date</Text>
               <Text variant="body" weight="medium">{item.expiry_date || 'No Expiry'}</Text>
+              {item.expiry_date && (
+                <Text variant="caption" color="textMuted">
+                  {formatExpiryDetail(item.expiry_date)}
+                </Text>
+              )}
             </View>
           </View>
           
@@ -80,6 +88,14 @@ export function BatchDetailScreen() {
 
         <Text variant="h3" weight="bold" style={{ marginBottom: 16 }}>Actions</Text>
         <Card>
+          <Button
+            variant="secondary"
+            block
+            style={{ marginBottom: 12 }}
+            onPress={() => navigation.navigate('EditBatch', { id: item.id })}
+          >
+            Edit / Delete Item
+          </Button>
           <Button 
             variant="success" 
             block 

@@ -20,8 +20,11 @@ jest.mock('./src/lib/supabase', () => ({
       select: jest.fn().mockReturnThis(),
       insert: jest.fn().mockReturnThis(),
       update: jest.fn().mockReturnThis(),
+      upsert: jest.fn().mockReturnThis(),
+      delete: jest.fn().mockReturnThis(),
       eq: jest.fn().mockReturnThis(),
       is: jest.fn().mockReturnThis(),
+      not: jest.fn().mockReturnThis(),
       in: jest.fn().mockReturnThis(),
       order: jest.fn().mockReturnThis(),
       limit: jest.fn().mockReturnThis(),
@@ -30,12 +33,31 @@ jest.mock('./src/lib/supabase', () => ({
   },
 }));
 
+jest.mock('expo-notifications', () => ({
+  SchedulableTriggerInputTypes: { DATE: 'date' },
+  setNotificationHandler: jest.fn(),
+  getPermissionsAsync: jest.fn().mockResolvedValue({ granted: true }),
+  requestPermissionsAsync: jest.fn().mockResolvedValue({ granted: true }),
+  getAllScheduledNotificationsAsync: jest.fn().mockResolvedValue([]),
+  cancelScheduledNotificationAsync: jest.fn(),
+  scheduleNotificationAsync: jest.fn().mockResolvedValue('notification-id'),
+  addNotificationResponseReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
+}));
+
+jest.mock('expo-camera', () => {
+  const React = require('react');
+  return {
+    CameraView: ({ children }) => React.createElement(React.Fragment, null, children),
+    useCameraPermissions: jest.fn(() => [{ granted: true }, jest.fn(), jest.fn()]),
+  };
+});
+
 jest.mock('react-native-safe-area-context', () => {
   const React = require('react');
   const inset = { top: 0, right: 0, bottom: 0, left: 0 };
   return {
-    SafeAreaProvider: ({ children }: any) => React.createElement(React.Fragment, null, children),
-    SafeAreaView: ({ children }: any) => React.createElement(React.Fragment, null, children),
+    SafeAreaProvider: ({ children }) => React.createElement(React.Fragment, null, children),
+    SafeAreaView: ({ children }) => React.createElement(React.Fragment, null, children),
     useSafeAreaInsets: () => inset,
     SafeAreaInsetsContext: React.createContext(inset),
   }

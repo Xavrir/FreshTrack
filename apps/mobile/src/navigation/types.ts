@@ -7,6 +7,7 @@ export type RootStackParamList = {
   Main: undefined;
   Scanner: undefined;
   AddBatch: { barcode?: string };
+  EditBatch: { id: string };
   BatchDetail: { id: string };
   ConsumeWaste: { 
     id: string;
