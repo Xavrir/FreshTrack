@@ -17,6 +17,7 @@
     "@supabase/supabase-js": "^2.105.3",
     "@types/jest": "29.5.14",
     "expo": "~55.0.4",
+    "expo-build-properties": "^56.0.17",
     "expo-camera": "~55.0.19",
     "expo-notifications": "~55.0.23",
     "expo-status-bar": "~55.0.4",

@@ -55,6 +55,29 @@ export function ConsumeWasteScreen() {
     }
 
     const newQuantity = item.quantity - amountNumber;
+    const { data: { user }, } = await supabase.auth.getUser();
+
+    if (!user) {
+      alert('Please sign in again.');
+      return;
+    }
+
+    const { error: historyError } = await supabase
+      .from('inventory_history')
+      .insert({
+        inventory_batch_id: item.id,
+        household_id: item.household_id,
+        user_id: user.id,
+        action: type,
+        quantity: amountNumber,
+        reason: type === 'waste' ? reason : null,
+      });
+
+    if (historyError) {
+      console.log('History insert error:', historyError);
+      alert('Failed to record history.');
+      return;
+    }
 
     if (newQuantity <= 0) {
       const { error } = await supabase 
@@ -84,19 +107,6 @@ export function ConsumeWasteScreen() {
         return;
       }
     }
-
-    const { data: { user }, } = await supabase.auth.getUser();
-
-    await supabase
-      .from('inventory_history')
-      .insert({
-        inventory_batch_id: item.id,
-        household_id: item.household_id,
-        user_id: user?.id,
-        action: type,
-        quantity: amountNumber,
-        reason: type === 'waste' ? reason : null,
-      });
 
     await refreshReminderNotifications().catch((notificationError) => {
       console.log('Reminder refresh error:', notificationError);

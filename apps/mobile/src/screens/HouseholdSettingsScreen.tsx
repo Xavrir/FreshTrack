@@ -226,7 +226,7 @@ export function HouseholdSettingsScreen() {
         </Card>
 
         <Card elevated style={{ marginBottom: 24 }}>
-          <Text variant="h3" weight="bold" style={{ marginBottom: 16 }}>Reminder Settings</Text>
+          <Text variant="h3" weight="bold" style={{ marginBottom: 16 }}>Reminder rules</Text>
           <TextInput label="Reminder Time" placeholder="09:00" value={reminderTime} onChangeText={setReminderTime} />
           <TextInput label="Lead Days" placeholder="7, 3, 1" helperText="Comma separated days before expiry." value={leadDays} onChangeText={setLeadDays} />
           <Button variant="primary" block loading={savingSettings} onPress={saveReminderSettings}>Save Settings</Button>

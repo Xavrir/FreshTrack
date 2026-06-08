@@ -8,6 +8,8 @@ alter table inventory_history
 alter table inventory_history
   add column if not exists reason text;
 
+drop policy if exists "Owners can insert settings" on household_settings;
+
 create policy "Owners can insert settings"
 on household_settings
 for insert
@@ -20,6 +22,8 @@ with check (
     and role = 'owner'
   )
 );
+
+drop policy if exists "Owners can delete invites" on household_invites;
 
 create policy "Owners can delete invites"
 on household_invites

@@ -41,8 +41,6 @@ export function BatchDetailScreen() {
     loadItem();
   }, [loadItem]);
 
-  const expiryInfo = item.expiry_date ? getExpiryInfo(item.expiry_date) : null;
-
   if (!item) {
     return (
       <Container>
@@ -52,6 +50,8 @@ export function BatchDetailScreen() {
       </Container>
     );
   }
+
+  const expiryInfo = item.expiry_date ? getExpiryInfo(item.expiry_date) : null;
   
   return (
     <Container scroll>
