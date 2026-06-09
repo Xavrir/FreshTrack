@@ -1,5 +1,5 @@
 import { findMockInventoryByBarcode } from '../data/mockInventory';
-import { authenticatedApiRequest, isApiConfigured } from './api';
+import { supabase } from '../lib/supabase';
 
 export interface ProductDetectionDraft {
   name?: string;
@@ -22,58 +22,53 @@ interface DetectProductParams {
   householdId?: string;
 }
 
+function mockDraft(barcode: string, confidence: number, source: string): ProductDetectionDraft | null {
+  const mock = findMockInventoryByBarcode(barcode);
+  if (!mock) return null;
+  return {
+    barcode,
+    name: mock.name,
+    brand: mock.brand,
+    quantityValue: mock.quantityValue,
+    unit: mock.unit,
+    category: mock.category,
+    storage: mock.storage,
+    storageDetail: mock.storageDetail,
+    expiryIso: mock.expiryIso,
+    imageUri: mock.imageUri,
+    notes: mock.note,
+    confidence,
+    sources: [source],
+  };
+}
+
 export async function detectProductDraft({ barcode, householdId }: DetectProductParams): Promise<ProductDetectionDraft | null> {
   if (!barcode) return null;
 
-  const mock = findMockInventoryByBarcode(barcode);
-
-  if (!isApiConfigured || !householdId) {
-    return mock
-      ? {
+  // Prefer a household-known barcode mapping persisted from a previous add.
+  if (householdId) {
+    try {
+      const { data: mapping } = await supabase
+        .from('barcode_mappings')
+        .select('name, brand')
+        .eq('household_id', householdId)
+        .eq('barcode', barcode)
+        .maybeSingle();
+      if (mapping?.name) {
+        return {
           barcode,
-          name: mock.name,
-          brand: mock.brand,
-          quantityValue: mock.quantityValue,
-          unit: mock.unit,
-          category: mock.category,
-          storage: mock.storage,
-          storageDetail: mock.storageDetail,
-          expiryIso: mock.expiryIso,
-          imageUri: mock.imageUri,
-          notes: mock.note,
-          confidence: 0.92,
-          sources: ['mock'],
-        }
-      : null;
-  }
-
-  try {
-    const data = await authenticatedApiRequest<{ autofill?: ProductDetectionDraft }>('/v1/products/detect', {
-      method: 'POST',
-      body: JSON.stringify({ barcode }),
-    });
-
-    return data.autofill ?? null;
-  } catch (error) {
-    if (mock) {
-      return {
-        barcode,
-        name: mock.name,
-        brand: mock.brand,
-        quantityValue: mock.quantityValue,
-        unit: mock.unit,
-        category: mock.category,
-        storage: mock.storage,
-        storageDetail: mock.storageDetail,
-        expiryIso: mock.expiryIso,
-        imageUri: mock.imageUri,
-        notes: mock.note,
-        confidence: 0.55,
-        sources: ['mock-fallback'],
-      };
+          name: mapping.name,
+          brand: mapping.brand ?? undefined,
+          confidence: 0.9,
+          sources: ['barcode-mapping'],
+        };
+      }
+    } catch {
+      // fall through to local catalog
     }
-    throw error instanceof Error ? error : new Error('Product detection failed');
   }
+
+  return mockDraft(barcode, 0.92, 'catalog');
 }
 
 export async function detectProductFromImage(imageUri: string): Promise<ProductDetectionDraft> {

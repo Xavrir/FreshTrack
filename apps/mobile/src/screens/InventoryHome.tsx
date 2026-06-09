@@ -8,21 +8,15 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { BOTTOM_NAV_CLEARANCE } from '../components/BottomNav';
 import { MOCK_INVENTORY } from '../data/mockInventory';
 import { inventoryRepo, type InventoryBatch } from '../services/InventoryRepository';
+import { daysUntilExpiry, expiryLabel, expiryVariant } from '../utils/expiry';
 
 const FILTERS = ['All', 'Expiring', 'Fresh', 'Low Stock'] as const;
 type FilterLabel = typeof FILTERS[number];
 
 const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80';
 
-function daysUntil(date?: string) {
-  if (!date) return null;
-  const today = new Date();
-  const expiry = new Date(`${date}T00:00:00`);
-  return Math.ceil((expiry.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-}
-
 function batchStatus(item: InventoryBatch) {
-  const days = daysUntil(item.expiryDate);
+  const days = daysUntilExpiry(item.expiryDate);
   if (days !== null && days < 0) return 'expired';
   if (days !== null && days <= 3) return 'soon';
   return 'good';
@@ -70,25 +64,30 @@ export function InventoryHome() {
   );
 
   const filteredData = useMemo(() => {
+    const byExpiry = (data: InventoryBatch[]) => [...data].sort((left, right) => {
+      const leftTime = left.expiryDate ? new Date(`${left.expiryDate}T00:00:00`).getTime() : Number.MAX_SAFE_INTEGER;
+      const rightTime = right.expiryDate ? new Date(`${right.expiryDate}T00:00:00`).getTime() : Number.MAX_SAFE_INTEGER;
+      return leftTime - rightTime;
+    });
     switch (activeFilter) {
       case 'Expiring':
-        return items.filter((item) => batchStatus(item) === 'soon' || batchStatus(item) === 'expired');
+        return byExpiry(items.filter((item) => batchStatus(item) === 'soon' || batchStatus(item) === 'expired'));
       case 'Fresh':
-        return items.filter((item) => batchStatus(item) === 'good');
+        return byExpiry(items.filter((item) => batchStatus(item) === 'good'));
       case 'Low Stock':
-        return items.filter((item) => item.quantity <= 1);
+        return byExpiry(items.filter((item) => item.quantity <= 1));
       case 'All':
       default:
-        return items;
+        return byExpiry(items);
     }
   }, [activeFilter, items]);
 
   const renderItem = ({ item }: { item: InventoryBatch }) => {
     const status = batchStatus(item);
-    const daysLeft = daysUntil(item.expiryDate);
+    const daysLeft = daysUntilExpiry(item.expiryDate);
     const progress = status === 'expired' ? 0.18 : status === 'soon' ? 0.42 : 0.78;
     const accentColor = status === 'expired' ? colors.danger : status === 'soon' ? colors.warning : colors.success;
-    const chipVariant = status === 'expired' ? 'danger' : status === 'soon' ? 'warning' : 'success';
+    const chipVariant = expiryVariant(item.expiryDate);
 
     return (
       <TouchableOpacity activeOpacity={0.88} onPress={() => navigation.navigate('BatchDetail', { id: item.id })}>
@@ -117,9 +116,14 @@ export function InventoryHome() {
               </Text>
               <View style={{ marginTop: spacing.sm }}>
                 <Chip
-                  label={status === 'expired' ? 'EXPIRED' : daysLeft === null ? 'NO EXPIRY' : `${daysLeft} DAYS LEFT`}
+                  label={expiryLabel(item.expiryDate)}
                   variant={chipVariant}
                 />
+                {daysLeft !== null && (
+                  <Text variant="caption" color="textFaint" mono style={{ marginTop: 4 }}>
+                    {daysLeft < 0 ? `${Math.abs(daysLeft)} DAYS OVERDUE` : `${daysLeft} DAYS LEFT`}
+                  </Text>
+                )}
               </View>
             </View>
 

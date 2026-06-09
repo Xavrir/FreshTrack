@@ -1,49 +1,70 @@
-import React from 'react';
-import { View, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import React, { useCallback, useMemo, useState } from 'react';
+import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { Text, BottomNav, Icon, Card, Chip } from '../components';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '../navigation/types';
 import { useTheme } from '../theme/ThemeProvider';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BOTTOM_NAV_CLEARANCE } from '../components/BottomNav';
+import { inventoryRepo, type InventoryBatch, type InventoryEvent } from '../services/InventoryRepository';
 
-interface HistoryEvent {
-  id: string;
-  type: 'consumed' | 'wasted' | 'added';
-  product: string;
-  amount: string;
-  time: string;
+function eventLabel(type: InventoryEvent['type']) {
+  return type === 'created' ? 'ADDED' : type.toUpperCase();
 }
 
-const mockData: HistoryEvent[] = [
-  { id: '1', type: 'consumed', product: 'Organic Strawberries', amount: '150 g', time: 'TODAY, 08:30' },
-  { id: '2', type: 'added', product: 'Oat Milk', amount: '1 carton', time: 'YESTERDAY, 14:20' },
-  { id: '3', type: 'wasted', product: 'Greek Yogurt', amount: '1 cup', time: 'OCT 24, 09:15' },
-];
+function eventVariant(type: InventoryEvent['type']) {
+  if (type === 'wasted' || type === 'deleted') return 'danger';
+  if (type === 'created') return 'success';
+  return 'warning';
+}
 
 export function HistoryScreen() {
   const navigation = useNavigation<RootNavigationProp>();
   const insets = useSafeAreaInsets();
   const { colors, spacing, borderWidth: bw, radii } = useTheme();
+  const [events, setEvents] = useState<InventoryEvent[]>([]);
+  const [items, setItems] = useState<InventoryBatch[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const renderEvent = ({ item }: { item: HistoryEvent }) => {
-    const variant = item.type === 'wasted' ? 'danger' : item.type === 'added' ? 'success' : 'warning';
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      setLoading(true);
+      Promise.all([inventoryRepo.getHistory(), inventoryRepo.getBatches().catch(() => [])])
+        .then(([history, batches]) => {
+          if (!active) return;
+          setEvents(history);
+          setItems(batches);
+        })
+        .finally(() => {
+          if (active) setLoading(false);
+        });
+      return () => {
+        active = false;
+      };
+    }, [])
+  );
 
+  const itemNames = useMemo(() => new Map(items.map((item) => [item.id, item.name])), [items]);
+
+  const renderEvent = ({ item }: { item: InventoryEvent }) => {
+    const amount = item.amount === undefined ? 'No quantity change' : `${item.amount} ${item.unit ?? ''}`.trim();
+    const product = item.batchName ?? itemNames.get(item.batchId) ?? 'Inventory item';
     return (
       <Card style={{ marginBottom: spacing.md, borderRadius: radii.lg }}>
         <View style={styles.eventRow}>
           <View style={{ flex: 1 }}>
             <Text variant="body" weight="bold">
-              {item.product}
+              {product}
             </Text>
             <Text variant="caption" color="textMuted" style={{ marginTop: 4 }}>
-              {item.amount}
+              {amount}
             </Text>
           </View>
-          <Chip label={item.type.toUpperCase()} variant={variant} />
+          <Chip label={eventLabel(item.type)} variant={eventVariant(item.type)} />
         </View>
         <Text variant="caption" color="textFaint" mono style={{ marginTop: spacing.md }}>
-          {item.time}
+          {new Date(item.createdAt).toLocaleString().toUpperCase()}
         </Text>
       </Card>
     );
@@ -52,22 +73,32 @@ export function HistoryScreen() {
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}> 
       <View style={[styles.header, { paddingHorizontal: spacing.xl, paddingVertical: spacing.lg, borderBottomColor: colors.border, borderBottomWidth: bw.medium }]}> 
-        <TouchableOpacity style={[styles.headerBtn, { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: bw.medium, borderRadius: radii.md }]} onPress={() => navigation.navigate('Main')}> 
+        <TouchableOpacity style={[styles.headerBtn, { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: bw.medium, borderRadius: radii.md }]} onPress={() => navigation.navigate('Main')}>
           <Icon name="history" size={20} color="primary" />
         </TouchableOpacity>
         <Text variant="h3" weight="bold" uppercase>
           ACTIVITY
         </Text>
-        <TouchableOpacity style={[styles.headerBtn, { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: bw.medium, borderRadius: radii.md }]} onPress={() => Alert.alert('Filters coming next', 'Sorting and filtering for activity history has not been wired yet.')}> 
+        <TouchableOpacity style={[styles.headerBtn, { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: bw.medium, borderRadius: radii.md }]} onPress={() => navigation.navigate('Main')}>
           <Icon name="filter-variant" size={20} />
         </TouchableOpacity>
       </View>
 
       <FlatList
-        data={mockData}
+        data={events}
         keyExtractor={(item) => item.id}
         renderItem={renderEvent}
         contentContainerStyle={{ padding: spacing.xl, paddingBottom: insets.bottom + BOTTOM_NAV_CLEARANCE }}
+        ListEmptyComponent={
+          <Card style={{ borderRadius: radii.lg }}>
+            <Text variant="body" weight="bold">
+              {loading ? 'Loading activity...' : 'No activity yet'}
+            </Text>
+            <Text variant="caption" color="textMuted" style={{ marginTop: spacing.sm }}>
+              Add, edit, consume, waste, or delete inventory to build the household log.
+            </Text>
+          </Card>
+        }
         ListHeaderComponent={
           <View style={{ marginBottom: spacing.lg }}>
             <Text variant="label" color="primary" mono tracking="widest">
