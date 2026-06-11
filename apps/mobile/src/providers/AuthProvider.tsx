@@ -9,6 +9,7 @@ import {
   storedAccessToken,
   storedRefreshToken,
 } from '../services/api';
+import { registerForPushNotifications } from '../services/pushNotifications';
 
 interface Session {
   access_token: string;
@@ -28,6 +29,7 @@ interface AuthContextValue {
   loading: boolean;
   isMockMode: boolean;
   signInWithOtp: (email: string) => Promise<{ error: string | null }>;
+  resendOtp: (email: string) => Promise<{ error: string | null }>;
   verifyOtp: (email: string, token: string) => Promise<{ error: string | null }>;
   updateDisplayName: (fullName: string) => Promise<{ error: string | null }>;
   signInMock: () => void;
@@ -62,10 +64,6 @@ function toUser(user: ApiUser): User {
     email: user.email,
     user_metadata: { full_name: user.fullName ?? undefined },
   };
-}
-
-function fallbackPassword(email: string) {
-  return `FreshTrack-${email.toLowerCase()}-Passwordless`;
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -104,13 +102,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     restoreSession();
   }, []);
 
+  // Register for push notifications once authenticated against a real backend.
+  // Intentionally keyed on the token only, so it re-runs on sign-in, not on every
+  // session object change.
+  useEffect(() => {
+    if (session && isApiConfigured) {
+      void registerForPushNotifications();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session?.access_token]);
+
   const signInWithOtp = useCallback(async (email: string) => {
     const trimmed = email.trim().toLowerCase();
     if (!isApiConfigured) return { error: 'API not configured. Use demo mode.' };
     try {
       await apiRequest('/v1/auth/signup', {
         method: 'POST',
-        body: JSON.stringify({ email: trimmed, password: fallbackPassword(trimmed), fullName: '' }),
+        body: JSON.stringify({ email: trimmed }),
       });
       return { error: null };
     } catch (error) {
@@ -125,6 +133,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } catch (resendError) {
         return { error: resendError instanceof Error ? resendError.message : 'Could not send access code' };
       }
+    }
+  }, []);
+
+  const resendOtp = useCallback(async (email: string) => {
+    if (!isApiConfigured) return { error: 'API not configured. Use demo mode.' };
+    try {
+      await apiRequest('/v1/auth/resend-verification', {
+        method: 'POST',
+        body: JSON.stringify({ email: email.trim().toLowerCase() }),
+      });
+      return { error: null };
+    } catch (error) {
+      return { error: error instanceof Error ? error.message : 'Could not resend access code' };
     }
   }, []);
 
@@ -182,6 +203,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loading,
         isMockMode: !isApiConfigured,
         signInWithOtp,
+        resendOtp,
         verifyOtp,
         updateDisplayName,
         signInMock,

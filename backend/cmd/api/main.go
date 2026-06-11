@@ -37,6 +37,8 @@ func main() {
 	}
 
 	app := server.New(cfg, db, logger)
+	go app.StartMaintenance(ctx)
+	go app.StartReminders(ctx)
 	httpServer := &http.Server{
 		Addr:              ":" + cfg.APIPort,
 		Handler:           app.Routes(),

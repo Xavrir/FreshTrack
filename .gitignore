@@ -18,8 +18,3 @@ yarn-error.log*
 .expo/
 dist/
 web-build/
-
-# Supabase local
-supabase/.temp/
-supabase/.branches/
-supabase/.cache/

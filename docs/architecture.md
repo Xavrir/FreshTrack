@@ -6,7 +6,7 @@
 - Backend: Go API
 - Database: PostgreSQL
 - Email: Mailpit locally, Resend in production
-- Reminder: local notifications (expo-notifications)
+- Reminder MVP: in-app expiry labels/rules only. OS local notifications via expo-notifications are post-MVP.
 
 ## Data Model (v1)
 

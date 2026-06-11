@@ -1,20 +1,72 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
 import { Text, Button, Icon, Card, Chip } from '../components';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { RootNavigationProp, RootStackParamList } from '../navigation/types';
 import { useTheme } from '../theme/ThemeProvider';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SCREEN_EDGE_GUTTER } from '../theme/layout';
-import { getMockInventoryItem } from '../data/mockInventory';
+import { inventoryRepo, type InventoryBatch, type InventoryEvent } from '../services/InventoryRepository';
+import { daysUntilExpiry, expiryLabel, expiryVariant } from '../utils/expiry';
+
+const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80';
+
+function formatDisplayDate(date?: string) {
+  if (!date) return 'NO DATE';
+  return new Date(`${date}T00:00:00`).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
+}
+
+function formatEvent(event: InventoryEvent) {
+  const label = event.type === 'created' ? 'ADDED' : event.type.toUpperCase();
+  const amount = event.amount === undefined ? '' : `${event.amount} ${event.unit ?? ''}`.trim();
+  return amount ? `${label} · ${amount}` : label;
+}
 
 export function BatchDetailScreen() {
   const navigation = useNavigation<RootNavigationProp>();
   const route = useRoute<RouteProp<RootStackParamList, 'BatchDetail'>>();
   const insets = useSafeAreaInsets();
   const { colors, spacing, borderWidth: bw, radii } = useTheme();
-  const item = getMockInventoryItem(route.params?.id);
-  const daysLeftLabel = item.status === 'expired' ? 'EXPIRED' : `${item.daysLeft} DAYS LEFT`;
+  const [item, setItem] = useState<InventoryBatch | null>(null);
+  const [events, setEvents] = useState<InventoryEvent[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      setLoading(true);
+      Promise.all([inventoryRepo.getBatch(route.params.id), inventoryRepo.getEvents(route.params.id).catch(() => [])])
+        .then(([batch, batchEvents]) => {
+          if (!active) return;
+          setItem(batch);
+          setEvents(batchEvents);
+        })
+        .finally(() => {
+          if (active) setLoading(false);
+        });
+      return () => {
+        active = false;
+      };
+    }, [route.params.id])
+  );
+
+  if (!item) {
+    return (
+      <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}>
+        <View style={[styles.emptyState, { padding: spacing.xl }]}>
+          <Text variant="h2" weight="bold" uppercase>
+            {loading ? 'Loading Item' : 'Item Not Found'}
+          </Text>
+          <Button variant="secondary" style={{ marginTop: spacing.lg }} onPress={() => navigation.navigate('Main')}>
+            BACK TO STOCK
+          </Button>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  const daysLeft = daysUntilExpiry(item.expiryDate);
+  const note = item.notes ?? 'Track quantity, expiry status, and household usage from this inventory record.';
 
   return (
     <SafeAreaView edges={['left', 'right', 'bottom']} style={[styles.safe, { backgroundColor: colors.background }]}> 
@@ -60,9 +112,9 @@ export function BatchDetailScreen() {
             },
           ]}
         >
-          <Chip label="PREMIUM PRODUCE" variant="warning" style={{ alignSelf: 'flex-start', marginBottom: spacing.lg }} />
+          <Chip label={item.category ?? 'INVENTORY ITEM'} variant={expiryVariant(item.expiryDate)} style={{ alignSelf: 'flex-start', marginBottom: spacing.lg }} />
           <View style={[styles.heroImage, { backgroundColor: colors.surfaceMuted, borderRadius: radii.md, marginBottom: spacing.lg }]}>
-            <Image source={{ uri: item.imageUri }} style={[styles.heroPhoto, { borderRadius: radii.md }]} resizeMode="cover" />
+            <Image source={{ uri: item.imageUrl ?? PLACEHOLDER_IMAGE }} style={[styles.heroPhoto, { borderRadius: radii.md }]} resizeMode="cover" />
           </View>
           <Text variant="h1" weight="bold" uppercase>
             {item.name.toUpperCase()}
@@ -70,7 +122,7 @@ export function BatchDetailScreen() {
           <View style={[styles.noteRow, { marginTop: spacing.md }]}> 
             <View style={[styles.noteLine, { backgroundColor: colors.primary }]} />
               <Text variant="body" color="textMuted" style={{ flex: 1 }}>
-                {item.note}
+                {note}
               </Text>
           </View>
         </View>
@@ -81,7 +133,7 @@ export function BatchDetailScreen() {
           </Text>
           <View style={styles.quantityRow}>
             <Text variant="display" weight="bold">
-              {item.quantityValue}
+              {item.quantity}
             </Text>
             <Text variant="h3" color="textMuted" mono>
               {item.unit.toUpperCase()}
@@ -99,11 +151,9 @@ export function BatchDetailScreen() {
               EXPIRY DATE
             </Text>
             <Text variant="h2" weight="bold" style={{ marginTop: spacing.xs }}>
-              {item.expiry.toUpperCase()}
+              {formatDisplayDate(item.expiryDate)}
             </Text>
-            <Text variant="caption" color="danger" mono style={{ marginTop: spacing.sm }}>
-              {daysLeftLabel}
-            </Text>
+            <Chip label={expiryLabel(item.expiryDate)} variant={expiryVariant(item.expiryDate)} style={{ marginTop: spacing.sm }} />
           </Card>
 
           <Card style={{ flex: 1, borderRadius: radii.lg }}>
@@ -112,10 +162,10 @@ export function BatchDetailScreen() {
               STORAGE
             </Text>
             <Text variant="h2" weight="bold" style={{ marginTop: spacing.xs }}>
-              {item.storage.toUpperCase()}
+              {(item.storage ?? 'UNSORTED').toUpperCase()}
             </Text>
             <Text variant="caption" color="textMuted" mono style={{ marginTop: spacing.sm }}>
-              {item.storageDetail.toUpperCase()}
+              {(item.storageDetail ?? 'NO DETAIL').toUpperCase()}
             </Text>
           </Card>
         </View>
@@ -125,9 +175,38 @@ export function BatchDetailScreen() {
             ADDED TO INVENTORY
           </Text>
           <Text variant="body" color="textMuted" style={{ marginTop: 4 }}>
-            {item.addedAt.toUpperCase()}
+            {new Date(item.createdAt).toLocaleString().toUpperCase()}
           </Text>
         </View>
+
+        <Card style={{ marginBottom: spacing.lg, borderRadius: radii.lg }}>
+          <Text variant="label" color="primary" mono tracking="widest" style={{ marginBottom: spacing.sm }}>
+            REMINDER STATUS
+          </Text>
+          <Text variant="body" color="textMuted">
+            {daysLeft === null
+              ? 'No expiry date is available for this item.'
+              : daysLeft < 0
+                ? 'This item is expired and should be reviewed.'
+                : `This item is ${expiryLabel(item.expiryDate)} and expires in ${daysLeft} day${daysLeft === 1 ? '' : 's'}.`}
+          </Text>
+        </Card>
+
+        <Card style={{ marginBottom: spacing.lg, borderRadius: radii.lg }}>
+          <Text variant="label" color="primary" mono tracking="widest" style={{ marginBottom: spacing.sm }}>
+            RECENT ACTIVITY
+          </Text>
+          {events.slice(0, 3).map((event) => (
+            <Text key={event.id} variant="caption" color="textMuted" mono style={{ marginTop: 6 }}>
+              {formatEvent(event)} · {new Date(event.createdAt).toLocaleString().toUpperCase()}
+            </Text>
+          ))}
+          {events.length === 0 && (
+            <Text variant="caption" color="textMuted">
+              No activity has been recorded yet.
+            </Text>
+          )}
+        </Card>
 
         <View style={{ gap: spacing.md }}>
           <Button
@@ -198,5 +277,10 @@ const styles = StyleSheet.create({
   },
   progressFill: {
     height: '100%',
+  },
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

@@ -8,6 +8,53 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { findMockInventoryByBarcode } from '../data/mockInventory';
 import type { ProductDetectionDraft } from '../services/productDetection';
 import { inventoryRepo } from '../services/InventoryRepository';
+import { uploadInventoryImage } from '../services/imageUpload';
+
+function compactStorageLocation(draft: ProductDetectionDraft | null) {
+  if (!draft) return '';
+  return [draft.storage, draft.storageDetail].filter(Boolean).join(' / ');
+}
+
+function draftFromBarcodeFallback(barcode?: string): ProductDetectionDraft | null {
+  const matchedItem = findMockInventoryByBarcode(barcode);
+  if (!matchedItem) return null;
+  return {
+    barcode,
+    name: matchedItem.name,
+    brand: matchedItem.brand,
+    quantityValue: matchedItem.quantityValue,
+    unit: matchedItem.unit,
+    category: matchedItem.category,
+    storage: matchedItem.storage,
+    storageDetail: matchedItem.storageDetail,
+    expiryIso: matchedItem.expiryIso,
+    imageUri: matchedItem.imageUri,
+    notes: matchedItem.note,
+    confidence: 0.85,
+    sources: ['barcode-match'],
+  };
+}
+
+function mergeDrafts(fallback: ProductDetectionDraft | null, detected?: ProductDetectionDraft | null): ProductDetectionDraft | null {
+  if (!fallback) return detected ?? null;
+  if (!detected) return fallback;
+
+  return {
+    ...fallback,
+    ...detected,
+    name: detected.name || fallback.name,
+    brand: detected.brand || fallback.brand,
+    quantityValue: detected.quantityValue || fallback.quantityValue,
+    unit: detected.unit || fallback.unit,
+    category: detected.category || fallback.category,
+    storage: detected.storage || fallback.storage,
+    storageDetail: detected.storageDetail || fallback.storageDetail,
+    expiryIso: detected.expiryIso || fallback.expiryIso,
+    imageUri: detected.imageUri || fallback.imageUri,
+    notes: detected.notes || fallback.notes,
+    sources: Array.from(new Set([...(detected.sources ?? []), ...(fallback.sources ?? [])])),
+  };
+}
 
 export function AddBatchScreen() {
   const navigation = useNavigation<RootNavigationProp>();
@@ -15,29 +62,12 @@ export function AddBatchScreen() {
   const { colors, spacing, borderWidth: bw, radii } = useTheme();
   const barcode = route.params?.barcode;
   const capturedImageUri = route.params?.imageUri;
-  const matchedItem = findMockInventoryByBarcode(barcode);
   const aiDetection = route.params?.aiDetection;
   const isPhotoCaptureFlow = !!capturedImageUri && !barcode;
 
   const initialDraft = useMemo<ProductDetectionDraft | null>(() => {
-    if (aiDetection) return aiDetection;
-    if (!matchedItem) return null;
-    return {
-      barcode,
-      name: matchedItem.name,
-      brand: matchedItem.brand,
-      quantityValue: matchedItem.quantityValue,
-      unit: matchedItem.unit,
-      category: matchedItem.category,
-      storage: matchedItem.storage,
-      storageDetail: matchedItem.storageDetail,
-      expiryIso: matchedItem.expiryIso,
-      imageUri: matchedItem.imageUri,
-      notes: matchedItem.note,
-      confidence: 0.85,
-      sources: ['barcode-match'],
-    };
-  }, [aiDetection, barcode, matchedItem]);
+    return mergeDrafts(draftFromBarcodeFallback(barcode), aiDetection);
+  }, [aiDetection, barcode]);
 
   const [name, setName] = useState(initialDraft?.name ?? '');
   const [brand, setBrand] = useState(initialDraft?.brand ?? '');
@@ -45,9 +75,7 @@ export function AddBatchScreen() {
   const [unit, setUnit] = useState(initialDraft?.unit ?? '');
   const [expiryDate, setExpiryDate] = useState(initialDraft?.expiryIso ?? '');
   const [category, setCategory] = useState(initialDraft?.category ?? '');
-  const [storageLocation, setStorageLocation] = useState(
-    initialDraft ? [initialDraft.storage, initialDraft.storageDetail].filter(Boolean).join(' / ') : ''
-  );
+  const [storageLocation, setStorageLocation] = useState(compactStorageLocation(initialDraft));
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -57,7 +85,7 @@ export function AddBatchScreen() {
     setUnit(initialDraft?.unit ?? '');
     setExpiryDate(initialDraft?.expiryIso ?? '');
     setCategory(initialDraft?.category ?? '');
-    setStorageLocation(initialDraft ? [initialDraft.storage, initialDraft.storageDetail].filter(Boolean).join(' / ') : '');
+    setStorageLocation(compactStorageLocation(initialDraft));
   }, [initialDraft]);
 
   return (
@@ -138,26 +166,26 @@ export function AddBatchScreen() {
 
           <TextInput
             label="ITEM NAME"
-            placeholder="Organic Strawberries"
+            placeholder="e.g. Organic Strawberries"
             value={name}
             onChangeText={setName}
           />
 
           <TextInput
             label="BRAND"
-            placeholder="Fresh Farms"
+            placeholder="e.g. Fresh Farms"
             value={brand}
             onChangeText={setBrand}
           />
 
           <View style={{ flexDirection: 'row', gap: spacing.md }}>
-            <TextInput label="QUANTITY" placeholder={matchedItem?.quantityValue ?? '450'} keyboardType="numeric" style={{ flex: 1 }} mono value={quantity} onChangeText={setQuantity} />
-            <TextInput label="UNIT" placeholder={matchedItem?.unit ?? 'grams'} style={{ flex: 1 }} value={unit} onChangeText={setUnit} />
+            <TextInput label="QUANTITY" placeholder="e.g. 450" keyboardType="numeric" style={{ flex: 1 }} mono value={quantity} onChangeText={setQuantity} />
+            <TextInput label="UNIT" placeholder="e.g. grams" style={{ flex: 1 }} value={unit} onChangeText={setUnit} />
           </View>
 
-          <TextInput label="EXPIRY DATE" placeholder={matchedItem?.expiryIso ?? '2026-10-24'} mono value={expiryDate} onChangeText={setExpiryDate} />
-          <TextInput label="CATEGORY" placeholder={matchedItem?.category ?? 'Produce'} value={category} onChangeText={setCategory} />
-          <TextInput label="STORAGE LOCATION" placeholder={matchedItem ? `${matchedItem.storage} / ${matchedItem.storageDetail}` : 'Main fridge / Shelf 2'} value={storageLocation} onChangeText={setStorageLocation} helperText={aiDetection?.sources?.length ? `Sources: ${aiDetection.sources.join(', ')}` : undefined} />
+          <TextInput label="EXPIRY DATE" placeholder="YYYY-MM-DD" mono value={expiryDate} onChangeText={setExpiryDate} />
+          <TextInput label="CATEGORY" placeholder="e.g. Produce" value={category} onChangeText={setCategory} />
+          <TextInput label="STORAGE LOCATION" placeholder="e.g. Main fridge / Shelf 2" value={storageLocation} onChangeText={setStorageLocation} helperText={initialDraft?.sources?.length ? `Sources: ${initialDraft.sources.join(', ')}` : undefined} />
         </Card>
 
         <Button
@@ -165,9 +193,15 @@ export function AddBatchScreen() {
           block
           size="lg"
           onPress={async () => {
-            const parsedQuantity = Number(quantity);
+            const trimmedExpiryDate = expiryDate.trim();
+            const trimmedQuantity = quantity.trim();
+            const parsedQuantity = trimmedQuantity ? Number(trimmedQuantity) : 1;
             if (!name.trim()) {
               Alert.alert('Missing item name', 'Enter an item name before saving.');
+              return;
+            }
+            if (!trimmedExpiryDate) {
+              Alert.alert('Missing expiry date', 'Enter an expiry date before saving.');
               return;
             }
             if (!Number.isFinite(parsedQuantity) || parsedQuantity < 0) {
@@ -177,6 +211,10 @@ export function AddBatchScreen() {
             setSaving(true);
             try {
               const [storage, storageDetail] = storageLocation.split('/').map((part) => part.trim());
+              const localImage = capturedImageUri ?? initialDraft?.imageUri;
+              // Persist the photo to object storage when configured; otherwise keep
+              // the local URI (client-only image, current MVP behavior).
+              const uploadedImage = await uploadInventoryImage(localImage);
               await inventoryRepo.addBatch({
                 name: name.trim(),
                 brand: brand.trim() || undefined,
@@ -186,8 +224,8 @@ export function AddBatchScreen() {
                 category: category.trim() || undefined,
                 storage: storage || undefined,
                 storageDetail: storageDetail || undefined,
-                expiryDate: expiryDate.trim() || undefined,
-                imageUrl: capturedImageUri ?? initialDraft?.imageUri,
+                expiryDate: trimmedExpiryDate,
+                imageUrl: uploadedImage ?? localImage,
                 notes: initialDraft?.notes,
               });
               navigation.navigate('Main');

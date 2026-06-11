@@ -8,12 +8,15 @@ import { RootNavigationProp } from '../navigation/types';
 import { useTheme } from '../theme/ThemeProvider';
 import { useHousehold } from '../providers/HouseholdProvider';
 import { detectProductDraft, detectProductFromImage } from '../services/productDetection';
+import { isApiConfigured } from '../services/api';
 
 type Candidate = {
   label: string;
   product: string;
 };
 
+// Demo-only sample barcodes. Shown solely in mock mode (no backend configured)
+// so a real device shows real scan results instead of fake candidates.
 const FALLBACK_CANDIDATES: Candidate[] = [
   { label: '8999999123456', product: 'Organic Strawberries' },
   { label: '8999999345678', product: 'Oat Milk' },
@@ -81,7 +84,11 @@ export function ScannerScreen() {
     }
   };
 
-  const candidates = scannedCode ? [{ label: scannedCode, product: 'Detected Item' }] : FALLBACK_CANDIDATES;
+  const candidates: Candidate[] = scannedCode
+    ? [{ label: scannedCode, product: 'Detected Item' }]
+    : isApiConfigured
+      ? []
+      : FALLBACK_CANDIDATES;
 
   return (
     <SafeAreaView edges={['left', 'right', 'bottom']} style={[styles.safe, { backgroundColor: colors.background }]}> 
@@ -207,13 +214,18 @@ export function ScannerScreen() {
               LIVE RECOGNITION
             </Text>
             <Text variant="body" weight="bold" style={{ marginTop: 4 }}>
-              {scannedCode ? 'Barcode captured' : 'Barcode candidates detected'}
+              {scannedCode ? 'Barcode captured' : candidates.length ? 'Barcode candidates detected' : 'Point at a barcode to scan'}
             </Text>
           </View>
           <Chip label={torchEnabled ? 'FLASH ON' : permission?.granted ? 'READY' : 'PENDING'} variant={torchEnabled ? 'warning' : permission?.granted ? 'success' : 'warning'} />
         </View>
 
         <View style={{ gap: spacing.md }}>
+          {candidates.length === 0 && !scannedCode && (
+            <Text variant="caption" color="textMuted" align="center">
+              Align a product barcode within the frame, or use manual entry.
+            </Text>
+          )}
           {candidates.map((candidate) => (
             <TouchableOpacity
               key={candidate.label}

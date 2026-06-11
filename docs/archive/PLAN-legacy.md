@@ -1,3 +1,8 @@
+> **ARCHIVED — historical reference only.** This is the original pre-pivot plan written
+> around Supabase. FreshTrack has since migrated to a Go + PostgreSQL backend as the sole
+> runtime, and the Supabase code has been removed. Kept unedited for provenance; do not
+> treat it as the current architecture. See `docs/architecture.md` for the current design.
+
 # Sistem Pencatatan Kadaluarsa Makanan (Android Expo + Supabase)
 
 ## TL;DR

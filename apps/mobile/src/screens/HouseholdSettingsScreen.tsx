@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Alert, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Alert, TouchableOpacity, ScrollView, StyleSheet, Share } from 'react-native';
 import { Text, Button, TextInput, BottomNav, Icon, Card, Chip } from '../components';
 import { useAuth } from '../providers/AuthProvider';
 import { useHousehold } from '../providers/HouseholdProvider';
@@ -13,12 +13,13 @@ export function HouseholdSettingsScreen() {
   const navigation = useNavigation<RootNavigationProp>();
   const insets = useSafeAreaInsets();
   const { user, signOut, updateDisplayName } = useAuth();
-  const { members, settings, inviteCode, isOwner, updateSettings, removeMember } = useHousehold();
+  const { members, settings, inviteCode, inviteCodeKind, isOwner, updateSettings, removeMember, rotateInvite } = useHousehold();
   const { colors, spacing, borderWidth: bw, radii } = useTheme();
 
   const [displayName, setDisplayName] = useState((user?.user_metadata?.full_name as string | undefined) ?? '');
   const [reminderTime, setReminderTime] = useState(settings?.reminderTimeLocal ?? '09:00');
   const [leadDaysText, setLeadDaysText] = useState(settings?.leadDays?.join(', ') ?? '7, 3, 0');
+  const [timezone, setTimezone] = useState(settings?.timezone ?? 'UTC');
   const [saving, setSaving] = useState(false);
   const [profileSaving, setProfileSaving] = useState(false);
 
@@ -26,6 +27,7 @@ export function HouseholdSettingsScreen() {
     if (settings) {
       setReminderTime(settings.reminderTimeLocal);
       setLeadDaysText(settings.leadDays.join(', '));
+      setTimezone(settings.timezone);
     }
   }, [settings]);
 
@@ -45,7 +47,7 @@ export function HouseholdSettingsScreen() {
     }
 
     setSaving(true);
-    const { error } = await updateSettings({ reminderTimeLocal: reminderTime, leadDays });
+    const { error } = await updateSettings({ reminderTimeLocal: reminderTime, leadDays, timezone: timezone.trim() });
     setSaving(false);
 
     if (error) {
@@ -89,6 +91,24 @@ export function HouseholdSettingsScreen() {
       Alert.alert('Error', error);
     } else {
       Alert.alert('Saved', 'Profile name updated.');
+    }
+  };
+
+  const handleRotateInvite = async () => {
+    const { error } = await rotateInvite();
+    if (error) {
+      Alert.alert('Error', error);
+    } else {
+      Alert.alert('Invite ready', 'A full invite code is available to share.');
+    }
+  };
+
+  const handleShareInvite = async () => {
+    if (!inviteCode || inviteCodeKind !== 'full') return;
+    try {
+      await Share.share({ message: `Join my FreshTrack household with code: ${inviteCode}` });
+    } catch {
+      // user dismissed the share sheet; nothing to do
     }
   };
 
@@ -165,18 +185,27 @@ export function HouseholdSettingsScreen() {
                   Invite household member
                 </Text>
                 <Text variant="caption" color="textMuted" style={{ marginTop: 4 }}>
-                  Share this code to add someone to your pantry.
+                  {inviteCodeKind === 'full' ? 'Share this full code to add someone to your pantry.' : 'Only the invite suffix is available after refresh. Rotate to reveal a full shareable code.'}
                 </Text>
               </View>
-              <Chip label="OWNER" variant="warning" />
+              <Chip label={inviteCodeKind === 'full' ? 'FULL CODE' : 'SUFFIX'} variant="warning" />
             </View>
 
-            <View style={[styles.codeBox, { backgroundColor: colors.backgroundAlt, borderColor: colors.border, borderWidth: bw.medium, borderRadius: radii.md }]}> 
+            <View style={[styles.codeBox, { backgroundColor: colors.backgroundAlt, borderColor: colors.border, borderWidth: bw.medium, borderRadius: radii.md }]}>
               <Text variant="h2" weight="bold" mono>
                 {inviteCode}
               </Text>
-              <Icon name="content-copy" size={18} color="primary" />
+              {inviteCodeKind === 'full' && (
+                <TouchableOpacity onPress={handleShareInvite} accessibilityLabel="Share invite code" hitSlop={12}>
+                  <Icon name="content-copy" size={18} color="primary" />
+                </TouchableOpacity>
+              )}
             </View>
+            {inviteCodeKind !== 'full' && (
+              <Button variant="secondary" block style={{ marginTop: spacing.md }} onPress={handleRotateInvite}>
+                ROTATE FULL INVITE
+              </Button>
+            )}
           </Card>
         )}
 
@@ -215,17 +244,17 @@ export function HouseholdSettingsScreen() {
         })}
 
         <Text variant="label" color="primary" mono tracking="widest">
-          REMINDERS
+          REMINDER RULES
         </Text>
 
         <Card elevated style={{ borderRadius: radii.lg }}>
           <View style={[styles.rowBetween, { marginBottom: spacing.lg }]}> 
             <View style={{ flex: 1 }}>
               <Text variant="body" weight="bold">
-                Push notifications
+                In-app expiry reminders
               </Text>
               <Text variant="caption" color="textMuted" style={{ marginTop: 4 }}>
-                Keep expiring items visible across the household.
+                These rules drive H-7, H-3, H-1, expired, and fresh labels. OS push notifications are post-MVP.
               </Text>
             </View>
             <Icon name="bell-ring-outline" size={20} color="primary" />
@@ -244,6 +273,15 @@ export function HouseholdSettingsScreen() {
             value={leadDaysText}
             onChangeText={setLeadDaysText}
             helperText="Comma-separated days before expiry."
+            mono
+          />
+          <TextInput
+            label="TIMEZONE"
+            placeholder="Asia/Jakarta"
+            value={timezone}
+            onChangeText={setTimezone}
+            autoCapitalize="none"
+            helperText="IANA timezone for reminder delivery."
             mono
           />
 

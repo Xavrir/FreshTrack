@@ -29,6 +29,21 @@ type Config struct {
 	OpenAIAPIKey       string
 	PublicAPIURL       string
 	CORSAllowedOrigins []string
+
+	// Object storage (Cloudflare R2 / any S3-compatible) for inventory photos.
+	StorageEndpoint      string
+	StorageBucket        string
+	StorageRegion        string
+	StorageAccessKey     string
+	StorageSecretKey     string
+	StoragePublicBaseURL string
+}
+
+// StorageConfigured reports whether object storage is fully configured. When it
+// is not, photo upload endpoints are disabled and the app keeps client-side images.
+func (c Config) StorageConfigured() bool {
+	return c.StorageEndpoint != "" && c.StorageBucket != "" &&
+		c.StorageAccessKey != "" && c.StorageSecretKey != "" && c.StoragePublicBaseURL != ""
 }
 
 func Load() Config {
@@ -48,6 +63,13 @@ func Load() Config {
 		OpenAIAPIKey:       env("OPENAI_API_KEY", ""),
 		PublicAPIURL:       env("PUBLIC_API_URL", "http://localhost:8080"),
 		CORSAllowedOrigins: splitEnv("CORS_ALLOWED_ORIGINS", []string{"*"}),
+
+		StorageEndpoint:      env("STORAGE_ENDPOINT", ""),
+		StorageBucket:        env("STORAGE_BUCKET", ""),
+		StorageRegion:        env("STORAGE_REGION", "auto"),
+		StorageAccessKey:     env("STORAGE_ACCESS_KEY", ""),
+		StorageSecretKey:     env("STORAGE_SECRET_KEY", ""),
+		StoragePublicBaseURL: env("STORAGE_PUBLIC_BASE_URL", ""),
 	}
 }
 

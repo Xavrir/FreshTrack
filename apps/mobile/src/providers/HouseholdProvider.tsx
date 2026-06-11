@@ -15,6 +15,7 @@ interface Household {
 interface HouseholdSettings {
   reminderTimeLocal: string;
   leadDays: number[];
+  timezone: string;
 }
 
 interface HouseholdContextValue {
@@ -22,10 +23,12 @@ interface HouseholdContextValue {
   members: HouseholdMember[];
   settings: HouseholdSettings | null;
   inviteCode: string | null;
+  inviteCodeKind: 'full' | 'suffix' | null;
   isOwner: boolean;
   loading: boolean;
   createHousehold: () => Promise<{ error: string | null }>;
   joinHousehold: (code: string) => Promise<{ error: string | null }>;
+  rotateInvite: () => Promise<{ error: string | null }>;
   updateSettings: (settings: Partial<HouseholdSettings>) => Promise<{ error: string | null }>;
   removeMember: (userId: string) => Promise<{ error: string | null }>;
   refreshHousehold: () => Promise<void>;
@@ -46,6 +49,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
   const [members, setMembers] = useState<HouseholdMember[]>([]);
   const [settings, setSettings] = useState<HouseholdSettings | null>(null);
   const [inviteCode, setInviteCode] = useState<string | null>(null);
+  const [inviteCodeKind, setInviteCodeKind] = useState<'full' | 'suffix' | null>(null);
   const [loading, setLoading] = useState(true);
 
   const isOwner = household?.ownerUserId === user?.id;
@@ -57,6 +61,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
       setMembers([]);
       setSettings(null);
       setInviteCode(null);
+      setInviteCodeKind(null);
       setLoading(false);
       return;
     }
@@ -76,13 +81,18 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
       setHousehold({ id: householdData.id, ownerUserId: householdData.ownerUserId });
       setMembers(memberData);
       setSettings(settingsData);
-      const invite = await apiRequest<{ codeSuffix?: string }>('/v1/household/invite', { method: 'GET' }, token).catch(() => null);
-      setInviteCode(invite?.codeSuffix ?? null);
+      const invite = await apiRequest<{ code?: string | null; codeSuffix?: string }>('/v1/household/invite', { method: 'GET' }, token).catch(() => null);
+      // Prefer the full shareable code; fall back to suffix only for legacy
+      // invites created before the full code was persisted.
+      const fullCode = invite?.code ?? null;
+      setInviteCode(fullCode ?? invite?.codeSuffix ?? null);
+      setInviteCodeKind(fullCode ? 'full' : invite?.codeSuffix ? 'suffix' : null);
     } catch {
       setHousehold(null);
       setMembers([]);
       setSettings(null);
       setInviteCode(null);
+      setInviteCodeKind(null);
     } finally {
       setLoading(false);
     }
@@ -99,14 +109,19 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
       const mockId = 'mock-household-' + Date.now();
       setHousehold({ id: mockId, ownerUserId: user.id });
       setMembers([{ userId: user.id, role: 'owner' }]);
-      setSettings({ reminderTimeLocal: '09:00', leadDays: [7, 3, 0] });
+      setSettings({ reminderTimeLocal: '09:00', leadDays: [7, 3, 0], timezone: 'UTC' });
       setInviteCode(generateInviteCode());
+      setInviteCodeKind('full');
       return { error: null };
     }
 
     try {
-      await apiRequest('/v1/household', { method: 'POST', body: JSON.stringify({ name: 'My Household' }) }, token);
+      const created = await apiRequest<{ inviteCode?: string }>('/v1/household', { method: 'POST', body: JSON.stringify({ name: 'My Household' }) }, token);
       await fetchHousehold();
+      if (created.inviteCode) {
+        setInviteCode(created.inviteCode);
+        setInviteCodeKind('full');
+      }
       return { error: null };
     } catch (error) {
       return { error: error instanceof Error ? error.message : 'Could not create household' };
@@ -120,8 +135,9 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
       const mockId = 'mock-household-joined-' + Date.now();
       setHousehold({ id: mockId, ownerUserId: 'other-user' });
       setMembers([{ userId: 'other-user', role: 'owner' }, { userId: user.id, role: 'member' }]);
-      setSettings({ reminderTimeLocal: '09:00', leadDays: [7, 3, 0] });
+      setSettings({ reminderTimeLocal: '09:00', leadDays: [7, 3, 0], timezone: 'UTC' });
       setInviteCode(code.toUpperCase());
+      setInviteCodeKind('full');
       return { error: null };
     }
 
@@ -133,6 +149,23 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
       return { error: error instanceof Error ? error.message : 'Could not join household' };
     }
   }, [fetchHousehold, token, user]);
+
+  const rotateInvite = useCallback(async () => {
+    if (!household) return { error: 'No household' };
+    if (!isApiConfigured || !token) {
+      setInviteCode(generateInviteCode());
+      setInviteCodeKind('full');
+      return { error: null };
+    }
+    try {
+      const rotated = await apiRequest<{ inviteCode: string }>('/v1/household/invite/rotate', { method: 'POST' }, token);
+      setInviteCode(rotated.inviteCode);
+      setInviteCodeKind('full');
+      return { error: null };
+    } catch (error) {
+      return { error: error instanceof Error ? error.message : 'Could not rotate invite' };
+    }
+  }, [household, token]);
 
   const updateSettings = useCallback(async (partial: Partial<HouseholdSettings>) => {
     if (!household) return { error: 'No household' };
@@ -169,7 +202,7 @@ export function HouseholdProvider({ children }: { children: ReactNode }) {
 
   return (
     <HouseholdContext.Provider
-      value={{ household, members, settings, inviteCode, isOwner, loading, createHousehold, joinHousehold, updateSettings, removeMember, refreshHousehold: fetchHousehold }}
+      value={{ household, members, settings, inviteCode, inviteCodeKind, isOwner, loading, createHousehold, joinHousehold, rotateInvite, updateSettings, removeMember, refreshHousehold: fetchHousehold }}
     >
       {children}
     </HouseholdContext.Provider>

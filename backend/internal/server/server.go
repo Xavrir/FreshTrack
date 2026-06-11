@@ -23,6 +23,8 @@ import (
 	"freshtrack/backend/internal/config"
 	"freshtrack/backend/internal/httpx"
 	"freshtrack/backend/internal/mailer"
+	"freshtrack/backend/internal/push"
+	"freshtrack/backend/internal/storage"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -36,10 +38,12 @@ import (
 )
 
 type Server struct {
-	cfg    config.Config
-	db     *pgxpool.Pool
-	logger *slog.Logger
-	mail   mailer.Mailer
+	cfg     config.Config
+	db      *pgxpool.Pool
+	logger  *slog.Logger
+	mail    mailer.Mailer
+	storage *storage.Presigner
+	push    push.Sender
 }
 
 type ctxKey string
@@ -47,7 +51,18 @@ type ctxKey string
 const userIDKey ctxKey = "user_id"
 
 func New(cfg config.Config, db *pgxpool.Pool, logger *slog.Logger) *Server {
-	return &Server{cfg: cfg, db: db, logger: logger, mail: mailer.New(cfg)}
+	s := &Server{cfg: cfg, db: db, logger: logger, mail: mailer.New(cfg), push: push.NewExpoSender()}
+	if cfg.StorageConfigured() {
+		s.storage = &storage.Presigner{
+			Endpoint:      cfg.StorageEndpoint,
+			Bucket:        cfg.StorageBucket,
+			Region:        cfg.StorageRegion,
+			AccessKey:     cfg.StorageAccessKey,
+			SecretKey:     cfg.StorageSecretKey,
+			PublicBaseURL: cfg.StoragePublicBaseURL,
+		}
+	}
+	return s
 }
 
 func (s *Server) Routes() http.Handler {
@@ -68,19 +83,23 @@ func (s *Server) Routes() http.Handler {
 	r.Get("/ready", s.ready)
 
 	r.Route("/v1", func(r chi.Router) {
-		r.Post("/auth/signup", s.signup)
-		r.Post("/auth/verify-email", s.verifyEmail)
-		r.Post("/auth/resend-verification", s.resendVerification)
-		r.Post("/auth/login", s.login)
-		r.Post("/auth/refresh", s.refresh)
-		r.Post("/auth/forgot-password", s.forgotPassword)
-		r.Post("/auth/reset-password", s.resetPassword)
+		// Per-IP throttle on unauthenticated auth endpoints (brute-force + abuse).
+		authLimit := s.rateLimitIP("auth", ipAttemptLimit, ipAttemptWindow)
+		r.With(authLimit).Post("/auth/signup", s.signup)
+		r.With(authLimit).Post("/auth/verify-email", s.verifyEmail)
+		r.With(authLimit).Post("/auth/resend-verification", s.resendVerification)
+		r.With(authLimit).Post("/auth/login", s.login)
+		r.With(authLimit).Post("/auth/refresh", s.refresh)
+		r.With(authLimit).Post("/auth/forgot-password", s.forgotPassword)
+		r.With(authLimit).Post("/auth/reset-password", s.resetPassword)
 
 		r.Group(func(r chi.Router) {
 			r.Use(s.requireAuth)
 			r.Post("/auth/logout", s.logout)
 			r.Get("/me", s.me)
 			r.Patch("/me", s.updateMe)
+			r.Post("/me/push-token", s.registerPushToken)
+			r.Post("/uploads/sign", s.signUpload)
 
 			r.Get("/household", s.getHousehold)
 			r.Post("/household", s.createHousehold)
@@ -151,7 +170,9 @@ func (s *Server) signup(w http.ResponseWriter, r *http.Request) {
 	if !validEmail(req.Email) {
 		fields["email"] = "Enter a valid email address"
 	}
-	if len(req.Password) < 8 {
+	// Password is optional: the email-OTP flow signs up with no password. When a
+	// password is supplied it must still meet the minimum length.
+	if req.Password != "" && len(req.Password) < 8 {
 		fields["password"] = "Password must be at least 8 characters"
 	}
 	if len(fields) > 0 {
@@ -159,16 +180,22 @@ func (s *Server) signup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hash, err := hashPassword(req.Password, s.cfg.PasswordPepper)
-	if err != nil {
-		httpx.Error(w, http.StatusInternalServerError, "password_hash_failed", "Could not create password hash")
-		return
+	var passwordHash *string
+	authMethod := "otp"
+	if req.Password != "" {
+		hash, err := hashPassword(req.Password, s.cfg.PasswordPepper)
+		if err != nil {
+			httpx.Error(w, http.StatusInternalServerError, "password_hash_failed", "Could not create password hash")
+			return
+		}
+		passwordHash = &hash
+		authMethod = "password"
 	}
 
 	var id uuid.UUID
 	var email string
 	var fullName *string
-	err = s.db.QueryRow(r.Context(), `INSERT INTO users (email, password_hash, full_name) VALUES ($1, $2, NULLIF($3, '')) RETURNING id, email, full_name`, req.Email, hash, strings.TrimSpace(req.FullName)).Scan(&id, &email, &fullName)
+	err := s.db.QueryRow(r.Context(), `INSERT INTO users (email, password_hash, auth_method, full_name) VALUES ($1, $2, $3, NULLIF($4, '')) RETURNING id, email, full_name`, req.Email, passwordHash, authMethod, strings.TrimSpace(req.FullName)).Scan(&id, &email, &fullName)
 	if err != nil {
 		if isUniqueViolation(err) {
 			httpx.Error(w, http.StatusConflict, "email_taken", "Email is already registered")
@@ -181,7 +208,7 @@ func (s *Server) signup(w http.ResponseWriter, r *http.Request) {
 
 	code, err := s.createEmailCode(r.Context(), "email_verification_codes", id, 15*time.Minute)
 	if err == nil {
-		_ = s.mail.SendEmailVerification(r.Context(), email, code)
+		s.sendVerificationEmail(email, code)
 	}
 	httpx.Data(w, http.StatusCreated, map[string]any{"userId": id.String(), "email": email, "fullName": fullName, "emailVerificationRequired": true})
 }
@@ -226,9 +253,13 @@ func (s *Server) resendVerification(w http.ResponseWriter, r *http.Request) {
 		httpx.BadJSON(w, err)
 		return
 	}
-	if user, err := s.userByEmail(r.Context(), normalizeEmail(req.Email)); err == nil {
+	email := normalizeEmail(req.Email)
+	if !s.allowEmailSend(w, r, email) {
+		return
+	}
+	if user, err := s.userByEmail(r.Context(), email); err == nil {
 		if code, err := s.createEmailCode(r.Context(), "email_verification_codes", user.ID, 15*time.Minute); err == nil {
-			_ = s.mail.SendEmailVerification(r.Context(), user.Email, code)
+			s.sendVerificationEmail(user.Email, code)
 		}
 	}
 	httpx.Data(w, http.StatusOK, map[string]bool{"sent": true})
@@ -244,7 +275,9 @@ func (s *Server) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	user, err := s.userByEmail(r.Context(), normalizeEmail(req.Email))
-	if err != nil || !verifyPassword(req.Password, user.PasswordHash, s.cfg.PasswordPepper) {
+	// OTP-only accounts have no usable password. Reject without revealing whether
+	// the email exists (same generic error as a wrong password).
+	if err != nil || user.AuthMethod != "password" || !verifyPassword(req.Password, user.PasswordHash, s.cfg.PasswordPepper) {
 		httpx.Error(w, http.StatusUnauthorized, "invalid_credentials", "Invalid email or password")
 		return
 	}
@@ -307,9 +340,13 @@ func (s *Server) forgotPassword(w http.ResponseWriter, r *http.Request) {
 		httpx.BadJSON(w, err)
 		return
 	}
-	if user, err := s.userByEmail(r.Context(), normalizeEmail(req.Email)); err == nil {
+	email := normalizeEmail(req.Email)
+	if !s.allowEmailSend(w, r, email) {
+		return
+	}
+	if user, err := s.userByEmail(r.Context(), email); err == nil {
 		if code, err := s.createEmailCode(r.Context(), "password_reset_codes", user.ID, 15*time.Minute); err == nil {
-			_ = s.mail.SendPasswordReset(r.Context(), user.Email, code)
+			s.sendPasswordResetEmail(user.Email, code)
 		}
 	}
 	httpx.Data(w, http.StatusOK, map[string]bool{"sent": true})
@@ -349,7 +386,7 @@ func (s *Server) resetPassword(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, http.StatusUnauthorized, "invalid_code", "Invalid or expired code")
 		return
 	}
-	if _, err = tx.Exec(r.Context(), `UPDATE users SET password_hash = $1, updated_at = now() WHERE id = $2`, hash, user.ID); err != nil {
+	if _, err = tx.Exec(r.Context(), `UPDATE users SET password_hash = $1, auth_method = 'password', updated_at = now() WHERE id = $2`, hash, user.ID); err != nil {
 		httpx.Error(w, http.StatusInternalServerError, "reset_failed", "Could not reset password")
 		return
 	}
@@ -389,10 +426,87 @@ func (s *Server) updateMe(w http.ResponseWriter, r *http.Request) {
 	s.me(w, r)
 }
 
+// imageExtensions maps accepted image content types to file extensions.
+var imageExtensions = map[string]string{
+	"image/jpeg": "jpg",
+	"image/png":  "png",
+	"image/webp": "webp",
+}
+
+// signUpload returns a presigned PUT URL for an inventory photo plus the public
+// URL to persist in image_url. Disabled (501) until object storage is configured.
+func (s *Server) signUpload(w http.ResponseWriter, r *http.Request) {
+	if s.storage == nil {
+		httpx.Error(w, http.StatusNotImplemented, "storage_not_configured", "Photo storage is not configured")
+		return
+	}
+	var req struct {
+		ContentType string `json:"contentType"`
+	}
+	if err := httpx.ReadJSON(r, &req); err != nil {
+		httpx.BadJSON(w, err)
+		return
+	}
+	ext, ok := imageExtensions[strings.ToLower(strings.TrimSpace(req.ContentType))]
+	if !ok {
+		httpx.ValidationError(w, map[string]string{"contentType": "Unsupported image type (use jpeg, png, or webp)"})
+		return
+	}
+
+	// Scope the object key to the household when available, else the user.
+	userID := mustUserID(r.Context())
+	scope := "users/" + userID.String()
+	if household, err := s.activeHousehold(r.Context(), userID); err == nil {
+		scope = "households/" + household.ID.String()
+	}
+	key := fmt.Sprintf("%s/inventory/%s.%s", scope, uuid.NewString(), ext)
+
+	uploadURL, err := s.storage.PresignPut(key, req.ContentType, time.Now(), 10*time.Minute)
+	if err != nil {
+		s.logger.Error("presign upload", "error", err)
+		httpx.Error(w, http.StatusInternalServerError, "presign_failed", "Could not prepare upload")
+		return
+	}
+	httpx.Data(w, http.StatusOK, map[string]any{
+		"uploadUrl":   uploadURL,
+		"fileUrl":     s.storage.PublicURL(key),
+		"method":      "PUT",
+		"contentType": req.ContentType,
+	})
+}
+
+// registerPushToken stores (or re-activates) an Expo push token for the user's
+// device so expiry reminders can be delivered.
+func (s *Server) registerPushToken(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		Token    string `json:"token"`
+		Platform string `json:"platform"`
+	}
+	if err := httpx.ReadJSON(r, &req); err != nil {
+		httpx.BadJSON(w, err)
+		return
+	}
+	token := strings.TrimSpace(req.Token)
+	if token == "" {
+		httpx.ValidationError(w, map[string]string{"token": "Push token is required"})
+		return
+	}
+	_, err := s.db.Exec(r.Context(), `INSERT INTO device_push_tokens (user_id, expo_token, platform)
+		VALUES ($1, $2, NULLIF($3, ''))
+		ON CONFLICT (expo_token) DO UPDATE SET user_id = EXCLUDED.user_id, platform = EXCLUDED.platform, updated_at = now(), disabled_at = NULL`,
+		mustUserID(r.Context()), token, strings.TrimSpace(req.Platform))
+	if err != nil {
+		httpx.Error(w, http.StatusInternalServerError, "register_token_failed", "Could not register push token")
+		return
+	}
+	httpx.Data(w, http.StatusOK, map[string]bool{"registered": true})
+}
+
 type dbUser struct {
 	ID            uuid.UUID
 	Email         string
 	PasswordHash  string
+	AuthMethod    string
 	FullName      *string
 	EmailVerified bool
 }
@@ -400,7 +514,7 @@ type dbUser struct {
 func (s *Server) userByEmail(ctx context.Context, email string) (dbUser, error) {
 	var user dbUser
 	var verified *time.Time
-	err := s.db.QueryRow(ctx, `SELECT id, email, password_hash, full_name, email_verified_at FROM users WHERE email = $1 AND deleted_at IS NULL`, email).Scan(&user.ID, &user.Email, &user.PasswordHash, &user.FullName, &verified)
+	err := s.db.QueryRow(ctx, `SELECT id, email, COALESCE(password_hash, ''), auth_method, full_name, email_verified_at FROM users WHERE email = $1 AND deleted_at IS NULL`, email).Scan(&user.ID, &user.Email, &user.PasswordHash, &user.AuthMethod, &user.FullName, &verified)
 	user.EmailVerified = verified != nil
 	return user, err
 }
@@ -408,7 +522,7 @@ func (s *Server) userByEmail(ctx context.Context, email string) (dbUser, error) 
 func (s *Server) userByID(ctx context.Context, id uuid.UUID) (dbUser, error) {
 	var user dbUser
 	var verified *time.Time
-	err := s.db.QueryRow(ctx, `SELECT id, email, password_hash, full_name, email_verified_at FROM users WHERE id = $1 AND deleted_at IS NULL`, id).Scan(&user.ID, &user.Email, &user.PasswordHash, &user.FullName, &verified)
+	err := s.db.QueryRow(ctx, `SELECT id, email, COALESCE(password_hash, ''), auth_method, full_name, email_verified_at FROM users WHERE id = $1 AND deleted_at IS NULL`, id).Scan(&user.ID, &user.Email, &user.PasswordHash, &user.AuthMethod, &user.FullName, &verified)
 	user.EmailVerified = verified != nil
 	return user, err
 }
@@ -479,6 +593,29 @@ func (s *Server) createEmailCode(ctx context.Context, table string, userID uuid.
 	query := fmt.Sprintf(`INSERT INTO %s (user_id, code_hash, expires_at) VALUES ($1, $2, $3)`, table)
 	_, err = s.db.Exec(ctx, query, userID, s.hashSecret(code), time.Now().Add(ttl))
 	return code, err
+}
+
+// sendVerificationEmail delivers the OTP off the request path on a detached,
+// bounded context so a slow SMTP/Resend call never hangs the handler. Failures
+// are logged (without exposing them to the caller, to avoid account enumeration).
+func (s *Server) sendVerificationEmail(email, code string) {
+	go func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		if err := s.mail.SendEmailVerification(ctx, email, code); err != nil {
+			s.logger.Warn("send verification email failed", "error", err)
+		}
+	}()
+}
+
+func (s *Server) sendPasswordResetEmail(email, code string) {
+	go func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		if err := s.mail.SendPasswordReset(ctx, email, code); err != nil {
+			s.logger.Warn("send password reset email failed", "error", err)
+		}
+	}()
 }
 
 func (s *Server) consumeCode(ctx context.Context, table string, userID uuid.UUID, code string) error {
@@ -559,7 +696,7 @@ func (s *Server) createHousehold(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, http.StatusInternalServerError, "invite_failed", "Could not create invite")
 		return
 	}
-	if _, err := tx.Exec(r.Context(), `INSERT INTO household_invites (household_id, code_hash, code_suffix, created_by) VALUES ($1, $2, $3, $4)`, householdID, s.hashSecret(invite), suffix(invite, 4), userID); err != nil {
+	if _, err := tx.Exec(r.Context(), `INSERT INTO household_invites (household_id, code_hash, code_suffix, code, created_by) VALUES ($1, $2, $3, $4, $5)`, householdID, s.hashSecret(invite), suffix(invite, 4), invite, userID); err != nil {
 		httpx.Error(w, http.StatusInternalServerError, "invite_failed", "Could not create invite")
 		return
 	}
@@ -680,13 +817,16 @@ func (s *Server) getInvite(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var suffix string
+	var code *string
 	var createdAt time.Time
-	err = s.db.QueryRow(r.Context(), `SELECT code_suffix, created_at FROM household_invites WHERE household_id = $1 AND revoked_at IS NULL ORDER BY created_at DESC LIMIT 1`, household.ID).Scan(&suffix, &createdAt)
+	err = s.db.QueryRow(r.Context(), `SELECT code_suffix, code, created_at FROM household_invites WHERE household_id = $1 AND revoked_at IS NULL ORDER BY created_at DESC LIMIT 1`, household.ID).Scan(&suffix, &code, &createdAt)
 	if err != nil {
 		httpx.Error(w, http.StatusNotFound, "invite_not_found", "No active invite found")
 		return
 	}
-	httpx.Data(w, http.StatusOK, map[string]any{"codeSuffix": suffix, "createdAt": createdAt})
+	// code is non-null for invites created after the invite-code migration; older
+	// invites only have the suffix and require a rotate to reveal a shareable code.
+	httpx.Data(w, http.StatusOK, map[string]any{"code": code, "codeSuffix": suffix, "createdAt": createdAt})
 }
 
 func (s *Server) rotateInvite(w http.ResponseWriter, r *http.Request) {
@@ -710,7 +850,7 @@ func (s *Server) rotateInvite(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, http.StatusInternalServerError, "invite_failed", "Could not create invite")
 		return
 	}
-	if _, err := tx.Exec(r.Context(), `INSERT INTO household_invites (household_id, code_hash, code_suffix, created_by) VALUES ($1, $2, $3, $4)`, household.ID, s.hashSecret(invite), suffix(invite, 4), mustUserID(r.Context())); err != nil {
+	if _, err := tx.Exec(r.Context(), `INSERT INTO household_invites (household_id, code_hash, code_suffix, code, created_by) VALUES ($1, $2, $3, $4, $5)`, household.ID, s.hashSecret(invite), suffix(invite, 4), invite, mustUserID(r.Context())); err != nil {
 		httpx.Error(w, http.StatusInternalServerError, "invite_failed", "Could not create invite")
 		return
 	}
@@ -739,6 +879,7 @@ func (s *Server) updateSettings(w http.ResponseWriter, r *http.Request) {
 	var req struct {
 		ReminderTimeLocal *string `json:"reminderTimeLocal"`
 		LeadDays          []int   `json:"leadDays"`
+		Timezone          *string `json:"timezone"`
 	}
 	if err := httpx.ReadJSON(r, &req); err != nil {
 		httpx.BadJSON(w, err)
@@ -762,7 +903,16 @@ func (s *Server) updateSettings(w http.ResponseWriter, r *http.Request) {
 	if req.LeadDays != nil {
 		leads = req.LeadDays
 	}
-	_, err = s.db.Exec(r.Context(), `UPDATE household_settings SET reminder_time_local = $1, lead_days = $2, updated_at = now() WHERE household_id = $3`, reminder, leads, household.ID)
+	timezone := current.Timezone
+	if req.Timezone != nil {
+		tz := strings.TrimSpace(*req.Timezone)
+		if _, err := time.LoadLocation(tz); err != nil {
+			httpx.ValidationError(w, map[string]string{"timezone": "Unknown timezone (use an IANA name like Asia/Jakarta)"})
+			return
+		}
+		timezone = tz
+	}
+	_, err = s.db.Exec(r.Context(), `UPDATE household_settings SET reminder_time_local = $1, lead_days = $2, timezone = $3, updated_at = now() WHERE household_id = $4`, reminder, leads, timezone, household.ID)
 	if err != nil {
 		httpx.Error(w, http.StatusInternalServerError, "update_settings_failed", "Could not update settings")
 		return
@@ -780,6 +930,7 @@ type householdDTO struct {
 type settingsDTO struct {
 	ReminderTimeLocal string `json:"reminderTimeLocal"`
 	LeadDays          []int  `json:"leadDays"`
+	Timezone          string `json:"timezone"`
 }
 
 func (s *Server) activeHousehold(ctx context.Context, userID uuid.UUID) (householdDTO, error) {
@@ -790,7 +941,7 @@ func (s *Server) activeHousehold(ctx context.Context, userID uuid.UUID) (househo
 
 func (s *Server) settings(ctx context.Context, householdID uuid.UUID) (settingsDTO, error) {
 	var settings settingsDTO
-	err := s.db.QueryRow(ctx, `SELECT reminder_time_local, lead_days FROM household_settings WHERE household_id = $1`, householdID).Scan(&settings.ReminderTimeLocal, &settings.LeadDays)
+	err := s.db.QueryRow(ctx, `SELECT reminder_time_local, lead_days, timezone FROM household_settings WHERE household_id = $1`, householdID).Scan(&settings.ReminderTimeLocal, &settings.LeadDays, &settings.Timezone)
 	return settings, err
 }
 
@@ -1026,7 +1177,7 @@ func (s *Server) listBatchEvents(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	}
-	s.writeEvents(w, r, `WHERE batch_id = $1 AND household_id = $2`, item.ID, item.HouseholdID)
+	s.writeEvents(w, r, `WHERE e.batch_id = $1 AND e.household_id = $2`, item.ID, item.HouseholdID)
 }
 
 func (s *Server) history(w http.ResponseWriter, r *http.Request) {
@@ -1035,11 +1186,11 @@ func (s *Server) history(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, http.StatusNotFound, "household_not_found", "No household found")
 		return
 	}
-	s.writeEvents(w, r, `WHERE household_id = $1`, household.ID)
+	s.writeEvents(w, r, `WHERE e.household_id = $1`, household.ID)
 }
 
 func (s *Server) writeEvents(w http.ResponseWriter, r *http.Request, where string, args ...any) {
-	rows, err := s.db.Query(r.Context(), `SELECT id, batch_id, household_id, actor_user_id, event_type, amount::float8, unit, metadata, created_at FROM inventory_events `+where+` ORDER BY created_at DESC LIMIT 100`, args...)
+	rows, err := s.db.Query(r.Context(), `SELECT e.id, e.batch_id, e.household_id, e.actor_user_id, e.event_type, e.amount::float8, e.unit, e.metadata, e.created_at, ib.name FROM inventory_events e LEFT JOIN inventory_batches ib ON ib.id = e.batch_id `+where+` ORDER BY e.created_at DESC LIMIT 100`, args...)
 	if err != nil {
 		httpx.Error(w, http.StatusInternalServerError, "list_events_failed", "Could not list events")
 		return
@@ -1051,13 +1202,14 @@ func (s *Server) writeEvents(w http.ResponseWriter, r *http.Request, where strin
 		var eventType string
 		var amount *float64
 		var unit *string
+		var batchName *string
 		var metadata map[string]any
 		var createdAt time.Time
-		if err := rows.Scan(&id, &batchID, &householdID, &actorID, &eventType, &amount, &unit, &metadata, &createdAt); err != nil {
+		if err := rows.Scan(&id, &batchID, &householdID, &actorID, &eventType, &amount, &unit, &metadata, &createdAt, &batchName); err != nil {
 			httpx.Error(w, http.StatusInternalServerError, "scan_events_failed", "Could not list events")
 			return
 		}
-		events = append(events, map[string]any{"id": id, "batchId": batchID, "householdId": householdID, "actorUserId": actorID, "eventType": eventType, "amount": amount, "unit": unit, "metadata": metadata, "createdAt": createdAt})
+		events = append(events, map[string]any{"id": id, "batchId": batchID, "householdId": householdID, "actorUserId": actorID, "eventType": eventType, "amount": amount, "unit": unit, "batchName": batchName, "metadata": metadata, "createdAt": createdAt})
 	}
 	httpx.Data(w, http.StatusOK, events)
 }
@@ -1136,10 +1288,10 @@ func validateInventory(req inventoryRequest) map[string]string {
 	if strings.TrimSpace(req.Unit) == "" {
 		fields["unit"] = "Unit is required"
 	}
-	if req.ExpiryDate != nil && strings.TrimSpace(*req.ExpiryDate) != "" {
-		if _, err := time.Parse("2006-01-02", strings.TrimSpace(*req.ExpiryDate)); err != nil {
-			fields["expiryDate"] = "Expiry date must use YYYY-MM-DD"
-		}
+	if req.ExpiryDate == nil || strings.TrimSpace(*req.ExpiryDate) == "" {
+		fields["expiryDate"] = "Expiry date is required"
+	} else if _, err := time.Parse("2006-01-02", strings.TrimSpace(*req.ExpiryDate)); err != nil {
+		fields["expiryDate"] = "Expiry date must use YYYY-MM-DD"
 	}
 	return fields
 }

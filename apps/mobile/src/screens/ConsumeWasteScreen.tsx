@@ -23,7 +23,7 @@ export function ConsumeWasteScreen() {
   const currentItem = batch
     ? { name: batch.name, unit: batch.unit, remaining: batch.quantity }
     : fallbackItem;
-  const [amount, setAmount] = useState('150');
+  const [amount, setAmount] = useState('');
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const remaining = currentItem.remaining;
@@ -31,12 +31,15 @@ export function ConsumeWasteScreen() {
   React.useEffect(() => {
     let active = true;
     void inventoryRepo.getBatch(route.params.id).then((result) => {
-      if (active) setBatch(result);
+      if (!active) return;
+      setBatch(result);
+      const remainingAmount = result?.quantity ?? fallbackItem.remaining;
+      setAmount(String(remainingAmount));
     });
     return () => {
       active = false;
     };
-  }, [route.params.id]);
+  }, [fallbackItem.remaining, route.params.id]);
 
   async function record(type: 'consumed' | 'wasted') {
     const num = parseFloat(amount);
@@ -84,7 +87,7 @@ export function ConsumeWasteScreen() {
           </View>
 
           <View style={{ marginTop: spacing.md, marginBottom: spacing.lg }}>
-            <Chip label={`AVAILABLE ${remaining}${currentItem.unit.toUpperCase()}`} variant="warning" />
+            <Chip label={`AVAILABLE ${remaining} ${currentItem.unit.toUpperCase()}`} variant="warning" />
           </View>
 
           <View style={[styles.amountPanel, { backgroundColor: colors.backgroundAlt, borderRadius: radii.lg, borderWidth: bw.medium, borderColor: colors.border, marginBottom: spacing.lg }]}> 
